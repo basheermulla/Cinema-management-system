@@ -1,8 +1,8 @@
 const Member = require('../models/memberModel.js');
+const memberWS = require('../DAL/membersWS');
 
 /*=======================================================================================================
 /*================================//* Members Collection MongoDB *//*====================================
-/*================================//* Work with - membersDAL.js *//*====================================
 /*============================//* CRUD - Create, Read, Update, Delete *//*===============================
 /*=====================================================================================================*/
 
@@ -23,6 +23,15 @@ const addMember = async (obj) => {
     return 'Created';
 };
 
+// InsertMany - Insert multiple Members
+const addManyMembers = async (objMany) => {
+    // Prevent additional documents from being inserted if one fails
+    const options = { ordered: true };
+    // Execute insert operation
+    await Member.insertMany(objMany, options);
+    return 'Created Many';
+};
+
 // PUT - Update a Member
 const updateMember = async (id, obj) => {
     await Member.findByIdAndUpdate(id, obj);
@@ -35,10 +44,25 @@ const deleteMember = async (id) => {
     return 'Deleted';
 };
 
+/*=======================================================================================================
+/*==============================//* Work with - DAL/membersWS.js *//*====================================
+/*===========================//* Get - All members from external WS *//*=================================
+/*================//* Entry Point:> https://jsonplaceholder.typicode.com/users *//*======================
+/*=====================================================================================================*/
+
+// GET - Get All Members - Read
+const getAllMembersWS = async (amount = '') => {
+    const { data: members } = await memberWS.getAllMembersWS(amount);    //From WS
+
+    return members;
+};
+
 module.exports = {
     getAllMembers,
     getMemberById,
     addMember,
+    addManyMembers,
     updateMember,
-    deleteMember
+    deleteMember,
+    getAllMembersWS
 };

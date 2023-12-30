@@ -6,13 +6,17 @@ const app = express()
 require("dotenv").config();
 const connectDB = require('./config/db');
 const bodyParser = require('body-parser');
+const membersRouter = require('./routers/membersRouter');
+const moviesRouter = require('./routers/moviesRouter');
+const subscriptionsRouter = require('./routers/subscriptionsRouter');
+const seederWS = require('./seederWS/seeder');
 
 /*=======================================================================================================
 /*================================//* Use Environment Variable *//*======================================
 /*=====================================================================================================*/
 const { API_PORT } = process.env;
 const port = process.env.PORT || API_PORT;
-const { MONGO_URI } = process.env;
+const { MONGO_URL } = process.env;
 
 /*=======================================================================================================
 /*====================================//* Connect Database *//*==========================================
@@ -31,20 +35,23 @@ app.use(bodyParser.urlencoded({
 }));
 
 /*=======================================================================================================
-/*================================//* Create a session middleware *//*===================================
+/*================================//* Seeder data from external WS *//*==================================
 /*=====================================================================================================*/
+
+const getExternalData = async () => {
+    seederWS.getMembersWS(); // Against jsonplaceholder API
+    seederWS.getMoviesWS();  // Against tvmaze API
+}
+
+// Run seeder
+// getExternalData();
 
 /*=======================================================================================================
 /*==================================//* Routers - Logic goes here *//*===================================
 /*=====================================================================================================*/
 
-const membersRouter = require('./routers/membersRouter');
 app.use('/members', membersRouter);
-
-const moviesRouter = require('./routers/moviesRouter');
 app.use('/movies', moviesRouter);
-
-const subscriptionsRouter = require('./routers/subscriptionsRouter');
 app.use('/subscriptions', subscriptionsRouter);
 
 /*=======================================================================================================

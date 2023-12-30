@@ -36,7 +36,6 @@ router.get('/:id', async (req, res) => {
 // POST - Create a Subscription
 router.post('/', async (req, res) => {
     try {
-        const { firstName, lastName, startWorkYear } = req.body; // Not in use
         const obj = req.body; // In use
         console.log(obj)
         const result = await subscriptionsBLL.addSubscription(obj);

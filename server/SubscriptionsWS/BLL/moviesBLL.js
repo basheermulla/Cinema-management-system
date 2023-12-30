@@ -1,14 +1,14 @@
 const Movie = require('../models/movieModel.js');
+const movieWS = require('../DAL/moviesWS');
 
 /*=======================================================================================================
 /*================================//* Movies Collection MongoDB *//*=====================================
-/*================================//*  Work with - moviesDAL.js *//*=====================================
 /*============================//* CRUD - Create, Read, Update, Delete *//*===============================
 /*=====================================================================================================*/
 
 // GET - Get All Movies - Read
 const getAllMovies = async () => {
-    return Movie.find()
+    return Movie.find();
 };
 
 // GET - Get Movie By Id - Read
@@ -23,6 +23,15 @@ const addMovie = async (obj) => {
     return 'Created';
 };
 
+// InsertMany - Insert multiple Movies
+const addManyMovies = async (objMany) => {
+    // Prevent additional documents from being inserted if one fails
+    const options = { ordered: true };
+    // Execute insert operation
+    await Movie.insertMany(objMany, options);
+    return 'Created Many';
+};
+
 // PUT - Update a Movie
 const updateMovie = async (id, obj) => {
     await Movie.findByIdAndUpdate(id, obj);
@@ -35,10 +44,25 @@ const deleteMovie = async (id) => {
     return 'Deleted';
 };
 
+/*=======================================================================================================
+/*===============================//* Work with - DAL/moviesWS.js *//*====================================
+/*============================//* Get - All movies from external WS *//*=================================
+/*========================//* Entry Point:> https://api.tvmaze.com/shows *//*============================
+/*=====================================================================================================*/
+
+// GET - Get All Members - Read
+const getAllMoviesWS = async (id = '') => {
+    const { data: movies } = await movieWS.getAllMoviesWS(id);    //From WS
+    // console.log('movies = ', movies);
+    return movies;
+};
+
 module.exports = {
     getAllMovies,
     getMovieById,
     addMovie,
+    addManyMovies,
     updateMovie,
-    deleteMovie
+    deleteMovie,
+    getAllMoviesWS
 };
