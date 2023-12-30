@@ -6,7 +6,10 @@ const moviesSchema = new Schema({
     type: { type: String, require: true },
     language: { type: String, require: true },
     summary: { type: String, require: true },
-    image: { type: String, require: true },
+    image: {
+        medium: { type: String, require: true },
+        original: { type: String, require: true }
+    },
     genres: [{ type: String, require: true }],
     premiered: { type: Date, require: true }
 },

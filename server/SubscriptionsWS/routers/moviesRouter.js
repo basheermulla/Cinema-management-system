@@ -6,7 +6,7 @@ const router = express.Router();
 /*======================================================================================================
 /*================================//* Work with - moviesBLL.js *//*=====================================
 /*===========================//* CRUD - Create, Read, Update, Delete *//*===============================
-/*=========================//* Entry Point:> http://localhost:3000/movies *//*==========================
+/*=========================//* Entry Point:> http://localhost:8080/movies *//*==========================
 /*====================================================================================================*/
 
 // Get All Movies
@@ -36,7 +36,6 @@ router.get('/:id', async (req, res) => {
 // POST - Create a Movie
 router.post('/', async (req, res) => {
     try {
-        const { firstName, lastName, startWorkYear } = req.body; // Not in use
         const obj = req.body; // In use
         console.log(obj)
         const result = await moviesBLL.addMovie(obj);

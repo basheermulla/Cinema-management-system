@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
-const { MONGO_URI } = process.env;
+const { MONGO_URL } = process.env;
 
 const connectDB = async () => {
     try {
         mongoose.set("strictQuery", false);
-        await mongoose.connect(MONGO_URI, {});
+        await mongoose.connect(MONGO_URL, {});
         console.log('MongoDB Connected...');
     } catch (err) {
         console.log("database connection failed. exiting now...");
