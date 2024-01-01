@@ -9,6 +9,18 @@ const router = express.Router();
 /*=========================//* Entry Point:> http://localhost:8080/members *//*==========================
 /*=====================================================================================================*/
 
+// Get All Members with the widthly data by use MongoDB aggregation pipeline - Read
+router.get('/aggregate', async (req, res) => {
+    try {
+        const members = await membersBLL.getAllMembersAggregation();
+        
+        res.send(members);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+});
+
 // Get All Members
 router.get('/', async (req, res) => {
     try {

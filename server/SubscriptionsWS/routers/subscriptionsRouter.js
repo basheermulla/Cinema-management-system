@@ -9,6 +9,18 @@ const router = express.Router();
 /*======================//* Entry Point:> http://localhost:3000/subscriptions *//*=======================
 /*=====================================================================================================*/
 
+// Get All Subscriptions with the widthly data by use MongoDB aggregation pipeline - Read
+router.get('/aggregate', async (req, res) => {
+    try {
+        const subscriptions = await subscriptionsBLL.getAllSubscriptionsAggregation();
+        // console.log('subscriptions = ', subscriptions);
+        res.send(subscriptions);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+});
+
 // Get All Subscriptions
 router.get('/', async (req, res) => {
     try {
@@ -33,12 +45,12 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// POST - Create a Subscription
+// POST - Create the first Subscription of member
 router.post('/', async (req, res) => {
     try {
         const obj = req.body; // In use
         console.log(obj)
-        const result = await subscriptionsBLL.addSubscription(obj);
+        const result = await subscriptionsBLL.addFirstSubscription(obj);
         res.status(201).send(result);
     } catch (error) {
         console.error(error);
@@ -47,6 +59,10 @@ router.post('/', async (req, res) => {
 });
 
 // PUT - Update a Subscription
+//That's mean:
+         // 1. Create another subscription of a member who has already subscribed before
+         // Or
+         // 2. Update future subscription
 router.put('/:id', async (req, res) => {
     try {
         const { id } = req.params;

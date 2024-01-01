@@ -6,6 +6,124 @@ const movieWS = require('../DAL/moviesWS');
 /*============================//* CRUD - Create, Read, Update, Delete *//*===============================
 /*=====================================================================================================*/
 
+// GET - Get All Movies with the widthly data by use MongoDB aggregation pipeline - Read
+const getAllMoviesAggregation = async () => {
+    console.log('Hello from getAllMoviesAggregation');
+    return Movie.aggregate(
+        [
+            {
+                $lookup:
+                {
+                    from: 'subscriptions',
+                    let: { id: "$_id" },
+                    pipeline: [
+                        {
+                            $project:
+                            {
+                                memberId: 1,
+                                subscriptionMovies: {
+                                    $filter: {
+                                        input: "$subscriptionMovies",
+                                        as: "movie",
+                                        cond: { $eq: ["$$movie.movieId", { $toString: "$$id" }] }
+                                    }
+                                }
+                            }
+
+                        }
+                    ],
+                    as: "subscriptionWatched"
+                }
+            },
+            {
+                $project:
+                {
+                    name: 1,
+                    type: 1,
+                    language: 1,
+                    summary: 1,
+                    image: 1,
+                    genres: 1,
+                    premiered: 1,
+                    subscriptionWatched: {
+                        $filter: {
+                            input: "$subscriptionWatched",
+                            as: "subscription",
+                            cond: {
+                                $and: [
+                                    { $ne: ["$$subscription.subscriptionMovies", []] },
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                $lookup:
+                {
+                    from: "members",
+                    localField: "subscriptionWatched.memberId",
+                    foreignField: "_id",
+                    as: "members"
+                }
+            },
+            {
+                $addFields: {
+                    subscriptionWatched: {
+                        $map: {
+                            input: "$subscriptionWatched",
+                            as: "i",
+                            in: {
+                                $mergeObjects: [
+                                    "$$i",
+                                    {
+                                        $arrayElemAt: [
+                                            {
+                                                $filter: {
+                                                    input: "$members",
+                                                    cond: { $eq: ["$$this._id", "$$i.memberId"] }
+                                                }
+                                            },
+                                            0
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    members: "$$REMOVE"
+                }
+            },
+            {
+                $project:
+                {
+                    name: 1,
+                    type: 1,
+                    language: 1,
+                    summary: 1,
+                    image: 1,
+                    genres: 1,
+                    premiered: 1,
+                    subscriptionWatched: {
+                        $map: {
+                            input: "$subscriptionWatched",
+                            as: "member",
+                            in: {
+                                memberId: "$$member.memberId",
+                                name: "$$member.name",
+                                email: "$$member.email",
+                                city: "$$member.city",
+                                image: "$$member.image",
+                                dates: "$$member.subscriptionMovies.date"
+                            }
+                        }
+                    }
+                }
+            }
+        ]
+    ).exec();
+};
+
 // GET - Get All Movies - Read
 const getAllMovies = async () => {
     return Movie.find();
@@ -58,6 +176,7 @@ const getAllMoviesWS = async (id = '') => {
 };
 
 module.exports = {
+    getAllMoviesAggregation,
     getAllMovies,
     getMovieById,
     addMovie,

@@ -9,6 +9,18 @@ const router = express.Router();
 /*=========================//* Entry Point:> http://localhost:8080/movies *//*==========================
 /*====================================================================================================*/
 
+// Get All Movies with the widthly data by use MongoDB aggregation pipeline - Read
+router.get('/aggregate', async (req, res) => {
+    try {
+        const movies = await moviesBLL.getAllMoviesAggregation();
+        // console.log('movies = ', movies);
+        res.send(movies);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+});
+
 // Get All Movies
 router.get('/', async (req, res) => {
     try {
