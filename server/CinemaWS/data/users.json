@@ -1,0 +1,25 @@
+{
+    "users": [
+        {
+            "id": "659580b42550ce9c8b0fb5f8",
+            "firstName": "basheer",
+            "lastName": "mulla",
+            "published": 1704296629154,
+            "sessionTimeOut": "120"
+        },
+        {
+            "id": "659581031e6563e028455c14",
+            "firstName": "maram",
+            "lastName": "mulla",
+            "published": 1704296707514,
+            "sessionTimeOut": "120"
+        },
+        {
+            "id": "65958ddbe42e88c70887ab8d",
+            "firstName": "dana",
+            "lastName": "levi",
+            "published": 1704299996228,
+            "sessionTimeOut": "60"
+        }
+    ]
+}

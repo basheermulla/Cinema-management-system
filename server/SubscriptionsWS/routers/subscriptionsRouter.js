@@ -67,7 +67,8 @@ router.put('/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const obj = req.body;
-        const result = await subscriptionsBLL.updateSubscription(id, obj, { new: true });
+        console.log(obj);
+        const result = await subscriptionsBLL.updateSubscriptionByMemberId(id, obj, { new: true });
         res.send(result);
     } catch (error) {
         console.error(error);

@@ -1,13 +1,14 @@
 const Member = require('../models/memberModel.js');
 const memberWS = require('../DAL/membersWS');
 const Movie = require('../models/movieModel.js');
+const Subscription = require('../models/subscriptionModel.js');
 
 /*=======================================================================================================
 /*================================//* Members Collection MongoDB *//*====================================
 /*============================//* CRUD - Create, Read, Update, Delete *//*===============================
 /*=====================================================================================================*/
 
-// GET - Get All Movies with the widthly data by use MongoDB aggregation pipeline - Read
+// GET - Get All Members with the widthly data by use MongoDB aggregation pipeline - Read
 const getAllMembersAggregation = async () => {
     console.log('Hello from getAllMembersAggregation');
     const members = Member.aggregate(
@@ -144,7 +145,7 @@ const getAllMembersAggregation = async () => {
 
 // GET - Get All Members - Read
 const getAllMembers = async () => {
-    return Member.find()
+    return Member.find();
 };
 
 // GET - Get Member By Id - Read
@@ -159,6 +160,23 @@ const addMember = async (obj) => {
     return 'Created';
 };
 
+// PUT - Update a Member
+const updateMember = async (id, obj) => {
+    await Member.findByIdAndUpdate(id, obj, options);
+    return 'Updated';
+};
+
+// DELETE - Delete a Member
+const deleteMember = async (id) => {
+    await Member.findByIdAndDelete(id);
+    await Subscription.deleteOne({ memberId: id });
+    return 'Deleted';
+};
+
+//====================================================================
+//=     Working only once, when the Subscriptions server starting    =
+//====================================================================
+
 // InsertMany - Insert multiple Members
 const addManyMembers = async (objMany) => {
     // Prevent additional documents from being inserted if one fails
@@ -167,18 +185,7 @@ const addManyMembers = async (objMany) => {
     await Member.insertMany(objMany, options);
     return 'Created Many';
 };
-
-// PUT - Update a Member
-const updateMember = async (id, obj) => {
-    await Member.findByIdAndUpdate(id, obj);
-    return 'Updated';
-};
-
-// DELETE - Delete a Member
-const deleteMember = async (id) => {
-    await Member.findByIdAndDelete(id);
-    return 'Deleted';
-};
+//====================================================================
 
 /*=======================================================================================================
 /*==============================//* Work with - DAL/membersWS.js *//*====================================
