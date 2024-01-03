@@ -106,9 +106,10 @@ const addFirstSubscription = async (obj) => {
     return 'Created';
 };
 
-// PUT - Update a Subscription
-const updateSubscription = async (id, obj) => {
-    await Subscription.findByIdAndUpdate(id, obj);
+// PUT - Update a Subscription by memberId
+const updateSubscriptionByMemberId = async (id, obj, options) => {
+    const query = { memberId: id };
+    await Subscription.findOneAndUpdate(query, obj, options)
     return 'Updated';
 };
 
@@ -123,6 +124,6 @@ module.exports = {
     getAllSubscriptions,
     getSubscriptionById,
     addFirstSubscription,
-    updateSubscription,
+    updateSubscriptionByMemberId,
     deleteSubscription
 };

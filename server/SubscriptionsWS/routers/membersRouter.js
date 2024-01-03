@@ -25,7 +25,7 @@ router.get('/aggregate', async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         const members = await membersBLL.getAllMembers();
-
+        // console.log('Hi from Server with 8080 Port');
         res.send(members);
     } catch (error) {
         console.error(error);
@@ -49,7 +49,6 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         const obj = req.body; // In use
-        console.log('Post New Member = ', obj)
         const result = await membersBLL.addMember(obj);
         res.status(201).send(result);
     } catch (error) {

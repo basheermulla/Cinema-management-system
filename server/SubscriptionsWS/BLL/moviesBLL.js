@@ -1,5 +1,6 @@
 const Movie = require('../models/movieModel.js');
 const movieWS = require('../DAL/moviesWS');
+const Subscription = require('../models/subscriptionModel.js');
 
 /*=======================================================================================================
 /*================================//* Movies Collection MongoDB *//*=====================================
@@ -141,6 +142,24 @@ const addMovie = async (obj) => {
     return 'Created';
 };
 
+// PUT - Update a Movie
+const updateMovie = async (id, obj) => {
+    await Movie.findByIdAndUpdate(id, obj, options);
+    return 'Updated';
+};
+
+// DELETE - Delete a Movie
+const deleteMovie = async (id) => {
+    await Movie.findByIdAndDelete(id);
+    await Subscription.updateMany({}, { $pull: { subscriptionMovies: { movieId: id } } });
+    await Subscription.deleteMany({ subscriptionMovies: { $exists: true, $size: 0 } });
+    return 'Deleted';
+};
+
+//====================================================================
+//=     Working only once, when the Subscriptions server starting    =
+//====================================================================
+
 // InsertMany - Insert multiple Movies
 const addManyMovies = async (objMany) => {
     // Prevent additional documents from being inserted if one fails
@@ -149,18 +168,7 @@ const addManyMovies = async (objMany) => {
     await Movie.insertMany(objMany, options);
     return 'Created Many';
 };
-
-// PUT - Update a Movie
-const updateMovie = async (id, obj) => {
-    await Movie.findByIdAndUpdate(id, obj);
-    return 'Updated';
-};
-
-// DELETE - Delete a Movie
-const deleteMovie = async (id) => {
-    await Movie.findByIdAndDelete(id);
-    return 'Deleted';
-};
+//====================================================================
 
 /*=======================================================================================================
 /*===============================//* Work with - DAL/moviesWS.js *//*====================================
