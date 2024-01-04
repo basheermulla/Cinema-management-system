@@ -1,5 +1,6 @@
 const express = require('express');
 const moviesBLL = require('../BLL/moviesBLL');
+const verifyToken = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
@@ -10,7 +11,7 @@ const router = express.Router();
 /*=====================================================================================================*/
 
 // Get All Movies with the widthly data by use MongoDB aggregation pipeline - Read
-router.get('/aggregate', async (req, res) => {
+router.get('/aggregate', verifyToken, async (req, res) => {
     try {
         const movies = await moviesBLL.getAllMoviesAggregation();
         
@@ -22,7 +23,7 @@ router.get('/aggregate', async (req, res) => {
 });
 
 // Get All Movies
-router.get('/', async (req, res) => {
+router.get('/', verifyToken, async (req, res) => {
     try {
         const movies = await moviesBLL.getAllMovies();
 
@@ -34,7 +35,7 @@ router.get('/', async (req, res) => {
 });
 
 // GET - Get Movie By Id
-router.get('/:id', async (req, res) => {
+router.get('/:id', verifyToken, async (req, res) => {
     try {
         const { id } = req.params;
         const movie = await moviesBLL.getMovieById(id);
@@ -46,7 +47,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST - Create a Movie
-router.post('/', async (req, res) => {
+router.post('/', verifyToken, async (req, res) => {
     try {
         const obj = req.body; // In use        
         const result = await moviesBLL.addMovie(obj);
@@ -58,7 +59,7 @@ router.post('/', async (req, res) => {
 });
 
 // PUT - Update a Movie
-router.put('/:id', async (req, res) => {
+router.put('/:id', verifyToken, async (req, res) => {
     try {
         const { id } = req.params;
         const obj = req.body;
@@ -71,7 +72,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // DELETE - Delete a Movie
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verifyToken, async (req, res) => {
     try {
         const { id } = req.params;
         const result = await moviesBLL.deleteMovie(id);

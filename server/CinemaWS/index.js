@@ -7,10 +7,13 @@ require("dotenv").config();
 const connectDB = require('./config/db');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 const membersRouter = require('./routers/membersRouter');
 const moviesRouter = require('./routers/moviesRouter');
 const subscriptionsRouter = require('./routers/subscriptionsRouter');
 const usersRouter = require('./routers/usersRouter');
+const authRouter = require('./routers/authRouter');
 
 /*=======================================================================================================
 /*================================//* Use Environment Variable *//*======================================
@@ -18,11 +21,16 @@ const usersRouter = require('./routers/usersRouter');
 const { API_PORT } = process.env;
 const port = process.env.PORT || API_PORT;
 const { MONGO_URL } = process.env;
+const { SECRET } = process.env;
 
 /*=======================================================================================================
 /*====================================//* Connect Database *//*==========================================
 /*=====================================================================================================*/
 connectDB();
+const store = new MongoDBStore({
+    uri: MONGO_URL,
+    collection: 'mySessions'
+});
 
 /*=======================================================================================================
 /*=======================================//* Middlewares *//*============================================
@@ -40,7 +48,15 @@ app.use(express.urlencoded({ extended: true }));
 /*=======================================================================================================
 /*===============================//* Create a session middleware *//*====================================
 /*=====================================================================================================*/
-
+app.use(session({
+    secret: SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 3600000  // By dafault, session timeout of 60 minutes (60 minute  * 60 seconds * 1000 milliseconds)
+    },
+    store: store
+}));
 
 /*=======================================================================================================
 /*==================================//* Routers - Logic goes here *//*===================================
@@ -49,6 +65,7 @@ app.use('/members', membersRouter);
 app.use('/movies', moviesRouter);
 app.use('/subscriptions', subscriptionsRouter);
 app.use('/users', usersRouter);
+app.use('/authentication', authRouter);
 
 /*=======================================================================================================
 /*====================================//* server listening *//*==========================================

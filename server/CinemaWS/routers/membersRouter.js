@@ -1,5 +1,6 @@
 const express = require('express');
 const membersBLL = require('../BLL/membersBLL');
+const verifyToken = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
@@ -10,10 +11,11 @@ const router = express.Router();
 /*=====================================================================================================*/
 
 // Get All Members with the widthly data by use MongoDB aggregation pipeline - Read
-router.get('/aggregate', async (req, res) => {
+// Protected route
+router.get('/aggregate', verifyToken, async (req, res) => {
     try {
         const members = await membersBLL.getAllMembersAggregation();
-        
+
         res.send(members);
     } catch (error) {
         console.error(error);
@@ -22,7 +24,7 @@ router.get('/aggregate', async (req, res) => {
 });
 
 // Get All Members
-router.get('/', async (req, res) => {
+router.get('/', verifyToken, async (req, res) => {
     try {
         const members = await membersBLL.getAllMembers();
 
@@ -34,7 +36,7 @@ router.get('/', async (req, res) => {
 });
 
 // GET - Get Member By Id
-router.get('/:id', async (req, res) => {
+router.get('/:id', verifyToken, async (req, res) => {
     try {
         const { id } = req.params;
         const member = await membersBLL.getMemberById(id);
@@ -46,7 +48,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST - Create a Member
-router.post('/', async (req, res) => {
+router.post('/', verifyToken, async (req, res) => {
     try {
         const obj = req.body; // In use        
         const result = await membersBLL.addMember(obj);
@@ -58,7 +60,7 @@ router.post('/', async (req, res) => {
 });
 
 // PUT - Update a Member
-router.put('/:id', async (req, res) => {
+router.put('/:id', verifyToken, async (req, res) => {
     try {
         const { id } = req.params;
         const obj = req.body;
@@ -71,7 +73,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // DELETE - Delete a Member
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verifyToken, async (req, res) => {
     try {
         const { id } = req.params;
         const result = await membersBLL.deleteMember(id);

@@ -1,5 +1,6 @@
 const express = require('express');
 const usersBLL = require('../BLL/usersBLL');
+const verifyToken = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
@@ -10,7 +11,7 @@ const router = express.Router();
 /*=====================================================================================================*/
 
 // Get All Users
-router.get('/', async (req, res) => {
+router.get('/', verifyToken, async (req, res) => {
     try {
         const users = await usersBLL.getAllUsersAndPermissionsData();
 
@@ -22,7 +23,7 @@ router.get('/', async (req, res) => {
 });
 
 // GET - Get User By Id
-router.get('/:id', async (req, res) => {
+router.get('/:id', verifyToken, async (req, res) => {
     try {
         const { id } = req.params;
         const user = await usersBLL.getUserAndPermissionDataByUserId(id);
@@ -34,7 +35,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST - Create a User
-router.post('/', async (req, res) => {
+router.post('/', verifyToken, async (req, res) => {
     try {
         const obj = req.body; // In use        
         const result = await usersBLL.addUserAndDefaultPermissionData(obj);
@@ -46,7 +47,7 @@ router.post('/', async (req, res) => {
 });
 
 // PUT - Update a User
-router.put('/:id', async (req, res) => {
+router.put('/:id', verifyToken, async (req, res) => {
     try {
         const { id } = req.params;
         const obj = req.body;
@@ -59,7 +60,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // DELETE - Delete a User
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verifyToken, async (req, res) => {
     try {
         const { id } = req.params;
         const result = await usersBLL.deleteUserAndPermissionData(id);
