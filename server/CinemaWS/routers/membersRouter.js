@@ -24,10 +24,10 @@ router.get('/aggregate', verifyToken, async (req, res) => {
 });
 
 // Get All Members
-router.get('/', verifyToken, async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const members = await membersBLL.getAllMembers();
-
+        console.log('Hi from server');
         res.send(members);
     } catch (error) {
         console.error(error);
