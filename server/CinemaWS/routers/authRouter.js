@@ -31,7 +31,6 @@ router.post('/register', async (req, res) => {
         // User was created by the system administrator - Let's hash the password
         const obj = ({ password: hashedPassword });
         const result = await authBLL.addUserPassword(_id, obj, { new: true });
-
         res.status(201).json(result);
     } catch (error) {
         console.error(error);
@@ -52,14 +51,14 @@ router.post('/login', async (req, res) => {
         //              Or
         //           2. Missing password ! needs to register before login
         if (!userLogin) {
-            return res.status(401).send({ message: message });
+            return res.status(401).send({ user: null, message: message });
         }
 
         // Compare the given password with the stored password using the bcrypt module
         const passwordMatch = await bcrypt.compare(password, userLogin.password);
         console.log(passwordMatch);
         if (!passwordMatch) {
-            return res.status(401).json({ error: 'Authentication failed' });
+            return res.status(401).json({ user: null, error: 'Authentication failed' });
         }
 
         // User is authenticated - Let's generate a token
@@ -99,7 +98,7 @@ router.post('/login', async (req, res) => {
         const set_maxAge_session = userLogin.user['sessionTimeOut'] * 60 * 1000;
         req.session.cookie.maxAge = set_maxAge_session;
 
-        res.status(200).json({ message: 'User logged in successfully' });
+        res.status(200).json({ user: userLogin, accessToken , message: 'User logged in successfully' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Login failed' });
