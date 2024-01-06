@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'redux/store';
+import { useSelector, useDispatch } from 'redux';
 import { increment, decrement, incrementAmountAction } from 'redux/slices/counterSlice';
 import { getMembers } from 'redux/slices/membersSlice'
 

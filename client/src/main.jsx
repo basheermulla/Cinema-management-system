@@ -5,7 +5,7 @@ import App from './App.jsx'
 // redux - toolkit and persist
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { persister, store } from './redux/store';
+import { persister, store } from './redux/index.js';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
