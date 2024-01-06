@@ -1,10 +1,21 @@
-import PocMembersPage from "./views/poc-members-page/PocMembersPage"
+import { RouterProvider } from 'react-router-dom';
+
+// internal imports
+
+// auth provider
+import { AuthProvider } from 'contexts/AuthContext';
+
+// routing
+import router from 'routes';
+
 
 function App() {
-  
+
   return (
     <>
-      <PocMembersPage />
+        <AuthProvider>
+          <RouterProvider router={router} />
+        </AuthProvider>
     </>
   )
 }

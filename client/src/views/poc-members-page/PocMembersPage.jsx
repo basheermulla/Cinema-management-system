@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from '../../redux/store';
-import { increment, decrement, incrementAmountAction } from '../../redux/slices/counterSlice';
-import { getMembers } from '../../redux/slices/membersSlice'
+import { useSelector, useDispatch } from 'redux/store';
+import { increment, decrement, incrementAmountAction } from 'redux/slices/counterSlice';
+import { getMembers } from 'redux/slices/membersSlice'
 
 // material-ui
 import { Avatar, Box, Button, ListItem, Typography, Unstable_Grid2 } from '@mui/material';
 
 // internal imports
-import MainCard from '../../components/cards/MainCard';
+import MainCard from 'components/cards/MainCard';
 
 const PocMembersPage = () => {
     const [incrementAmount, setIncrementAmount] = useState(2)
