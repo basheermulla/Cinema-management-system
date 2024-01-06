@@ -94,7 +94,7 @@ const AuthRegister = ({ ...others }) => {
                         console.error(err);
                         if (scriptedRef.current) {
                             setStatus({ success: false });
-                            setErrors({ submit: err.message });
+                            setErrors({ submit: err.response.data.message });
                             setSubmitting(false);
                         }
                     }

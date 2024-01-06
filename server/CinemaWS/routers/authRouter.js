@@ -34,7 +34,7 @@ router.post('/register', async (req, res) => {
         res.status(201).json(result);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Registration failed' });
+        res.status(500).json({ message: 'Registration failed' });
     }
 });
 
@@ -58,7 +58,7 @@ router.post('/login', async (req, res) => {
         const passwordMatch = await bcrypt.compare(password, userLogin.password);
         console.log(passwordMatch);
         if (!passwordMatch) {
-            return res.status(401).json({ user: null, error: 'Authentication failed' });
+            return res.status(401).json({ user: null, message: 'Authentication failed' });
         }
 
         // User is authenticated - Let's generate a token
@@ -101,7 +101,7 @@ router.post('/login', async (req, res) => {
         res.status(200).json({ user: userLogin, accessToken , message: 'User logged in successfully' });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Login failed' });
+        res.status(500).json({ message: 'Login failed' });
     }
 });
 

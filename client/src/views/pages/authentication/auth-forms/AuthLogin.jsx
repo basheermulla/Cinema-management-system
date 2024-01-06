@@ -51,17 +51,18 @@ const AuthLogin = ({ loginProp, ...others }) => {
             })}
             onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                 try {
-                    await login(values.username, values.password);
-                    console.log('scriptedRef.current = ', scriptedRef.current);
+                    const response = await login(values.username, values.password);
+                    console.log('response = ', response);
                     if (scriptedRef.current) {
                         setStatus({ success: true });
                         setSubmitting(false);
                     }
                 } catch (err) {
                     console.error(err);
+                    console.error(err.response.data);    
                     if (scriptedRef.current) {
                         setStatus({ success: false });
-                        setErrors({ submit: err.message });
+                        setErrors({ submit: err.response.data.message });
                         setSubmitting(false);
                     }
                 }
