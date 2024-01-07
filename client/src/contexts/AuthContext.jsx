@@ -3,8 +3,8 @@ import { createContext, useEffect, useReducer } from 'react';
 import axios from 'axios';
 
 // reducer - state management
-import { LOGIN, LOGOUT } from 'redux/actions';
-import accountReducer from 'redux/accountReducer';
+import { LOGIN, LOGOUT } from 'store/actions';
+import accountReducer from 'store/accountReducer';
 
 // internal imports
 import Loader from 'components/Loader';

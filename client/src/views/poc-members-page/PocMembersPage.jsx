@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'redux';
-import { increment, decrement, incrementAmountAction } from 'redux/slices/counterSlice';
-import { getMembers } from 'redux/slices/membersSlice'
+import { useSelector, useDispatch } from 'store/index';
+import { increment, decrement, incrementAmountAction } from 'store/slices/counterSlice';
+import { getMembers } from 'store/slices/membersSlice'
 
 // material-ui
 import { Avatar, Box, Button, ListItem, Typography, Unstable_Grid2 } from '@mui/material';
