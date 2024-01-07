@@ -2,7 +2,10 @@ import { RouterProvider } from 'react-router-dom';
 
 // internal imports
 
-// auth provider
+// them customization [Context]
+import ThemeCustomization from 'themes';
+
+// auth provider [Context]
 import { AuthProvider } from 'contexts/AuthContext';
 
 // routing
@@ -11,11 +14,11 @@ import router from 'routes';
 function App() {
 
   return (
-    <>
-        <AuthProvider>
-          <RouterProvider router={router} />
-        </AuthProvider>
-    </>
+    <ThemeCustomization>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </ThemeCustomization>
   )
 }
 

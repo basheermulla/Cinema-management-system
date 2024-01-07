@@ -24,10 +24,12 @@ export const AuthProvider = ({ children }) => {
     const login = async (username, password) => {        
         const response = await axios.post(`${import.meta.env.VITE_APP_AUTH_URL}/login`, { username, password });
         console.log(response.data);
-        const { user, accessToken, message, error } = response.data;
-        console.log(user, accessToken, message, error);
+        const { user, accessToken, message } = response.data;
+        console.log(user, accessToken, message,);
+        console.log(user, accessToken, message);
         if (user) {
             localStorage.setItem('userLogin', user);
+            localStorage.setItem('accessToken', accessToken);
             dispatch({ type: LOGIN, payload: { isLoggedIn: true, user } });
         }
     };
@@ -50,7 +52,9 @@ export const AuthProvider = ({ children }) => {
         const init = async () => {
             try {
                 const user = window.localStorage.getItem('userLogin');
-                // console.log('init method = ', user);
+                const accessToken = window.localStorage.getItem('accessToken');
+                console.log('init user = ', user);
+                console.log('init accessToken = ', accessToken);
                 if (user) {
                     dispatch({ type: LOGIN, payload: { isLoggedIn: true, user } });
                 } else {

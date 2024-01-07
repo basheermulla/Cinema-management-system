@@ -13,7 +13,7 @@ const PocMembersPage = () => {
     const [incrementAmount, setIncrementAmount] = useState(2)
 
     const { members, error } = useSelector((state) => state.members);
-    
+
     const { value } = useSelector((state) => state.counter);
     const dispatch = useDispatch();
 
@@ -23,7 +23,7 @@ const PocMembersPage = () => {
 
     useEffect(() => {
         console.log(members);
-        console.log(error);
+        if (error) { console.error(error); }
     }, [members, error])
 
     return (
