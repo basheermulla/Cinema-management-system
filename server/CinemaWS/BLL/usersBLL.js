@@ -23,7 +23,7 @@ const getAllUsersAndPermissionsData = async () => {
         const userDB = users.find((u) => u['_id'].toHexString() === user.id);
         obj_user = {
             _id: user.id,
-            username: userDB.username,
+            username: userDB?.username,
             user: user,
             permissionsUser: getUserPermissions
         }

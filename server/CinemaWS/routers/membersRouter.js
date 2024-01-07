@@ -1,6 +1,7 @@
 const express = require('express');
 const membersBLL = require('../BLL/membersBLL');
 const verifyToken = require('../middleware/authMiddleware');
+const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
@@ -24,10 +25,10 @@ router.get('/aggregate', verifyToken, async (req, res) => {
 });
 
 // Get All Members
-router.get('/', async (req, res) => {
+router.get('/', verifyToken, async (req, res) => {
     try {
         const members = await membersBLL.getAllMembers();
-        console.log('Hi from server');
+        console.log('Hi from server and your accessToken is: ', req.headers['authorization']);
         res.send(members);
     } catch (error) {
         console.error(error);
