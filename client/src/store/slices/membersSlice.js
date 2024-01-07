@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { dispatch } from '../store';
+import { dispatch } from '..';
 import axios from "axios";
 
 const REACT_APP_MEMBERS_URL = "http://localhost:8082/members";

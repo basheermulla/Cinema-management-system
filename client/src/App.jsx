@@ -8,7 +8,6 @@ import { AuthProvider } from 'contexts/AuthContext';
 // routing
 import router from 'routes';
 
-
 function App() {
 
   return (
