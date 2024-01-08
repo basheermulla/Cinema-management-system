@@ -66,12 +66,11 @@ const getUserByUsername = async (usernameCheck) => {
     const getUserPermission = permissions.permissions.find((permission) => permission.id === _id);
 
     // Map the desire user with its username and permissions    
-    obj_user = {
-        _id,
+    const obj_user = { 
+        ...userDetails, 
         username: result_user.username,
         password: result_user.password,
-        user: userDetails,
-        permissionsUser: getUserPermission
+        ...getUserPermission
     }
     
     return { userLogin: obj_user };

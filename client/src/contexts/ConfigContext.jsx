@@ -15,6 +15,7 @@ const initialState = {
     onChangeOutlinedField: () => { },
     onChangeMenuType: () => { },
     onChangePresetColor: () => { },
+    onChangeLocale: () => { },
     onChangeContainer: () => { },
     onReset: () => { }
 };
@@ -30,6 +31,7 @@ const ConfigProvider = ({ chidren }) => {
         outlinedFilled: initialState.outlinedFilled,
         navType: initialState.navType,
         presetColor: initialState.presetColor,
+        locale: initialState.locale
     });
 
     const onChangeLayout = (layout) => {
@@ -81,6 +83,13 @@ const ConfigProvider = ({ chidren }) => {
         });
     };
 
+    const onChangeLocale = (locale) => {
+        setConfig({
+            ...config,
+            locale
+        });
+    };
+
     const onChangeContainer = (container) => {
         setConfig({
             ...config,
@@ -96,7 +105,8 @@ const ConfigProvider = ({ chidren }) => {
         <ConfigContext.Provider
             value={{
                 ...config, onChangeLayout, onChangeDrawer, onChangeFontFamily, onChangeBorderRadius,
-                onChangeOutlinedField, onChangeMenuType, onChangePresetColor, onChangeContainer, onReset
+                onChangeOutlinedField, onChangeMenuType, onChangePresetColor, onChangeLocale, 
+                onChangeContainer, onReset
             }}
         >
         </ConfigContext.Provider>

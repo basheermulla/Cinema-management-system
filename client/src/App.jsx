@@ -1,6 +1,7 @@
 import { RouterProvider } from 'react-router-dom';
 
 // internal imports
+import Locales from 'components/Locales';
 
 // them customization [Context]
 import ThemeCustomization from 'themes';
@@ -15,9 +16,11 @@ function App() {
 
   return (
     <ThemeCustomization>
-      <AuthProvider>
-        <RouterProvider router={router} />
-      </AuthProvider>
+      <Locales>
+        <AuthProvider>
+          <RouterProvider router={router} />
+        </AuthProvider>
+      </Locales>
     </ThemeCustomization>
   )
 }

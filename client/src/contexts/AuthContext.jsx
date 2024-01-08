@@ -21,21 +21,20 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
     const [state, dispatch] = useReducer(accountReducer, initialState);
 
-    const login = async (username, password) => {        
+    const login = async (username, password) => {
         const response = await axios.post(`${import.meta.env.VITE_APP_AUTH_URL}/login`, { username, password });
-        console.log(response.data);
         const { user, accessToken, message } = response.data;
-        console.log(user, accessToken, message,);
-        console.log(user, accessToken, message);
+        console.log('login user = ', user);
+        console.log('login accessToken = ', accessToken);
         if (user) {
-            localStorage.setItem('userLogin', user);
+            localStorage.setItem('userLogin', JSON.stringify(user));
             localStorage.setItem('accessToken', accessToken);
             dispatch({ type: LOGIN, payload: { isLoggedIn: true, user } });
         }
     };
 
     const register = async (username, password) => {
-        const response = await axios.post(`${import.meta.env.VITE_APP_AUTH_URL}/register`, { username, password, });
+        const response = await axios.post(`${import.meta.env.VITE_APP_AUTH_URL}/register`, { username, password });
         const { message, error } = response.data;
 
         if (message === 'User registered successfully') {
@@ -45,13 +44,15 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
         localStorage.removeItem('userLogin');
+        localStorage.removeItem('accessToken');
         dispatch({ type: LOGOUT });
     };
 
     useEffect(() => {
         const init = async () => {
             try {
-                const user = window.localStorage.getItem('userLogin');
+                const userLogin = window.localStorage.getItem('userLogin');
+                const user = JSON.parse(userLogin);                
                 const accessToken = window.localStorage.getItem('accessToken');
                 console.log('init user = ', user);
                 console.log('init accessToken = ', accessToken);
