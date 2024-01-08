@@ -64,8 +64,8 @@ router.post('/login', async (req, res) => {
         // User is authenticated - Let's generate a token
         const { ACCESS_SECRET_TOKEN } = process.env;
         const accessToken = jwt
-            .sign({ userId: userLogin?._id }, ACCESS_SECRET_TOKEN, { expiresIn: `${userLogin.user['sessionTimeOut']}m` });
-        
+            .sign({ userId: userLogin?._id }, ACCESS_SECRET_TOKEN, { expiresIn: `${userLogin['sessionTimeOut']}m` });
+
         console.log(accessToken);
         // Prevent sending the password to the client
         delete userLogin.password;
@@ -87,7 +87,7 @@ router.post('/login', async (req, res) => {
             const use_Session_Store = {
                 isLoggedIn: true,
                 accessToken,
-                sessionTimeOut: userLogin.user['sessionTimeOut'],
+                sessionTimeOut: userLogin['sessionTimeOut'],
                 userLogin
             }
 
@@ -95,10 +95,10 @@ router.post('/login', async (req, res) => {
         }
 
         // Update maxAge according to the user's session timeout
-        const set_maxAge_session = userLogin.user['sessionTimeOut'] * 60 * 1000;
+        const set_maxAge_session = userLogin['sessionTimeOut'] * 60 * 1000;
         req.session.cookie.maxAge = set_maxAge_session;
         console.log(userLogin);
-        res.status(200).json({ user: userLogin, accessToken , message: 'User logged in successfully' });
+        res.status(200).json({ user: userLogin, accessToken, message: 'User logged in successfully' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Login failed' });

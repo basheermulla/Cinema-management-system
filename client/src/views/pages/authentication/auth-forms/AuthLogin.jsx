@@ -41,7 +41,7 @@ const AuthLogin = ({ loginProp, ...others }) => {
     return (
         <Formik
             initialValues={{
-                username: 'movieSubscription',
+                username: 'cinemc-user',
                 password: '123456',
                 submit: null
             }}

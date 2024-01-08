@@ -48,7 +48,7 @@ const ThemeCustomization = ({ children }) => {
     <StyledEngineProvider injectFirst>
             <ThemeProvider theme={themes}>
                 <CssBaseline />
-                {console.log('themes = ', themes)}
+                {/* {console.log('themes = ', themes)} */}
                 {children}
             </ThemeProvider>
         </StyledEngineProvider>

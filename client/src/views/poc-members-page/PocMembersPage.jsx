@@ -22,7 +22,7 @@ const PocMembersPage = () => {
     }
 
     useEffect(() => {
-        console.log(members);
+        if (members) { console.log(members); }
         if (error) { console.error(error); }
     }, [members, error])
 
