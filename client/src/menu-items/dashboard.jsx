@@ -22,14 +22,6 @@ const dashboard = {
             url: '/dashboard/default',
             icon: icons.IconDashboard,
             breadcrumbs: false
-        },
-        {
-            id: 'chat',
-            title: <FormattedMessage id="chat" />,
-            type: 'item',
-            url: '/dashboard/analytics',
-            icon: icons.IconMessages,
-            breadcrumbs: false
         }
     ]
 };
