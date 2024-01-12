@@ -1,6 +1,8 @@
 {
     "control panel": "Control panel",
 
+    "cinema": "Cinema",
+
     "members": "Members",
     "all-members": "All members",
     "add-member": "Add member",
@@ -15,8 +17,8 @@
     "management": "Management",
     "users": "Users",
     "User Management": "User Management",
-
-
+    "recommendations": "Recommendations",
+    
 
 
 

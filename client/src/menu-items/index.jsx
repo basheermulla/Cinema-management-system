@@ -1,10 +1,10 @@
 import dashboard from "./dashboard";
-import application from "./application";
+import cinema from "./cinema";
 import management from "./management";
 
 
 const menuItems ={ 
-    items: [dashboard, application, management]
+    items: [dashboard, cinema, management]
 };
 
 export default menuItems;

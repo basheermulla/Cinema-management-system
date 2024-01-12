@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 // assets
 import {
     IconApps, IconUserCheck, IconBasket, IconMessages, IconLayoutKanban, IconMail, IconCalendar,
-    IconNfc, IconUsersGroup, IconUserCircle, IconUserPlus, IconBellCheck, IconMovie
+    IconNfc, IconUsersGroup, IconUserCircle, IconUserPlus, IconBellCheck, IconMovie, IconStars, IconStar
 } from '@tabler/icons-react';
 
 // constant
@@ -21,17 +21,27 @@ const icons = {
     IconUserCircle,
     IconUserPlus,
     IconBellCheck,
-    IconMovie
+    IconMovie,
+    IconStars,
+    IconStar
 };
 
 // ==============================|| APPLICATION MENU ITEMS ||============================== //
 
 const application = {
-    id: 'application',
-    title: <FormattedMessage id="application" />,
+    id: 'cinema',
+    title: <FormattedMessage id="cinema" />,
     icon: icons.IconApps,
     type: 'group',
     children: [
+        {
+            id: 'chat',
+            title: <FormattedMessage id="chat" />,
+            type: 'item',
+            url: '/dashboard/analytics',
+            icon: icons.IconMessages,
+            breadcrumbs: false
+        },
         {
             id: 'movies',
             title: <FormattedMessage id="movies" />,
@@ -39,38 +49,16 @@ const application = {
             icon: icons.IconMovie,
             children: [
                 {
-                    id: 'all-movies',
-                    title: <FormattedMessage id="all-movies" />,
+                    id: 'movies',
+                    title: <FormattedMessage id="movies" />,
                     type: 'item',
-                    url: '/apps/user/social-profile/posts'
+                    url: '/cinema/movies'
                 },
                 {
                     id: 'add-movie',
                     title: <FormattedMessage id="add-movie" />,
                     type: 'item',
-                    url: '/apps/user/social-profile/posts'
-                }
-            ]
-        },
-        {
-            id: 'members',
-            title: <FormattedMessage id="members" />,
-            type: 'collapse',
-            icon: icons.IconUsersGroup,
-            children: [
-                {
-                    id: 'all-members',
-                    title: <FormattedMessage id="all-members" />,
-                    type: 'item',
-                    url: '/apps/customer/customer-list',
-                    breadcrumbs: false
-                },
-                {
-                    id: 'add-member',
-                    title: <FormattedMessage id="add-member" />,
-                    type: 'item',
-                    url: '/apps/customer/order-list',
-                    breadcrumbs: false
+                    url: '/cinema/movies/true'
                 }
             ]
         },
@@ -81,13 +69,27 @@ const application = {
             icon: icons.IconBellCheck,
             children: [
                 {
-                    id: 'subscriptions',
-                    title: <FormattedMessage id="subscriptions" />,
+                    id: 'all-members',
+                    title: <FormattedMessage id="all-members" />,
                     type: 'item',
-                    url: '/apps/customer/customer-list',
+                    url: '/members-page',
+                    breadcrumbs: false
+                },
+                {
+                    id: 'add-member',
+                    title: <FormattedMessage id="add-member" />,
+                    type: 'item',
+                    url: '/members-page',
                     breadcrumbs: false
                 }
             ]
+        },
+        {
+            id: 'recommendations',
+            title: <FormattedMessage id="recommendations" />,
+            type: 'item',
+            icon: icons.IconStars,
+            url: '/members-page',
         }
     ]
 };

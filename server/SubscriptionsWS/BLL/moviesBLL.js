@@ -143,7 +143,7 @@ const addMovie = async (obj) => {
 };
 
 // PUT - Update a Movie
-const updateMovie = async (id, obj) => {
+const updateMovie = async (id, obj, options) => {
     await Movie.findByIdAndUpdate(id, obj, options);
     return 'Updated';
 };

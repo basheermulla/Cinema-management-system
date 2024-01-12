@@ -1,8 +1,13 @@
+import { lazy } from 'react';
+
 // Internal imports
 import MinimalLayout from 'layout/MinimalLayout';
 import GuestGuard from './route-guard/GuestGuard';
-import AuthLogin from 'views/pages/authentication/Login';
-import AuthRegister from 'views/pages/authentication/Register';
+import Loadable from 'components/Loadable';
+
+// login routing
+const AuthLogin = Loadable(lazy(() => import('views/pages/authentication/Login')));
+const AuthRegister = Loadable(lazy(() => import('views/pages/authentication/Register')));
 
 const LoginRoutes = {
     path: '/',
@@ -12,10 +17,6 @@ const LoginRoutes = {
         </GuestGuard>
     ),
     children: [
-        {
-            path: '/',
-            element: <AuthLogin />
-        },
         {
             path: '/login',
             element: <AuthLogin />

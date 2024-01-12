@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { dispatch } from '..';
+import { dispatch } from '../index';
 import axios from "axios";
 
 const MEMBERS_URL = import.meta.env.VITE_APP_MEMBERS_URL;
