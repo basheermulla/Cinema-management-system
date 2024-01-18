@@ -16,6 +16,7 @@ import StarIcon from '@mui/icons-material/Star'
 import Avatar from 'components/extended/Avatar';
 
 import { useDispatch } from 'store';
+import { Link } from 'react-router-dom';
 
 
 const SubscriptionList = ({ movie }) => {
@@ -26,6 +27,7 @@ const SubscriptionList = ({ movie }) => {
 
     useEffect(() => {
         setData(movie?.subscriptionWatched);
+        console.log(data);
         console.log(movie);
     }, []);
 
@@ -52,7 +54,15 @@ const SubscriptionList = ({ movie }) => {
                                         </Grid>
                                         <Grid item xs zeroMinWidth>
                                             <Typography align="left" variant="subtitle1" component="div">
-                                                {row.name}{' '}
+                                                <Typography
+                                                    component={Link}
+                                                    to={`/cinema/subscriptions/member-profile/${row.memberId}`}
+                                                    variant="subtitle1"
+                                                    color="primary"
+                                                    sx={{ textDecoration: 'none' }}
+                                                >
+                                                    {row.name}
+                                                </Typography>
                                             </Typography>
                                             <Typography align="left" variant="subtitle2" noWrap>
                                                 {row.email}
@@ -72,7 +82,7 @@ const SubscriptionList = ({ movie }) => {
                                                     <ListItemIcon>
                                                         <StarIcon />
                                                     </ListItemIcon>
-                                                    <ListItemText primary={                                                        
+                                                    <ListItemText primary={
                                                         <Typography> {format(new Date(date), 'E, MMM d yyyy')}</Typography>
                                                     } />
                                                 </ListItemButton>

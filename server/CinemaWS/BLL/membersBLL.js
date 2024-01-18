@@ -11,6 +11,12 @@ const getAllMembersAggregation = async () => {
     return members;
 }
 
+// GET - Get All Members with Unwind Subscriptions [Movies, Subscriptions] data
+const getAllMembersSubscriptionsUnwind = async () => {
+    let { data: members } = await MembersWS.getAllMembersSubscriptionsUnwind();
+    return members;
+}
+
 // GET - Get All Members
 const getAllMembers = async () => {
     let { data: members } = await MembersWS.getAllMembersWS();
@@ -43,6 +49,7 @@ const deleteMember = async (id) => {
 
 module.exports = { 
     getAllMembersAggregation,
+    getAllMembersSubscriptionsUnwind,
     getAllMembers,
     getMemberById,
     addMember,

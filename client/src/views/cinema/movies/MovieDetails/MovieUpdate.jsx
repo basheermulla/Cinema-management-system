@@ -49,7 +49,7 @@ const validationSchema = yup.object({
     summary: yup.string().required('Summary is required')
 });
 
-const MovieUpdate = ({ movie, editMovie, removeMovie }) => {
+const MovieUpdate = ({ movie, editMovie }) => {
 
     const navigate = useNavigate();
 
@@ -252,104 +252,110 @@ const MovieUpdate = ({ movie, editMovie, removeMovie }) => {
                                 </Stack>
                             </Grid>
                             <Grid container spacing={2} sx={{ textAlign: 'left', mt: 2, p: 1 }}>
-                                <Grid item xs={12} sm={6} md={4} lg={4}>
-                                    <FormControl sx={{ m: 1, minWidth: 120 }}>
-                                        <InputLabel id="type-select">Type</InputLabel>
-                                        <Select
-                                            labelId="type-select"
-                                            id="type"
-                                            name="type"
-                                            value={formik.values.type}
-                                            onChange={formik.handleChange}
-                                            label="Type"
-                                        >
-                                            <MenuItem value="">
-                                                <em>None</em>
-                                            </MenuItem>
-                                            {
-                                                typeOptions.map((type, index) => (
-                                                    <MenuItem key={index} value={type.type}>{type.type}</MenuItem>
-                                                ))
-                                            }
-                                        </Select>
-                                        {formik.errors.type && (
+                                <Grid item xs={12} sm={6} md={4}>
+                                    <Stack direction="column">
+                                        <FormControl sx={{ m: 1, minWidth: 120 }}>
+                                            <InputLabel id="type-select">Type</InputLabel>
+                                            <Select
+                                                labelId="type-select"
+                                                id="type"
+                                                name="type"
+                                                value={formik.values.type}
+                                                onChange={formik.handleChange}
+                                                label="Type"
+                                            >
+                                                <MenuItem value="">
+                                                    <em>None</em>
+                                                </MenuItem>
+                                                {
+                                                    typeOptions.map((type, index) => (
+                                                        <MenuItem key={index} value={type.type}>{type.type}</MenuItem>
+                                                    ))
+                                                }
+                                            </Select>
+                                            {formik.errors.type && (
+                                                <FormHelperText error id="standard-weight-helper-text-email-login">
+                                                    {' '}
+                                                    {formik.errors.type}{' '}
+                                                </FormHelperText>
+                                            )}
+                                        </FormControl>
+                                    </Stack>
+                                </Grid>
+                                <Grid item xs={12} sm={6} md={4}>
+                                    <Stack direction="row" sx={{ justifyContent: 'center' }}>                                        
+                                        <FormControl>
+                                            <RadioGroup
+                                                row
+                                                aria-label="language"
+                                                value={formik.values.language}
+                                                onChange={formik.handleChange}
+                                                name="language"
+                                                id="language"
+                                            >
+                                                <FormControlLabel
+                                                    value="English"
+                                                    control={
+                                                        <Radio
+                                                            sx={{
+                                                                color: 'primary.main',
+                                                                '&.Mui-checked': { color: 'primary.main' }
+                                                            }}
+                                                        />
+                                                    }
+                                                    label="English"
+                                                />
+                                                <FormControlLabel
+                                                    value="Japanese"
+                                                    control={
+                                                        <Radio
+                                                            sx={{
+                                                                color: 'error.main',
+                                                                '&.Mui-checked': { color: 'error.main' }
+                                                            }}
+                                                        />
+                                                    }
+                                                    label="Japanese"
+                                                />
+                                                <FormControlLabel
+                                                    value="Spanish"
+                                                    control={
+                                                        <Radio
+                                                            sx={{
+                                                                color: 'secondary.main',
+                                                                '&.Mui-checked': { color: 'secondary.main' }
+                                                            }}
+                                                        />
+                                                    }
+                                                    label="Spanish"
+                                                />
+                                            </RadioGroup>
+                                        </FormControl>
+                                        {formik.errors.language && (
                                             <FormHelperText error id="standard-weight-helper-text-email-login">
                                                 {' '}
-                                                {formik.errors.type}{' '}
+                                                {formik.errors.language}{' '}
                                             </FormHelperText>
                                         )}
-                                    </FormControl>
+                                    </Stack>
                                 </Grid>
-                                <Grid item xs={12} sm={6} md={4} lg={4}>
-                                    <FormControl>
-                                        <RadioGroup
-                                            row
-                                            aria-label="language"
-                                            value={formik.values.language}
-                                            onChange={formik.handleChange}
-                                            name="language"
-                                            id="language"
-                                        >
-                                            <FormControlLabel
-                                                value="English"
-                                                control={
-                                                    <Radio
-                                                        sx={{
-                                                            color: 'primary.main',
-                                                            '&.Mui-checked': { color: 'primary.main' }
-                                                        }}
-                                                    />
-                                                }
-                                                label="English"
-                                            />
-                                            <FormControlLabel
-                                                value="Japanese"
-                                                control={
-                                                    <Radio
-                                                        sx={{
-                                                            color: 'error.main',
-                                                            '&.Mui-checked': { color: 'error.main' }
-                                                        }}
-                                                    />
-                                                }
-                                                label="Japanese"
-                                            />
-                                            <FormControlLabel
-                                                value="Spanish"
-                                                control={
-                                                    <Radio
-                                                        sx={{
-                                                            color: 'secondary.main',
-                                                            '&.Mui-checked': { color: 'secondary.main' }
-                                                        }}
-                                                    />
-                                                }
-                                                label="Spanish"
-                                            />
-                                        </RadioGroup>
-                                    </FormControl>
-                                    {formik.errors.language && (
-                                        <FormHelperText error id="standard-weight-helper-text-email-login">
-                                            {' '}
-                                            {formik.errors.language}{' '}
-                                        </FormHelperText>
-                                    )}
-                                </Grid>
-                                <Grid item xs={12} sm={6} md={4} lg={4}>
+                                <Grid item xs={12} sm={6} md={4}>
                                     {/* Material Ui Date Picker */}
-                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                        <DatePicker
-                                            id="premiered"
-                                            name="premiered"
-                                            label="Premiered date picker"
-                                            inputVariant="outlined"
-                                            format="MM/dd/yyyy"
-                                            value={parseISO(formik.values.premiered, "yyyy-M-dd'T'HH:mm:ss.SSSX", new Date())}
-                                            onChange={value => formik.setFieldValue("premiered", value)}
-                                            slotProps={{ textField: { variant: 'outlined' } }}
+                                    <Stack direction="column">
+                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                            <DatePicker
+                                                id="premiered"
+                                                name="premiered"
+                                                label="Premiered date picker"
+                                                inputVariant="outlined"
+                                                format="MM/dd/yyyy"
+                                                value={parseISO(formik.values.premiered, "yyyy-M-dd'T'HH:mm:ss.SSSX", new Date())}
+                                                onChange={value => formik.setFieldValue("premiered", value)}
+                                                slotProps={{ textField: { variant: 'outlined' } }}
 
-                                        />
-                                    </LocalizationProvider>
+                                            />
+                                        </LocalizationProvider>
+                                    </Stack>
                                 </Grid>
                             </Grid>
                             <Grid item xs={12}>
@@ -383,7 +389,7 @@ const MovieUpdate = ({ movie, editMovie, removeMovie }) => {
 
 MovieUpdate.propTypes = {
     movie: PropTypes.object,
-    editMovie: PropTypes.func,    
+    editMovie: PropTypes.func,
 }
 
 export default MovieUpdate

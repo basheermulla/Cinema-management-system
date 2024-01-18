@@ -56,7 +56,6 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({
 
 const MoviesMain = () => {
     const theme = useTheme();
-    const { add } = useParams();
     
     const { borderRadius } = useConfig();
     const dispatch = useDispatch();
@@ -80,8 +79,7 @@ const MoviesMain = () => {
     };
 
     // movie data
-    const initialMovies = useLoaderData();
-    
+    const initialMovies = useLoaderData();    
     const [movies, setMovies] = useState(initialMovies);
 
     // filter
@@ -179,7 +177,7 @@ const MoviesMain = () => {
     };
 
     useEffect(() => {
-        filterData();
+        filterData();        
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filter]);
 
@@ -193,8 +191,8 @@ const MoviesMain = () => {
         setAnchorEl(null);
     };
 
-    const addMovie = (addressNew) => {
-        dispatch(createMovie(addressNew));
+    const addMovie = (movieNew) => {
+        dispatch(createMovie(movieNew));
     };
 
     const sortLabel = SortOptions.filter((items) => items.value === filter.sort);
@@ -223,8 +221,8 @@ const MoviesMain = () => {
         );
     }
 
-    // show a right sidebar when clicked on new product
-    const [openAddDialog, setOpenAddDialog] = useState(add ? true : false);
+    // open a dialog alert when clicked on new movie
+    const [openAddDialog, setOpenAddDialog] = useState(false);
 
     const handleClickOpenDialog = () => {
         setOpenAddDialog(true);

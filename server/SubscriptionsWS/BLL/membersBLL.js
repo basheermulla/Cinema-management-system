@@ -53,61 +53,20 @@ const getAllMembersAggregation = async () => {
             {
                 $project: { subscriptionWatched: 0, memberId: 0 }
             },
-
-            //==============================================================================
-            //=======                       the first attempt                       ========
-            //======= The attempt to $lookup with movies collection doesn't success ========
-            //=======       There is an unknown problem with a foreign Field        ========
-            //==   The strange thing is that it works with https://mongoplayground.net/   ==
-            //==============================================================================
-            // {
-            //     $lookup:
-            //     {
-            //         from: "movies",
-            //         localField: "subscriptionMovies.movieId",
-            //         foreignField: "_id",
-            //         as: "moviesReleted",
-            //     }
-            // },
-            //==============================================================================
-            //=======                       the second attempt                      ========
-            //======= The try to $lookup with movies collection doesn't success ============
-            //=======       There is an unknown problem with a foreign Field    ============
-            //==   The strange thing is that it works with https://mongoplayground.net/   ==
-            //==============================================================================
-            // {
-            //     $lookup: {
-            //         from: 'movies',
-            //         let: { "id": '$subscriptionMovies.movieId' },
-            //         pipeline: [
-            //             {
-            //                 $match: {
-            //                     $expr: { $eq: ["$_id", "$$id"] },
-            //                 }
-            //             },
-            //             {
-            //                 $project:
-            //                 {
-            //                     name: 1,
-            //                     type: 1,
-            //                     language: 1,
-            //                     summary: 1,
-            //                     image: 1,
-            //                     genres: 1,
-            //                     premiered: 1,
-            //                 }
-            //             }
-            //         ],
-            //         as: 'target',
-            //     }
-            // }
         ]
     ).exec();
 
     // Accept the members as asynchronous to give us the ability to work with them
     const resp_members = await members;
+    resp_members.forEach((member) => {
+        console.log(member);
+    })
 
-    // Group the member movies by movie Id, and push the subscribe dates into array dates
+    // Calculate the amount of member's subscriptions and append to the certain member's document as a property object
+    // Because I will probably use it during the development of the frontend
+    let memberAmountSubscriptions = 0;
+
+    // Group the member's movies by movie Id, and push the subscribe dates into array dates
     resp_members.map((member) => {
         const data = member.subscriptionMovies;
         let hash = [];
@@ -115,32 +74,139 @@ const getAllMembersAggregation = async () => {
             hash = data.reduce((p, c) => (p[c.movieId] ? p[c.movieId].push(c) : p[c.movieId] = [c], p), {}),
                 newData = Object.keys(hash).map(k => {
                     const dates = hash[k].map((date) => date.dates);
+                    memberAmountSubscriptions += dates.length;
+
                     return ({ movieId: k, dates })
                 });
             member.memberMovies = newData;
+            member.memberAmountSubscriptions = memberAmountSubscriptions;
+            memberAmountSubscriptions = 0;
         }
         delete member.subscriptionMovies;
         return member;
     });
 
     // Get all movies from DB
-    const members_With_Moves = await Movie.find()
+    const all_Moves = await Movie.find()
 
     // append movie datails into memberMovies
     resp_members.map((member) => {
         const data = member.memberMovies;
         if (data != null) {
             const movie_details = member.memberMovies.map((movie, i) => {
-                const getMovie = members_With_Moves.find((m) => m._id.toString() === movie.movieId);
+                const getMovie = all_Moves.find((m) => m._id.toString() === movie.movieId);
                 return { ...movie, ...getMovie._doc }
             });
             member.memberMovies = { ...member.memberMovies, ...movie_details }
+
+
         }
         return member
     });
 
-
+    console.log(members);
     return members;
+};
+
+// GET - Get All Members with Unwind Subscriptions & get all movies - Read
+const getAllMembersSubscriptionsUnwind = async () => {
+    const members = Member.aggregate(
+        [
+            {
+                $lookup:
+                {
+                    from: 'subscriptions',
+                    let: { "id": '$_id' },
+                    pipeline: [
+                        {
+                            $match:
+                            {
+                                $expr:
+                                    { $eq: ["$$id", "$memberId"] }
+                            }
+                        },
+                        {
+                            $project:
+                            {
+                                _id: 1,
+                                memberId: 1,
+                                subscriptionMovies: 1
+                            }
+                        },
+                    ], as: "subscriptionWatched"
+                }
+            },
+            {
+                $replaceRoot: { newRoot: { $mergeObjects: [{ $arrayElemAt: ["$subscriptionWatched", 0] }, "$$ROOT"] } }
+            },
+            {
+                $project: { subscriptionWatched: 0, memberId: 0 }
+            },
+            {
+                $unwind: {
+                    path: "$subscriptionMovies",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $lookup:
+                {
+                    from: "movies",
+                    localField: "subscriptionMovies.movieId",
+                    foreignField: "_id",
+                    as: "RelatedMovie",
+                }
+            },
+            {
+                $replaceRoot: {
+                    newRoot: {
+                        $mergeObjects: ["$subscriptionMovies", { "subscriptionId": "$subscriptionMovies._id" }, "$$ROOT"]
+                    }
+                }
+            },
+            {
+                $project: { "subscriptionMovies": 0 }
+            },
+            {
+                $unwind: {
+                    path: "$RelatedMovie",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    image: { $first: "$image" },
+                    name: { $first: "$name" },
+                    email: { $first: "$email" },
+                    city: { $first: "$city" },
+                    relatedMovie: { $push: { movie: "$RelatedMovie", date: "$date", subscriptionId: "$subscriptionId" } }
+                }
+            },
+            { $unwind: "$relatedMovie" },
+            { $sort: { "relatedMovie.date": -1 } },
+            {
+                $group: {
+                    _id: "$_id",
+                    image: { $first: "$image" },
+                    name: { $first: "$name" },
+                    email: { $first: "$email" },
+                    city: { $first: "$city" },
+                    relatedMovie: { $push: "$relatedMovie" }
+                }
+            }
+        ]
+    ).exec();
+
+    // Get all movies from DB
+    const all_Moves = await Movie.find()
+    const all_Members = await members;
+
+    const collect_obj_return = {
+        members: all_Members,
+        movies: all_Moves
+    }
+    return collect_obj_return;
 };
 
 // GET - Get All Members - Read
@@ -161,7 +227,7 @@ const addMember = async (obj) => {
 };
 
 // PUT - Update a Member
-const updateMember = async (id, obj) => {
+const updateMember = async (id, obj, options) => {
     await Member.findByIdAndUpdate(id, obj, options);
     return 'Updated';
 };
@@ -202,6 +268,7 @@ const getAllMembersWS = async (amount = '') => {
 
 module.exports = {
     getAllMembersAggregation,
+    getAllMembersSubscriptionsUnwind,
     getAllMembers,
     getMemberById,
     addMember,

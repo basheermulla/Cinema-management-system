@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const subscriptionsSchema = new Schema({
     memberId: { type: Schema.Types.ObjectId, ref: 'Member' },
     subscriptionMovies: [{
-        movieId: { type: String, require: true },
+        movieId: { type: Schema.Types.ObjectId, ref: 'Movie' },
         date: { type: String, require: true }
     }]
 },

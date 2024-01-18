@@ -21,7 +21,8 @@ const MovieCard = ({ id, name, genres, image, type, language, premiered, rating 
 
     const [movieRating] = useState(rating);
 
-    const handleSubscribe = () => {
+    const handleRating = () => {
+        console.log('handleRating [Inside Movie Card] = Designate it to fill a rating');
         // dispatch(subscribeMove(id));
     }
 
@@ -93,7 +94,7 @@ const MovieCard = ({ id, name, genres, image, type, language, premiered, rating 
                                                 <Rating precision={0.5} name="size-small" value={movieRating} size="small" readOnly />
                                             </Stack>
                                         </Grid>
-                                        <Button variant="contained" sx={{ minWidth: 0 }} onClick={handleSubscribe} aria-label="Subscribe movie">
+                                        <Button variant="contained" sx={{ minWidth: 0 }} onClick={handleRating} aria-label="Rating movie">
                                             <ShoppingCartTwoToneIcon
                                                 fontSize="small" // =======||  todo  ||======= //
                                             />

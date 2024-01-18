@@ -24,6 +24,19 @@ router.get('/aggregate', verifyToken, async (req, res) => {
     }
 });
 
+// Get All Members with Unwind Subscriptions data by use MongoDB aggregation pipeline - Read
+// Protected route
+router.get('/subscriptionsUnwind', verifyToken, async (req, res) => {
+    try {
+        const members = await membersBLL.getAllMembersSubscriptionsUnwind();
+
+        res.send(members);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+});
+
 // Get All Members
 router.get('/', verifyToken, async (req, res) => {
     try {
