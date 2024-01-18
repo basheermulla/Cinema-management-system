@@ -6,7 +6,8 @@ import { Box, CardMedia, Grid, Typography } from '@mui/material';
 import { gridSpacing } from 'utils/constant-theme';
 
 // assets
-import movieEmpty from 'assets/images/cinema/empty_movies.svg';
+import mamberEmpty from 'assets/images/maintenance/empty.svg';
+import mamberDarkEmpty from 'assets/images/maintenance/empty-dark.svg';
 
 const MovietEmpty = () => {
     const theme = useTheme();
@@ -19,7 +20,7 @@ const MovietEmpty = () => {
                         <Grid item xs={12}>
                             <CardMedia
                                 component="img"
-                                image={theme.palette.mode === 'dark' ? movieEmpty : movieEmpty}
+                                image={theme.palette.mode === 'dark' ? mamberDarkEmpty : mamberEmpty}
                                 title="Slider5 image"
                             />
                         </Grid>
@@ -27,13 +28,15 @@ const MovietEmpty = () => {
                             <Grid container spacing={gridSpacing}>
                                 <Grid item xs={12}>
                                     <Typography variant="h1" color="inherit" component="div">
-                                        There is no Movies
+                                        There is no Members
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Typography variant="body2">Your access time may have expired !</Typography>
-                                    <Typography variant="body2">Try altering your filter options, or login again, or contact the administrator !</Typography>
+                                    <Typography variant="body2">Please, Please login again or contact the administrator.</Typography>
+
                                 </Grid>
+
                             </Grid>
                         </Grid>
                     </Grid>

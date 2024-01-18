@@ -11,6 +11,9 @@ const { MEMBERS_WS_URL } = process.env;
 // GET - Get All Members with the widthly data by use MongoDB aggregation pipeline - Read
 const getAllMembersAggregationWS = () => axios.get(`${MEMBERS_WS_URL}/aggregate`)
 
+// GET - Get All Members with Unwind Subscriptions data by use MongoDB aggregation pipeline - Read
+const getAllMembersSubscriptionsUnwind = () => axios.get(`${MEMBERS_WS_URL}/subscriptionsUnwind`)
+
 // GET - Get All Members - Read
 const getAllMembersWS = () => axios.get(`${MEMBERS_WS_URL}`)
 
@@ -28,6 +31,7 @@ const deleteMemberWS = (id) => axios.delete(`${MEMBERS_WS_URL}/${id}`);
 
 module.exports = {
     getAllMembersAggregationWS,
+    getAllMembersSubscriptionsUnwind,
     getAllMembersWS,
     getMemberByIdWS,
     addMemberWS,

@@ -143,7 +143,6 @@ const MovieDescriptionCard = ({ id, name, genres, image, type, language, summary
                     </SubCard>
                 </Grid>
             </Grid>
-
         </MainCard>
     );
 };

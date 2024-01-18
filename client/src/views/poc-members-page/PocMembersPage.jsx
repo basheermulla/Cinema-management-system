@@ -1,30 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'store/index';
 import { increment, decrement, incrementAmountAction } from 'store/slices/counterSlice';
-import { getMembers } from 'store/slices/membersSlice'
+import { getMembers } from 'store/slices/member'
 
 // material-ui
 import { Avatar, Box, Button, ListItem, Typography, Unstable_Grid2 } from '@mui/material';
 
 // internal imports
 import MainCard from 'components/cards/MainCard';
+import { useLoaderData } from 'react-router-dom';
 
 const PocMembersPage = () => {
     const [incrementAmount, setIncrementAmount] = useState(2)
 
-    const { members, error } = useSelector((state) => state.members);
-
     const { value } = useSelector((state) => state.counter);
     const dispatch = useDispatch();
 
-    const getAllMembers = async () => {
-        dispatch(getMembers());
-    }
-
-    useEffect(() => {
-        if (members) { console.log(members); }
-        if (error) { console.error(error); }
-    }, [members, error])
+    // movie data
+    const {members: initialMembers, subscriptions: initialSubscriptions} = useLoaderData();
+    const [members, setMembers] = useState(initialMembers);
+    const [subscriptions, setSubscriptions] = useState(initialSubscriptions);
 
     return (
         <>
@@ -32,7 +27,7 @@ const PocMembersPage = () => {
                 <Typography variant="h5">
                     List of members
                 </Typography>
-                <Button onClick={getAllMembers} variant='contained' color='primary'>Get Members</Button>
+                {/* <Button onClick={getAllMembers} variant='contained' color='primary'>Get Members</Button> */}
                 <Unstable_Grid2>
                     {
                         members?.map((member, index) => {

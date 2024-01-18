@@ -50,7 +50,7 @@ const getAllSubscriptionsAggregation = async () => {
     // Because I will probably use it during the development of the frontend
     let memberAmountSubscriptions = 0;
 
-    // Group the member movies by movie Id, and push the subscribe dates into array dates
+    // Group the member's movies by movie Id, and push the subscribe dates into array dates
     resp_subscriptions.map((subscription) => {
         const data = subscription.subscriptionMovies;
         let hash = [];
@@ -62,23 +62,23 @@ const getAllSubscriptionsAggregation = async () => {
 
                     return ({ movieId: k, dates })
                 });
-                subscription.groupMemberSubscriptions = newData;
-                subscription.memberAmountSubscriptions = memberAmountSubscriptions;
-                memberAmountSubscriptions = 0;
+            subscription.groupMemberSubscriptions = newData;
+            subscription.memberAmountSubscriptions = memberAmountSubscriptions;
+            memberAmountSubscriptions = 0;
         }
         delete subscription.subscriptionMovies;
         return subscription;
     });
 
     // Get all movies from DB
-    const members_With_Moves = await Movie.find()
+    const all_Moves = await Movie.find()
 
-    // append movie datails into groupMemberSubscriptions
+    // Append movie's datails into groupMemberSubscriptions
     resp_subscriptions.map((subscription) => {
         const data = subscription.groupMemberSubscriptions;
         if (data != null) {
             const movie_details = subscription.groupMemberSubscriptions.map((movie, i) => {
-                const getMovie = members_With_Moves.find((m) => m._id.toString() === movie.movieId);
+                const getMovie = all_Moves.find((m) => m._id.toString() === movie.movieId);
                 return { ...movie, ...getMovie._doc }
             });
             subscription.groupMemberSubscriptions = { ...subscription.groupMemberSubscriptions, ...movie_details }
@@ -107,9 +107,24 @@ const addFirstSubscription = async (obj) => {
 };
 
 // PUT - Update a Subscription by memberId
+// 1. Create another subscription of a member who has already subscribed before
+// Or
+// 2. Update future subscription
+// 3. Delete future subscription
 const updateSubscriptionByMemberId = async (id, obj, options) => {
-    const query = { memberId: id };
-    await Subscription.findOneAndUpdate(query, obj, options)
+    let query_id = {};
+    let query_obj = [];
+    if (!obj.subscriptionId) {
+        query_id = { memberId: id };
+        query_obj = { $push: { subscriptionMovies: obj } }; // 1. Create another subscription of a member who has already subscribed before
+    } else if (!obj.action) {
+        query_id = { memberId: id, 'subscriptionMovies._id': obj.subscriptionId };
+        query_obj = { $set: { "subscriptionMovies.$.movieId": obj.movieId, "subscriptionMovies.$.date": obj.date } }; // 2. Update future subscription
+    } else {
+        query_id = { memberId: id, 'subscriptionMovies._id': obj.subscriptionId };
+        query_obj = { $pull: { "subscriptionMovies": { _id: obj.subscriptionId } } }; // 3. Delete future subscription
+    }
+    await Subscription.findOneAndUpdate(query_id, query_obj, options);
     return 'Updated';
 };
 

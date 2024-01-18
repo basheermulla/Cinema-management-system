@@ -25,8 +25,8 @@ const getAllMoviesAggregation = async () => {
                                 subscriptionMovies: {
                                     $filter: {
                                         input: "$subscriptionMovies",
-                                        as: "movie",
-                                        cond: { $eq: ["$$movie.movieId", { $toString: "$$id" }] }
+                                        cond: { $eq: ["$$movie.movieId", "$$id"] },
+                                        as: "movie"
                                     }
                                 }
                             }

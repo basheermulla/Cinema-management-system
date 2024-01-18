@@ -49,7 +49,7 @@ const validationSchema = yup.object({
         .max(6, 'Please select a maximum of 6 skills.'),
     type: yup.string().required('Type selection is required'),
     language: yup.string().required('Language selection is required'),
-    premiered: yup.date().nullable().required('Language selection is required'),
+    premiered: yup.date().nullable().required('Premiered date is required'),
     summary: yup.string().required('Summary is required')
 });
 
@@ -390,7 +390,7 @@ const AddMovie = ({ open, handleCloseDialog, addMovie }) => {
                                     </Button>
                                     <AnimateButton>
                                         <Button variant="contained" type="submit">
-                                            Submit
+                                            Add
                                         </Button>
                                     </AnimateButton>
                                 </Stack>

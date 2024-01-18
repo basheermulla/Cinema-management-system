@@ -6,6 +6,7 @@ import AuthGuard from './route-guard/AuthGuard';
 import Loadable from 'components/Loadable';
 
 import { loader as moviesLoader, movieLoader } from 'store/slices/movie';
+import { loader as membersLoader, memberLoader } from 'store/slices/member';
 
 // dashboard routing
 const PocMembersPage = Loadable(lazy(() => import('views/poc-members-page/PocMembersPage')));
@@ -13,6 +14,10 @@ const PocMembersPage = Loadable(lazy(() => import('views/poc-members-page/PocMem
 // cinema - movies routing
 const CinemaMoviesMain = Loadable(lazy(() => import('views/cinema/movies/MoviesMain')));
 const CinemaMovieDetails = Loadable(lazy(() => import('views/cinema/movies/MovieDetails')));
+
+// cinema - subscriptions routing
+const CinemaSubscriptionsMain = Loadable(lazy(() => import('views/cinema/subscriptions/SubscriptionsMain')));
+const CinemaMemberProfile = Loadable(lazy(() => import('views/cinema/subscriptions/MemberDetails')));
 
 const MainRoutes = {
     path: '/',
@@ -24,26 +29,33 @@ const MainRoutes = {
     children: [
         {
             path: '/',
-            element: <PocMembersPage />
+            element: <PocMembersPage />,
+            loader: membersLoader,
         },
         {
             path: '/members-page',
-            element: <PocMembersPage />
+            element: <PocMembersPage />,
+            loader: membersLoader,
         },
         {
             path: '/cinema/movies',
-            element: <CinemaMoviesMain />,
-            loader: moviesLoader,
-        },        
-        {
-            path: '/cinema/movies/:add',
             element: <CinemaMoviesMain />,
             loader: moviesLoader,
         },
         {
             path: '/cinema/movies/movie-details/:id',
             element: <CinemaMovieDetails />,
-            loader: movieLoader,
+            // loader: movieLoader,
+        },
+        {
+            path: '/cinema/subscriptions',
+            element: <CinemaSubscriptionsMain />,
+            loader: membersLoader,
+        },
+        {
+            path: '/cinema/subscriptions/member-profile/:id',
+            element: <CinemaMemberProfile />,
+            loader: memberLoader,
         }
         
     ]

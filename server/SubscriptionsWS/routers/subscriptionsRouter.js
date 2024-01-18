@@ -63,12 +63,12 @@ router.post('/', async (req, res) => {
          // 1. Create another subscription of a member who has already subscribed before
          // Or
          // 2. Update future subscription
+         // 3. Delete future subscription
 router.put('/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const obj = req.body;
-        console.log(obj);
-        const result = await subscriptionsBLL.updateSubscriptionByMemberId(id, obj, { new: true });
+        const result = await subscriptionsBLL.updateSubscriptionByMemberId(id, obj, { upsert: true });
         res.send(result);
     } catch (error) {
         console.error(error);

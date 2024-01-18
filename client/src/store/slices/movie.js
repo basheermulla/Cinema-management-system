@@ -85,10 +85,11 @@ export default slice.reducer;
 //     };
 // }
 
-// ⬇️ this is the loader and error boundary
+// ⬇️ this is the loader and error boundary (Until now, the loader includes redux functions)
 export async function loader() {
     try {
         let token = window.localStorage.getItem('accessToken');
+        console.log('<=== Movies Loader ===>');
         const response = await axios.get(`${MOVIES_URL}/aggregate`, { headers: { "Authorization": `Bearer ${token}` } });
         dispatch(slice.actions.getMoviesSuccess(response.data));
         return response.data;
@@ -105,6 +106,7 @@ export async function loader() {
 // export async function filterProducts(filter) {
 //     return await axios.post('/api/products/filter', { filter });
 // }
+
 export async function filterMovies() {
     try {
         let token = window.localStorage.getItem('accessToken');
@@ -127,6 +129,7 @@ export async function movieLoader({ params }) {
     try {
         let token = window.localStorage.getItem('accessToken');
         const id = params.id;
+        // console.log('<=== M o v i e Loader ===>');
         const response = await axios.get(`${MOVIES_URL}/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
         return response.data;
     } catch (error) {
@@ -171,11 +174,3 @@ export function deleteMovie(id) {
         }
     };
 }
-
-// export async function getRelatedProducts(id) {
-//     return await axios.post('/api/product/related', { id });
-// }
-
-// export async function getProductReviews() {
-//     return await axios.get('/api/review/list');
-// }

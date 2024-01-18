@@ -24,8 +24,6 @@ export const AuthProvider = ({ children }) => {
     const login = async (username, password) => {
         const response = await axios.post(`${import.meta.env.VITE_APP_AUTH_URL}/login`, { username, password });
         const { user, accessToken, message } = response.data;
-        console.log('login user = ', user);
-        console.log('login accessToken = ', accessToken);
         if (user) {
             localStorage.setItem('userLogin', JSON.stringify(user));
             localStorage.setItem('accessToken', accessToken);
@@ -54,8 +52,6 @@ export const AuthProvider = ({ children }) => {
                 const userLogin = window.localStorage.getItem('userLogin');
                 const user = JSON.parse(userLogin);                
                 const accessToken = window.localStorage.getItem('accessToken');
-                console.log('init user = ', user);
-                console.log('init accessToken = ', accessToken);
                 if (user) {
                     dispatch({ type: LOGIN, payload: { isLoggedIn: true, user } });
                 } else {
@@ -66,12 +62,10 @@ export const AuthProvider = ({ children }) => {
                 dispatch({ type: LOGOUT });
             }
         };
-        console.log(state.isInitialized);
         init();
     }, []);
 
-    if (state.isInitialized !== undefined && !state.isInitialized) {
-        console.log(state);
+    if (state.isInitialized !== undefined && !state.isInitialized) {        
         return <Loader />;
     }
 
