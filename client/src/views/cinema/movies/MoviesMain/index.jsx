@@ -81,6 +81,7 @@ const MoviesMain = () => {
     // movie data
     const initialMovies = useLoaderData();    
     const [movies, setMovies] = useState(initialMovies);
+    console.log(initialMovies);
 
     // filter
     const initialState = {
@@ -237,7 +238,7 @@ const MoviesMain = () => {
                 <Grid container alignItems="center" justifyContent="space-between" spacing={matchDownMD ? 0.5 : 2}>
                     <Grid item>
                         <Stack direction="row" alignItems="center" spacing={1}>
-                            <Typography variant="h4">Movies</Typography>
+                            <Typography variant="h3">Movies</Typography>
                             <IconButton size="large" aria-label="go to subscription">
                                 <ArrowForwardIosIcon sx={{ width: '0.875rem', height: '0.875rem', fontWeight: 500, color: 'grey.500' }} />
                             </IconButton>

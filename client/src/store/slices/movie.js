@@ -91,6 +91,7 @@ export async function loader() {
         let token = window.localStorage.getItem('accessToken');
         console.log('<=== Movies Loader ===>');
         const response = await axios.get(`${MOVIES_URL}/aggregate`, { headers: { "Authorization": `Bearer ${token}` } });
+        console.log(response.data);
         dispatch(slice.actions.getMoviesSuccess(response.data));
         return response.data;
     } catch (error) {

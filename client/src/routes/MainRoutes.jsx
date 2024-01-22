@@ -7,6 +7,7 @@ import Loadable from 'components/Loadable';
 
 import { loader as moviesLoader, movieLoader } from 'store/slices/movie';
 import { loader as membersLoader, memberLoader } from 'store/slices/member';
+import { loader as usersLoader } from 'store/slices/user';
 
 // dashboard routing
 const PocMembersPage = Loadable(lazy(() => import('views/poc-members-page/PocMembersPage')));
@@ -18,6 +19,12 @@ const CinemaMovieDetails = Loadable(lazy(() => import('views/cinema/movies/Movie
 // cinema - subscriptions routing
 const CinemaSubscriptionsMain = Loadable(lazy(() => import('views/cinema/subscriptions/SubscriptionsMain')));
 const CinemaMemberProfile = Loadable(lazy(() => import('views/cinema/subscriptions/MemberDetails')));
+
+// management - users routing
+const UsersManagementMain = Loadable(lazy(() => import('views/UsersManagement/UsersManagementMain')));
+const UsersAddEditUser = Loadable(lazy(() => import('views/UsersManagement/AddEditUser')));
+
+
 
 const MainRoutes = {
     path: '/',
@@ -56,6 +63,19 @@ const MainRoutes = {
             path: '/cinema/subscriptions/member-profile/:id',
             element: <CinemaMemberProfile />,
             loader: memberLoader,
+        },
+        {
+            path: '/management/users',
+            element: <UsersManagementMain />,
+            loader: usersLoader,
+        },
+        {
+            path: '/management/users/add-user',
+            element: <UsersAddEditUser />,            
+        },
+        {
+            path: '/management/users/add-user/:id',
+            element: <UsersAddEditUser />,            
         }
         
     ]
