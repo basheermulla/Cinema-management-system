@@ -5,7 +5,7 @@ import { useLoaderData, useNavigate } from 'react-router-dom';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Box, Collapse, Grid, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Box, Collapse, Grid, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 
 // internal imports
 import MainCard from 'components/cards/MainCard';
@@ -17,6 +17,7 @@ import SecondaryAction from 'components/cards/CardSecondaryAction';
 import AddOrEditMember from './AddOrEditMember';
 import MemberEmpty from './MemberEmpty';
 import { loader, createSubscription, updateSubscription, deleteSubscription, createMember, updateMember, deleteMember } from 'store/slices/member';
+import { gridSpacing } from 'utils/constant-theme';
 
 // assets
 import { IconUserPlus, IconRefresh } from '@tabler/icons-react';
@@ -30,6 +31,11 @@ const SubscriptionsMain = () => {
     const initialdata = useLoaderData();
     const [subscriptions, setSubscriptions] = useState(initialdata.members);
     const [movies, setMovies] = useState(initialdata.movies);
+
+    useEffect(() => {
+        console.log(movies);
+    }, [])
+
 
     const subscriptionsToExport = [];
     if (subscriptions) {
@@ -57,7 +63,7 @@ const SubscriptionsMain = () => {
         setMember(null);
         setOpenMemberDialog(false);
     };
-    
+
     const addSubscription = (method, memberId, obj_SubscriptionMovie) => {
         dispatch(createSubscription(method, memberId.id, obj_SubscriptionMovie)).then(() => {
             loadDataAfterAction();
@@ -144,9 +150,15 @@ const SubscriptionsMain = () => {
     return (
         <MainCard
             content={false}
-            title="Members Subscriptions"
+            title={
+                <Grid container alignItems="center" justifyContent="space-between" spacing={gridSpacing}>
+                    <Grid item>
+                        <Typography variant="h3">Members Subscriptions</Typography>
+                    </Grid>
+                </Grid >
+            }
             secondary={
-                <Stack direction="row" spacing={2} alignItems="center">
+                < Stack direction="row" spacing={2} alignItems="center" >
                     {subscriptions && subscriptions.length > 0 ? <>
                         <SecondaryAction
                             title="New Member"
@@ -163,17 +175,15 @@ const SubscriptionsMain = () => {
                             action_func={handleAction}
                         />
                         <CSVExport data={subscriptionsToExport} filename="basic-table.csv" header={header} />
-
-
                     </>
                         :
                         null
                     }
-                </Stack>
+                </Stack >
             }
         >
             {/* table */}
-            <TableContainer>
+            < TableContainer >
                 <Table aria-label="Members Subscriptions">
                     <TableHead>
                         <TableRow>
@@ -192,9 +202,9 @@ const SubscriptionsMain = () => {
                         {memberResult}
                     </TableBody>
                 </Table>
-            </TableContainer>
+            </TableContainer >
             <AddOrEditMember open={openMemberDialog} member={member} handleCloseMemberDialog={handleCloseMemberDialog} addMember={addMember} editMember={editMember} />
-        </MainCard>
+        </MainCard >
     )
 }
 

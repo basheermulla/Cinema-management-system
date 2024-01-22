@@ -111,7 +111,7 @@ const MemberProfile = ({ member, editMember }) => {
                                     error={formik.touched.email && Boolean(formik.errors.email)}
                                     helperText={formik.touched.email && formik.errors.email}
                                 />
-                            </Grid>
+                            </Grid>                            
                             <Grid item xs={6}>
                                 <TextField
                                     fullWidth

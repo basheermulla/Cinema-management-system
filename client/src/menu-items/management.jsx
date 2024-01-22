@@ -17,9 +17,8 @@ const management = {
             id: 'User Management',
             title: <FormattedMessage id="User Management" />,
             type: 'item',
-            url: '/dashboard/default',
-            icon: icons.IconUserCheck,
-            breadcrumbs: false
+            url: '/management/users',
+            icon: icons.IconUserCheck,            
         }
     ]
 };

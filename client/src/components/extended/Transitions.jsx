@@ -5,6 +5,7 @@ import React from 'react';
 import { Collapse, Fade, Box, Grow, Slide, Zoom } from '@mui/material';
 
 const Transitions = React.forwardRef(({ children, position, type, direction, ...others }, ref) => {
+    console.log(type);
     let positionSX = {
         transformOrigin: '0 0 0'
     };
@@ -36,6 +37,10 @@ const Transitions = React.forwardRef(({ children, position, type, direction, ...
             };
             break;
         case 'top-left':
+            positionSX = {
+                transformOrigin: '0 0 0'
+            };
+            break;
         default:
             positionSX = {
                 transformOrigin: '0 0 0'

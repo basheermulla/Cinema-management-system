@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import {
     Avatar, Box, Chip, ClickAwayListener, Divider, Grid, List, ListItemButton, ListItemIcon, ListItemText, Paper,
-    Popper, Stack, Typography
+    Popper, Stack, Typography, Container
 } from '@mui/material';
 
 // third-party
@@ -137,9 +137,9 @@ const ProfileSection = () => {
             >
                 {
                     ({ TransitionProps }) => (
-                        <ClickAwayListener onClickAway={handleClose}>
+                        <ClickAwayListener onClickAway={handleClose}>                            
                             <Transitions in={open} {...TransitionProps}>
-                                <Paper>
+                                <Container sx={{ height: 'auto' }}>
                                     {
                                         open && (
                                             <MainCard border={false} elevation={16} content={false} boxShadow shadow={theme.shadows[16]}>
@@ -245,7 +245,7 @@ const ProfileSection = () => {
                                             </MainCard>
                                         )
                                     }
-                                </Paper>
+                                </Container>
                             </Transitions>
                         </ClickAwayListener>
                     )

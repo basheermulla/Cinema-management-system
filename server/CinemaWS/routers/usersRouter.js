@@ -14,7 +14,7 @@ const router = express.Router();
 router.get('/', verifyToken, async (req, res) => {
     try {
         const users = await usersBLL.getAllUsersAndPermissionsData();
-
+        
         res.send(users);
     } catch (error) {
         console.error(error);

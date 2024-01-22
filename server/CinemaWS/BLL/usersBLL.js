@@ -86,7 +86,8 @@ const addUserAndDefaultPermissionData = async (obj) => {
 const updateUserAndPermissionData = async (id, obj, options) => {
     // Extract received data regarding the user's updating 
     const { username, user, permissionsUser } = obj
-
+    console.log(id);
+    console.log(username);
     // Update username without password into mongoDB Users Collection
     if (username) {
         await User.findByIdAndUpdate(id, { username: username }, options);

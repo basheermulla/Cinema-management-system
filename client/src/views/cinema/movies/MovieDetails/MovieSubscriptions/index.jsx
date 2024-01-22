@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { Button, Grid, InputAdornment, Menu, MenuItem, OutlinedInput, Pagination, Typography } from '@mui/material';
 
-// project imports
+// internal imports
 import SubscriptionList from './SubscriptionList';
 import MainCard from 'components/cards/MainCard';
 import { gridSpacing } from 'utils/constant-theme';
