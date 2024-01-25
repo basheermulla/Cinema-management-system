@@ -89,6 +89,52 @@ const getAllSubscriptionsAggregation = async () => {
     return subscriptions;
 };
 
+//
+// GET - Get This Yearly Subscriptions - Read
+const getYearlySubscriptions = async (year) => {
+    console.log('Hello from getYearlySubscriptions = ', +year);
+    return Subscription.aggregate(
+        [
+            { $unwind: "$subscriptionMovies" },
+            { $project: { memberId: 0 } },
+            {
+                $replaceRoot: {
+                    newRoot: {
+                        $mergeObjects: [
+                            "$$ROOT",
+                            "$subscriptionMovies"
+                        ]
+                    }
+                }
+            },
+            { $unset: "subscriptionMovies" },
+            {
+                $group: {
+                    _id: {
+                        month: { $month: { $toDate: "$date" } },
+                        year: { $year: { $toDate: "$date" } },
+                    },
+                    total: { $sum: 1 }
+                },
+
+            },
+            {
+                $replaceRoot: {
+                    newRoot: {
+                        $mergeObjects: [
+                            "$$ROOT",
+                            "$_id"
+                        ]
+                    }
+                }
+            },
+            { $unset: "_id" },
+            { $match: { year: +year } },
+            { $sort: { month: 1 } },
+        ]
+    ).exec();
+};
+
 // GET - Get All Subscriptions - Read
 const getAllSubscriptions = async () => {
     return Subscription.find()
@@ -136,6 +182,7 @@ const deleteSubscription = async (id) => {
 
 module.exports = {
     getAllSubscriptionsAggregation,
+    getYearlySubscriptions,
     getAllSubscriptions,
     getSubscriptionById,
     addFirstSubscription,

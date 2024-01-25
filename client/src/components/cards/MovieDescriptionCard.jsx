@@ -16,6 +16,7 @@ import AnimateButton from 'components/extended/AnimateButton';
 // assets
 import StarTwoToneIcon from '@mui/icons-material/StarTwoTone';
 import StarBorderTwoToneIcon from '@mui/icons-material/StarBorderTwoTone';
+import { useState } from 'react';
 
 
 const MovieDescriptionCard = ({ id, name, genres, image, type, language, summary, premiered, rating, removeMovie }) => {
@@ -28,6 +29,8 @@ const MovieDescriptionCard = ({ id, name, genres, image, type, language, summary
         const newString = input.replace(regex, "");
         return newString;
     }
+
+    const [numberr, setNumberr] = useState(3)
 
     const handleDelete = () => {
         removeMovie(id);
@@ -79,7 +82,7 @@ const MovieDescriptionCard = ({ id, name, genres, image, type, language, summary
                                 <Rating
                                     size="large"
                                     name="simple-controlled"
-                                    value={rating < 4 ? rating + 1 : rating}
+                                    value={numberr}
                                     icon={<StarTwoToneIcon fontSize="inherit" />}
                                     emptyIcon={<StarBorderTwoToneIcon fontSize="inherit" />}
                                     precision={0.1}

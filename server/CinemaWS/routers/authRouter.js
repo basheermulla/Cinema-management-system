@@ -56,7 +56,6 @@ router.post('/login', async (req, res) => {
 
         // Compare the given password with the stored password using the bcrypt module
         const passwordMatch = await bcrypt.compare(password, userLogin.password);
-        console.log(passwordMatch);
         if (!passwordMatch) {
             return res.status(401).json({ user: null, message: 'Authentication failed' });
         }
@@ -66,7 +65,6 @@ router.post('/login', async (req, res) => {
         const accessToken = jwt
             .sign({ userId: userLogin?._id }, ACCESS_SECRET_TOKEN, { expiresIn: `${userLogin['sessionTimeOut']}m` });
 
-        console.log(accessToken);
         // Prevent sending the password to the client
         delete userLogin.password;
 
@@ -97,7 +95,6 @@ router.post('/login', async (req, res) => {
         // Update maxAge according to the user's session timeout
         const set_maxAge_session = userLogin['sessionTimeOut'] * 60 * 1000;
         req.session.cookie.maxAge = set_maxAge_session;
-        console.log(userLogin);
         res.status(200).json({ user: userLogin, accessToken, message: 'User logged in successfully' });
     } catch (error) {
         console.error(error);
@@ -110,7 +107,7 @@ router.post('/logout', async (req, res) => {
     // When a user logs out or the session expires, we will destroy the session
     req.session.destroy((err) => {
         if (err) {
-            console.log(err);
+            console.error(err);
         } else {
             res.status(200).json({ message: 'You logged out ! Good bye.' });
         }

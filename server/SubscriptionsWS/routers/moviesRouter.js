@@ -21,6 +21,18 @@ router.get('/aggregate', async (req, res) => {
     }
 });
 
+// GET - Get All popular movies by [number of subscriptions] - Read
+router.get('/mostPopular', async (req, res) => {
+    try {
+        const movies = await moviesBLL.getAllPopularMovies();
+
+        res.send(movies);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+});
+
 // Get All Movies
 router.get('/', async (req, res) => {
     try {

@@ -8,9 +8,10 @@ import Loadable from 'components/Loadable';
 import { loader as moviesLoader, movieLoader } from 'store/slices/movie';
 import { loader as membersLoader, memberLoader } from 'store/slices/member';
 import { loader as usersLoader } from 'store/slices/user';
+import { loader as dashboardLoader } from 'store/slices/dashboard';
 
 // dashboard routing
-const PocMembersPage = Loadable(lazy(() => import('views/poc-members-page/PocMembersPage')));
+const DashboardControlPanel = Loadable(lazy(() => import('views/dashboard/ControlPanel')));
 
 // cinema - movies routing
 const CinemaMoviesMain = Loadable(lazy(() => import('views/cinema/movies/MoviesMain')));
@@ -36,13 +37,13 @@ const MainRoutes = {
     children: [
         {
             path: '/',
-            element: <PocMembersPage />,
-            loader: membersLoader,
+            element: <DashboardControlPanel />,
+            loader: dashboardLoader,
         },
         {
-            path: '/members-page',
-            element: <PocMembersPage />,
-            loader: membersLoader,
+            path: '/dashboard/control-panel',
+            element: <DashboardControlPanel />,
+            loader: dashboardLoader,
         },
         {
             path: '/cinema/movies',

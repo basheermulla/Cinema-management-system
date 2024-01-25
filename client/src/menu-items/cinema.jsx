@@ -26,8 +26,6 @@ const icons = {
     IconStar
 };
 
-// ==============================|| APPLICATION MENU ITEMS ||============================== //
-
 const application = {
     id: 'cinema',
     title: <FormattedMessage id="cinema" />,
@@ -39,8 +37,7 @@ const application = {
             title: <FormattedMessage id="chat" />,
             type: 'item',
             icon: icons.IconMessages,
-            url: '/members-page'
-            
+            url: '/chat'            
         },
         {
             id: 'movies',
@@ -61,7 +58,7 @@ const application = {
             title: <FormattedMessage id="recommendations" />,
             type: 'item',
             icon: icons.IconStars,
-            url: '/members-page',
+            url: '/recommendations',
         }
     ]
 };

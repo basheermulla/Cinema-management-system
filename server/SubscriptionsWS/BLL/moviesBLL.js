@@ -125,6 +125,110 @@ const getAllMoviesAggregation = async () => {
     ).exec();
 };
 
+// GET - Get All popular movies by [number of subscriptions] - Read
+const getAllPopularMovies = async () => {
+    console.log('Hello from getAllPopularMovies');
+    return Movie.aggregate(
+        [
+            {
+                $lookup:
+                {
+                    from: 'subscriptions',
+                    let: { id: "$_id" },
+                    pipeline: [
+                        {
+                            $project:
+                            {
+                                memberId: 1,
+                                subscriptionMovies: {
+                                    $filter: {
+                                        input: "$subscriptionMovies",
+                                        cond: { $eq: ["$$movie.movieId", "$$id"] },
+                                        as: "movie"
+                                    }
+                                }
+                            }
+
+                        }
+                    ],
+                    as: "subscriptionWatched"
+                }
+            },
+            {
+                $project:
+                {
+                    name: 1,
+                    type: 1,
+                    language: 1,
+                    summary: 1,
+                    image: 1,
+                    genres: 1,
+                    premiered: 1,
+                    subscriptionWatched: {
+                        $filter: {
+                            input: "$subscriptionWatched",
+                            as: "subscription",
+                            cond: {
+                                $and: [
+                                    { $ne: ["$$subscription.subscriptionMovies", []] },
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                $project:
+                {
+                    name: 1,
+                    type: 1,
+                    language: 1,
+                    summary: 1,
+                    image: 1,
+                    genres: 1,
+                    premiered: 1,
+                    subscriptionWatched: {
+                        $map: {
+                            input: "$subscriptionWatched",
+                            as: "member",
+                            in: {
+                                memberId: "$$member.memberId",
+                                subscription_count: {
+                                    $size: "$$member.subscriptionMovies"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                $addFields: {
+                    total_subscriptions: {
+                        $sum: {
+                            $map: {
+                                input: "$subscriptionWatched",
+                                as: "subscription",
+                                in: "$$subscription.subscription_count",
+                            },
+                        },
+                    },
+                },
+            },
+            {
+                $project: {
+                    subscriptionWatched: 0
+                }
+            },
+            {
+                $sort: { total_subscriptions: -1 }
+            },
+            // {
+            //   $limit: 5
+            // }
+        ]
+    ).exec();
+};
+
 // GET - Get All Movies - Read
 const getAllMovies = async () => {
     return Movie.find();
@@ -185,6 +289,7 @@ const getAllMoviesWS = async (id = '') => {
 
 module.exports = {
     getAllMoviesAggregation,
+    getAllPopularMovies,
     getAllMovies,
     getMovieById,
     addMovie,

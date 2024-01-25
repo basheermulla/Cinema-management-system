@@ -32,11 +32,6 @@ const SubscriptionsMain = () => {
     const [subscriptions, setSubscriptions] = useState(initialdata.members);
     const [movies, setMovies] = useState(initialdata.movies);
 
-    useEffect(() => {
-        console.log(movies);
-    }, [])
-
-
     const subscriptionsToExport = [];
     if (subscriptions) {
         subscriptions.forEach((subscription) => {

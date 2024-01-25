@@ -41,6 +41,7 @@ const UsersManagementMain = () => {
     const removeUser = (userId) => {
         dispatch(deleteUser(userId)).then(() => {
             loadDataAfterAction();
+            
         });
     };
 

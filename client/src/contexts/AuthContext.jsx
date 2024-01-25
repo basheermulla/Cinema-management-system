@@ -26,6 +26,7 @@ export const AuthProvider = ({ children }) => {
         const { user, accessToken, message } = response.data;
         if (user) {
             localStorage.setItem('userLogin', JSON.stringify(user));
+            console.log(user);
             localStorage.setItem('accessToken', accessToken);
             dispatch({ type: LOGIN, payload: { isLoggedIn: true, user } });
         }
