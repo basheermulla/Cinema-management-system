@@ -11,6 +11,12 @@ const getAllSubscriptionsAggregation = async () => {
     return subscriptions;
 }
 
+// GET - Get This Yearly Subscriptions - Read
+const getYearlySubscriptions = async (year) => {
+    let { data: yearlySubscriptionsData } = await SubscriptionsWS.getYearlySubscriptionsWS(year);
+    return yearlySubscriptionsData;
+}
+
 // GET - Get All Subscriptions
 const getAllSubscriptions = async () => {
     let { data: subscriptions } = await SubscriptionsWS.getAllSubscriptionsWS();
@@ -43,6 +49,7 @@ const deleteSubscription = async (id) => {
 
 module.exports = { 
     getAllSubscriptionsAggregation,
+    getYearlySubscriptions,
     getAllSubscriptions,
     getSubscriptionById,
     addSubscription,

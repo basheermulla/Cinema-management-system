@@ -21,6 +21,18 @@ router.get('/aggregate', async (req, res) => {
     }
 });
 
+// GET - Get This Yearly Subscriptions - Read
+router.get('/yearlyData/:year', async (req, res) => {
+    try {
+        const { year } = req.params;
+        const yearlySubscriptionsData = await subscriptionsBLL.getYearlySubscriptions(year);
+        res.send(yearlySubscriptionsData);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+});
+
 // Get All Subscriptions
 router.get('/', async (req, res) => {
     try {

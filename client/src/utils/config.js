@@ -1,7 +1,10 @@
 import LAYOUT_CONST from './constant-layout';
 
-export const DASHBOARD_PATH = '/members-page';
+export const DASHBOARD_PATH = '/dashboard/control-panel';
+
 export const HORIZONTAL_MAX_ITEM = 7;
+
+export const SOCKET_URL = 'http://localhost:8082';
 
 const config = {
     layout: LAYOUT_CONST.VERTICAL_LAYOUT, // vertical, horizontal

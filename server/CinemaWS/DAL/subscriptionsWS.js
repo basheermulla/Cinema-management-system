@@ -11,6 +11,9 @@ const { SUBSCRIPTIONS_WS_URL } = process.env;
 // GET - Get All Subscriptions with the widthly data by use MongoDB aggregation pipeline - Read
 const getAllSubscriptionsAggregationWS = () => axios.get(`${SUBSCRIPTIONS_WS_URL}/aggregate`);
 
+// GET - Get This Yearly Subscriptions - Read
+const getYearlySubscriptionsWS = (year) => axios.get(`${SUBSCRIPTIONS_WS_URL}/yearlyData/${year}`);
+
 // GET - Get All Subscriptions - Read
 const getAllSubscriptionsWS = () => axios.get(`${SUBSCRIPTIONS_WS_URL}`);
 
@@ -28,6 +31,7 @@ const deleteSubscriptionWS = (id) => axios.delete(`${SUBSCRIPTIONS_WS_URL}/${id}
 
 module.exports = {
     getAllSubscriptionsAggregationWS,
+    getYearlySubscriptionsWS,
     getAllSubscriptionsWS,
     getSubscriptionByIdWS,
     addFirstSubscriptionWS,

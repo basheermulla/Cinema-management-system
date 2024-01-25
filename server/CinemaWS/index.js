@@ -14,6 +14,7 @@ const moviesRouter = require('./routers/moviesRouter');
 const subscriptionsRouter = require('./routers/subscriptionsRouter');
 const usersRouter = require('./routers/usersRouter');
 const authRouter = require('./routers/authRouter');
+const http = require('http').Server(app);
 
 /*=======================================================================================================
 /*================================//* Use Environment Variable *//*======================================
@@ -59,6 +60,57 @@ app.use(session({
 }));
 
 /*=======================================================================================================
+/*==========================//* Socket.io - Bi-Directional Communication *//*============================
+/*=====================================================================================================*/
+const whitelist = ['http://localhost:5173', 'http://localhost:3000'];
+
+const socketIO = require('socket.io')(http, {
+    cors: {
+        origin: whitelist,
+        methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
+        credentials: true,          // -----> access-control-allow-credentials:true
+    }
+});
+
+// Open socket.io to establish a connection with a React app 
+let count = 0;
+let users = [];
+socketIO.on('connection', (socket) => {
+    if (socket.handshake.headers.origin === 'http://localhost:5173' || socket.handshake.headers.origin === 'http://localhost:3000') {
+
+        console.log(`⚡: ${socket.id} user just connected!`);
+
+        // Triggers a "count" event when a user joins the server for the first time
+        count++;
+        socketIO.emit('count', count);
+        console.log(count);
+
+        // ===== Triggers a "newUser" event when a user joins the server for the first time
+        socket.on('newUser', (data) => {
+            // ===== Adds the new user to the list of users
+            users.push(data);
+            console.log(users);
+            // ===== Sends the list of users to the client
+            socketIO.emit('newUserResponse', users);
+        });
+
+        // Listens and logs the message to the console
+        socket.on('message', (data) => {
+            console.log(data);
+        });
+
+        // Listens when a user disconnect
+        socket.on('disconnect', () => {
+            count--;
+            socket.broadcast.emit('count', count);
+            console.log(count);
+            console.log('🔥: A user disconnected');
+        });
+    }
+
+});
+ 
+/*=======================================================================================================
 /*==================================//* Routers - Logic goes here *//*===================================
 /*=====================================================================================================*/
 app.use('/members', membersRouter);
@@ -70,7 +122,7 @@ app.use('/authentication', authRouter);
 /*=======================================================================================================
 /*====================================//* server listening *//*==========================================
 /*=====================================================================================================*/
-app.listen(port, () => {
+http.listen(port, () => {
     console.log(`------------------------------------------------------------`)
     console.log(`- Subscription server is running at http://localhost: ${port} -`)
     console.log(`------------------------------------------------------------`)

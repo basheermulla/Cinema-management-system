@@ -11,6 +11,9 @@ const { MOVIES_WS_URL } = process.env;
 // GET - Get All Movies with the widthly data by use MongoDB aggregation pipeline - Read
 const getAllMoviesAggregationWS = () => axios.get(`${MOVIES_WS_URL}/aggregate`);
 
+// GET - Get All popular movies by [number of subscriptions] - Read
+const getAllPopularMoviesWS = () => axios.get(`${MOVIES_WS_URL}/mostPopular`);
+
 // GET - Get All Movies - Read
 const getAllMoviesWS = () => axios.get(`${MOVIES_WS_URL}`);
 
@@ -28,6 +31,7 @@ const deleteMovieWS = (id) => axios.delete(`${MOVIES_WS_URL}/${id}`);
 
 module.exports = {
     getAllMoviesAggregationWS,
+    getAllPopularMoviesWS,
     getAllMoviesWS,
     getMovieByIdWS,
     addMovieWS,

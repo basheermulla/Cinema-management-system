@@ -10,18 +10,17 @@ const icons = {
 };
 
 const dashboard = {
-    id: 'control panel',
+    id: 'dashboard',
     title: <FormattedMessage id="dashboard" />,
     icon: icons.IconDashboard,
     type: 'group',
     children: [
         {
-            id: 'default',
+            id: 'control panel',
             title: <FormattedMessage id="control panel" />,
             type: 'item',
-            url: '/dashboard/default',
-            icon: icons.IconDashboard,
-            breadcrumbs: false
+            url: '/dashboard/control-panel',
+            icon: icons.IconDashboard,            
         }
     ]
 };
