@@ -93,15 +93,23 @@ export function updateSubscription(memberId, subscription) {
     };
 }
 
-export function deleteSubscription(memberId, subscriptionId) {
+export function deleteSubscription(memberId, subscriptionId, action) {
     return async () => {
         try {
             let token = window.localStorage.getItem('accessToken');
-            const obj_delete = { subscriptionId, action: 'delete' }
-            console.log('Pay attention - You may delete the subscription = ', memberId);
+            const obj_delete = { subscriptionId, action }
+            console.log('Pay attention - You may delete the movie`s subscription = ', memberId);
             console.log(obj_delete);
-            const response = await axios.put(`${SUBSCRIPTIONS_URL}/${memberId}`, obj_delete, { headers: { "Authorization": `Bearer ${token}` } });
-            console.log(response);
+            if (action === 'deleteOneMovie') {
+                 // Remove only this [subscriptionId] desired member's subscription from the subscriptionMovies array in the member's subscription document
+                const response = await axios.put(`${SUBSCRIPTIONS_URL}/${memberId}`, obj_delete, { headers: { "Authorization": `Bearer ${token}` } });
+                console.log(response);
+            } else {
+                // Delete the member's entire subscription document - this case can be when the member has only one future subscription and wants to cancel it
+                console.log('Pay attention - You may delete the member`s entire subscription document = ', subscriptionId);
+                const response = await axios.delete(`${SUBSCRIPTIONS_URL}/${memberId}`, { headers: { "Authorization": `Bearer ${token}` } });
+                console.log(response);
+            }
         } catch (error) {
             console.error(error);
         }

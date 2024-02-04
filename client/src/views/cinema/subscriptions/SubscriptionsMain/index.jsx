@@ -71,8 +71,8 @@ const SubscriptionsMain = () => {
         });
     };
 
-    const removeSubscription = (memberId, subscriptionId) => {
-        dispatch(deleteSubscription(memberId, subscriptionId)).then(() => {
+    const removeSubscription = (memberId, subscriptionId, action) => {
+        dispatch(deleteSubscription(memberId, subscriptionId, action)).then(() => {
             loadDataAfterAction();
         });;
     };

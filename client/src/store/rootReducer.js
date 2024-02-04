@@ -7,13 +7,15 @@ import membersReducer from './slices/member'
 import menuReducer from './slices/menu';
 import movieReducer from './slices/movie';
 import userReducer from './slices/user';
+import chatReducer from './slices/chat';
 
 const rootReducer = combineReducers({
+    menu: menuReducer,
     counter: counterReducer,
     members: membersReducer,
-    menu: menuReducer,
     movies: movieReducer,
-    users: userReducer
+    users: userReducer,
+    chat: chatReducer,
 });
 
 export default rootReducer

@@ -8,7 +8,6 @@ const Movie = require('../models/movieModel.js');
 
 // Get All Subscriptions with the widthly data by use MongoDB aggregation pipeline - Read
 const getAllSubscriptionsAggregation = async () => {
-    console.log('Hello from getAllSubscriptionsAggregation');
     const subscriptions = Subscription.aggregate(
         [
             {
@@ -92,7 +91,6 @@ const getAllSubscriptionsAggregation = async () => {
 //
 // GET - Get This Yearly Subscriptions - Read
 const getYearlySubscriptions = async (year) => {
-    console.log('Hello from getYearlySubscriptions = ', +year);
     return Subscription.aggregate(
         [
             { $unwind: "$subscriptionMovies" },
@@ -111,8 +109,11 @@ const getYearlySubscriptions = async (year) => {
             {
                 $group: {
                     _id: {
-                        month: { $month: { $toDate: "$date" } },
-                        year: { $year: { $toDate: "$date" } },
+                        // month: { $month: { $toDate: "$date" } },
+                        // year: { $year: { $toDate: "$date" } },
+                        month: { $month: { "date": { $toDate: "$date" }, "timezone": "Asia/Jerusalem" } },
+                        year: { $year: { "date": { $toDate: "$date" }, "timezone": "Asia/Jerusalem" } },
+
                     },
                     total: { $sum: 1 }
                 },
@@ -176,7 +177,7 @@ const updateSubscriptionByMemberId = async (id, obj, options) => {
 
 // DELETE - Delete a Subscription
 const deleteSubscription = async (id) => {
-    await Subscription.findByIdAndDelete(id);
+    await Subscription.deleteOne({ memberId: id });
     return 'Deleted';
 };
 

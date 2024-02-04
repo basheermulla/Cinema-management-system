@@ -28,11 +28,8 @@ const PopularMoviesCard = ({ isLoading, popular_movies }) => {
     const [totalViews, setTotalViews] = useState(0)
 
     useEffect(() => {
-        const total_popular_subscriptions = popular_movies.reduce((accumulator, object) => accumulator + object.total_subscriptions, 0);
+        const total_popular_subscriptions = popular_movies?.reduce((accumulator, object) => accumulator + object.total_subscriptions, 0);
         setTotalViews(total_popular_subscriptions);
-        console.log(date);
-        console.log(date.toString());
-        console.log(date.toISOString());
     }, []);
 
     return (
@@ -59,7 +56,7 @@ const PopularMoviesCard = ({ isLoading, popular_movies }) => {
                                 />
                             </Grid>
                             {
-                                popular_movies.slice(0, 4).map((movie) => (
+                                popular_movies?.slice(0, 4).map((movie) => (
                                     <Grid item xs={12} key={movie._id} sx={{ pt: '12px !important' }}>
                                         <Grid container alignItems="center" justifyContent="space-between">
                                             <Grid item>

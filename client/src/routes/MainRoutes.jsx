@@ -10,6 +10,9 @@ import { loader as membersLoader, memberLoader } from 'store/slices/member';
 import { loader as usersLoader } from 'store/slices/user';
 import { loader as dashboardLoader } from 'store/slices/dashboard';
 
+// socket provider [Context]
+import { SocketProvider } from 'contexts/SocketContext';
+
 // dashboard routing
 const DashboardControlPanel = Loadable(lazy(() => import('views/dashboard/ControlPanel')));
 
@@ -21,64 +24,71 @@ const CinemaMovieDetails = Loadable(lazy(() => import('views/cinema/movies/Movie
 const CinemaSubscriptionsMain = Loadable(lazy(() => import('views/cinema/subscriptions/SubscriptionsMain')));
 const CinemaMemberProfile = Loadable(lazy(() => import('views/cinema/subscriptions/MemberDetails')));
 
+// cinema - chat
+const CinemaChat = Loadable(lazy(() => import('views/cinema/chat')));
+
 // management - users routing
 const UsersManagementMain = Loadable(lazy(() => import('views/UsersManagement/UsersManagementMain')));
 const UsersAddEditUser = Loadable(lazy(() => import('views/UsersManagement/AddEditUser')));
 
-
-
 const MainRoutes = {
     path: '/',
     element: (
-        <AuthGuard>
-            <MainLayout />
-        </AuthGuard>
+        <SocketProvider>
+            <AuthGuard>
+                <MainLayout />
+            </AuthGuard>
+        </SocketProvider>
     ),
     children: [
         {
             path: '/',
             element: <DashboardControlPanel />,
-            loader: dashboardLoader,
+            loader: dashboardLoader
         },
         {
             path: '/dashboard/control-panel',
             element: <DashboardControlPanel />,
-            loader: dashboardLoader,
+            loader: dashboardLoader
         },
         {
             path: '/cinema/movies',
             element: <CinemaMoviesMain />,
-            loader: moviesLoader,
+            loader: moviesLoader
         },
         {
             path: '/cinema/movies/movie-details/:id',
             element: <CinemaMovieDetails />,
-            // loader: movieLoader,
+            // loader: movieLoader
         },
         {
             path: '/cinema/subscriptions',
             element: <CinemaSubscriptionsMain />,
-            loader: membersLoader,
+            loader: membersLoader
         },
         {
             path: '/cinema/subscriptions/member-profile/:id',
             element: <CinemaMemberProfile />,
-            loader: memberLoader,
+            loader: memberLoader
         },
         {
             path: '/management/users',
             element: <UsersManagementMain />,
-            loader: usersLoader,
+            loader: usersLoader
         },
         {
             path: '/management/users/add-user',
-            element: <UsersAddEditUser />,            
+            element: <UsersAddEditUser />,
         },
         {
             path: '/management/users/add-user/:id',
-            element: <UsersAddEditUser />,            
-        }
-        
+            element: <UsersAddEditUser />,
+        },
+        {
+            path: '/cinema/chat',
+            element: <CinemaChat />,
+        },
+
     ]
 }
 

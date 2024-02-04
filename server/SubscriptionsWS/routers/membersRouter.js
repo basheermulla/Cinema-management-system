@@ -13,7 +13,6 @@ const router = express.Router();
 router.get('/aggregate', async (req, res) => {
     try {
         const members = await membersBLL.getAllMembersAggregation();
-        
         res.send(members);
     } catch (error) {
         console.error(error);
@@ -25,7 +24,6 @@ router.get('/aggregate', async (req, res) => {
 router.get('/subscriptionsUnwind', async (req, res) => {
     try {
         const collect_obj_return = await membersBLL.getAllMembersSubscriptionsUnwind(); // collect_obj_return = { members: all_Members, movies: all_Moves }
-        
         res.send(collect_obj_return);
     } catch (error) {
         console.error(error);
@@ -37,7 +35,6 @@ router.get('/subscriptionsUnwind', async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         const members = await membersBLL.getAllMembers();
-        // console.log('Hi from Server with 8080 Port');
         res.send(members);
     } catch (error) {
         console.error(error);

@@ -13,7 +13,6 @@ const router = express.Router();
 router.get('/aggregate', async (req, res) => {
     try {
         const movies = await moviesBLL.getAllMoviesAggregation();
-        // console.log('movies = ', movies);
         res.send(movies);
     } catch (error) {
         console.error(error);
@@ -25,7 +24,6 @@ router.get('/aggregate', async (req, res) => {
 router.get('/mostPopular', async (req, res) => {
     try {
         const movies = await moviesBLL.getAllPopularMovies();
-
         res.send(movies);
     } catch (error) {
         console.error(error);
@@ -37,7 +35,6 @@ router.get('/mostPopular', async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         const movies = await moviesBLL.getAllMovies();
-
         res.send(movies);
     } catch (error) {
         console.error(error);
@@ -61,7 +58,6 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         const obj = req.body; // In use
-        console.log(obj)
         const result = await moviesBLL.addMovie(obj);
         res.status(201).send(result);
     } catch (error) {

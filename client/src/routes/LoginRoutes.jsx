@@ -4,6 +4,7 @@ import { lazy } from 'react';
 import MinimalLayout from 'layout/MinimalLayout';
 import GuestGuard from './route-guard/GuestGuard';
 import Loadable from 'components/Loadable';
+import NavMotion from 'layout/NavMotion';
 
 // login routing
 const AuthLogin = Loadable(lazy(() => import('views/pages/authentication/Login')));
@@ -12,9 +13,11 @@ const AuthRegister = Loadable(lazy(() => import('views/pages/authentication/Regi
 const LoginRoutes = {
     path: '/',
     element: (
-        <GuestGuard>
-            <MinimalLayout />
-        </GuestGuard>
+        <NavMotion>
+            <GuestGuard>
+                <MinimalLayout />
+            </GuestGuard>
+        </NavMotion>
     ),
     children: [
         {

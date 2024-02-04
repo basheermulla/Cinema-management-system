@@ -10,9 +10,9 @@ const User = require('../models/userModel');
 
 // GET - Get All Users and Permissions
 const getAllUsersAndPermissionsData = async () => {
+    console.log('getAllUsersAndPermissionsData');
     // Get username from mongoDB Users Collection
     const users = await User.find();
-    console.log(users);
     // Read users and permissions json file
     let usersData = await usersFile.getUsersFile();
     const permissionsData = await permissionsFile.getPermissionsFile();
@@ -35,6 +35,7 @@ const getAllUsersAndPermissionsData = async () => {
 
 // GET - Get User and Permission By User Id
 const getUserAndPermissionDataByUserId = async (id) => {
+    console.log('getUserAndPermissionDataByUserId = ', id);
     // Get username from mongoDB Users Collection
     const { _id, username } = await User.findById({ _id: id });
 
@@ -57,8 +58,124 @@ const getUserAndPermissionDataByUserId = async (id) => {
     return obj_user;
 }
 
+// GET - Get All Users and Messages By User Id
+const getAllUsersAndMessagesByUserId = async (id) => {
+    console.log('getAllUsersAndMessagesByUserId = ', id);
+    // Get username from mongoDB Users Collection
+    const users = await User.aggregate(
+        [
+            {
+                $match: { $expr: { $ne: ["$_id", { $toObjectId: id }] } }
+            },
+            {
+                $project: { password: 0 }
+            },
+            {
+                $lookup:
+                {
+                    from: 'conversations',
+                    let: { "id": '$_id' },
+                    pipeline: [
+                        {
+                            $match:
+                            {
+                                $expr:
+                                {
+                                    $and: [
+                                        { $in: [{ $toObjectId: id }, "$participants"] },
+                                        { $in: ["$$id", "$participants"] }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            $addFields:
+                            {
+                                conversationId: "$_id",
+                            }
+                        }
+                    ], as: "myparticipants"
+                }
+            },
+            {
+                $replaceRoot: { newRoot: { $mergeObjects: [{ $arrayElemAt: ["$myparticipants", 0] }, "$$ROOT"] } }
+            },
+            {
+                $project: { myparticipants: 0 }
+            },
+            {
+                $lookup:
+                {
+                    from: "messages",
+                    localField: "conversationId",
+                    foreignField: "converstationId",
+                    as: "messages",
+                }
+            },
+            {
+                $addFields: {
+                    unReadChatCount: {
+                        $sum: {
+                            $map: {
+                                input: {
+                                    $filter: {
+                                        input: "$messages",
+                                        as: "message_recipient",
+                                        cond: { $eq: ['$$message_recipient.recipient', { $toObjectId: id }] }
+                                    }
+                                },
+                                as: 'message',
+                                in: {
+                                    $cond: ["$$message.isReadByRecipient", 0, 1]
+                                },
+                            }
+                        }
+                    },
+                },
+            },
+            {
+                $addFields: {
+                    lastMessage: {
+                        $max: {
+                            $map: {
+                                input: '$messages',
+                                as: 'message',
+                                in: "$$message.created_at"
+                            }
+                        }
+                    },
+                },
+            },
+            {
+                $project: { messages: 0 }
+            },
+        ]
+    ).exec();
+
+    // Accept the users as asynchronous to give us the ability to work with them
+    const resp_users = await users;
+
+    // Read users and permissions json file
+    let usersData = await usersFile.getUsersFile();
+    const permissionsData = await permissionsFile.getPermissionsFile();
+
+    // Map the users with their permissions
+    const mapUsers = usersData.users.filter((u) => u.id !== id).map((user) => {
+        const userDB = resp_users.find((u) => u['_id'].toHexString() === user.id);
+        obj_user = {
+            ...userDB,
+            user: user,
+        }
+        return obj_user;
+    });
+
+    return mapUsers;
+}
+
+
 // POST - Create a User and Default Permission
 const addUserAndDefaultPermissionData = async (obj) => {
+    console.log('addUserAndDefaultPermissionData = ', obj);
     // Extract received data regarding the new user 
     const { username, user, permissionsUser } = obj
 
@@ -84,10 +201,10 @@ const addUserAndDefaultPermissionData = async (obj) => {
 
 // PUT - Update a User and Permission
 const updateUserAndPermissionData = async (id, obj, options) => {
+    console.log('updateUserAndPermissionData = ', id);
     // Extract received data regarding the user's updating 
     const { username, user, permissionsUser } = obj
-    console.log(id);
-    console.log(username);
+
     // Update username without password into mongoDB Users Collection
     if (username) {
         await User.findByIdAndUpdate(id, { username: username }, options);
@@ -114,6 +231,7 @@ const updateUserAndPermissionData = async (id, obj, options) => {
 
 // DELETE - Delete a User and Permission
 const deleteUserAndPermissionData = async (id) => {
+    console.log('deleteUserAndPermissionData = ', id);
     // Delete user [username and password] from mongoDB Users Collection
     await User.findByIdAndDelete(id);
 
@@ -128,13 +246,14 @@ const deleteUserAndPermissionData = async (id) => {
     const permissionIndex = permissionsData.permissions.findIndex((permission) => permission.id === id);
     permissionsData.permissions.splice(permissionIndex, 1);
     await permissionsFile.setPermissionsFile(permissionsData);
-    
+
     return 'Deleted';
 }
 
 module.exports = {
     getAllUsersAndPermissionsData,
     getUserAndPermissionDataByUserId,
+    getAllUsersAndMessagesByUserId,
     addUserAndDefaultPermissionData,
     updateUserAndPermissionData,
     deleteUserAndPermissionData

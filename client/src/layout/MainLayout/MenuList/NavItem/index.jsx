@@ -64,8 +64,8 @@ const NavItem = ({ item, level, parentId, isParents = false }) => {
         const currentIndex = document.location.pathname
             .toString()
             .split('/')
-            .findIndex((id) => id === item.id);
-        if (currentIndex > -1) {
+            .findIndex((id) => id === item.id);        
+        if (currentIndex > -1) {                      
             dispatch(activeItem([item.id]));
         }
         // eslint-disable-next-line
@@ -91,18 +91,18 @@ const NavItem = ({ item, level, parentId, isParents = false }) => {
                         ...(drawerOpen &&
                             level === 1 &&
                             theme.palette.mode !== 'dark' && {
+                            '&:hover': {
+                                background: theme.palette.secondary.light
+                            },
+                            '&.Mui-selected': {
+                                background: theme.palette.secondary.light,
+                                color: iconSelectedColor,
                                 '&:hover': {
-                                    background: theme.palette.secondary.light
-                                },
-                                '&.Mui-selected': {
-                                    background: theme.palette.secondary.light,
                                     color: iconSelectedColor,
-                                    '&:hover': {
-                                        color: iconSelectedColor,
-                                        background: theme.palette.secondary.light
-                                    }
+                                    background: theme.palette.secondary.light
                                 }
-                            }),
+                            }
+                        }),
                         ...((!drawerOpen || level !== 1) && {
                             py: level === 1 ? 0 : 1,
                             '&:hover': {
@@ -126,22 +126,22 @@ const NavItem = ({ item, level, parentId, isParents = false }) => {
                                 color: isSelected ? iconSelectedColor : textColor,
                                 ...(!drawerOpen &&
                                     level === 1 && {
-                                        borderRadius: `${borderRadius}px`,
-                                        width: 46,
-                                        height: 46,
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
+                                    borderRadius: `${borderRadius}px`,
+                                    width: 46,
+                                    height: 46,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    '&:hover': {
+                                        bgcolor: theme.palette.mode === 'dark' ? theme.palette.secondary.main + 25 : 'secondary.light'
+                                    },
+                                    ...(isSelected && {
+                                        bgcolor: theme.palette.mode === 'dark' ? theme.palette.secondary.main + 25 : 'secondary.light',
                                         '&:hover': {
-                                            bgcolor: theme.palette.mode === 'dark' ? theme.palette.secondary.main + 25 : 'secondary.light'
-                                        },
-                                        ...(isSelected && {
-                                            bgcolor: theme.palette.mode === 'dark' ? theme.palette.secondary.main + 25 : 'secondary.light',
-                                            '&:hover': {
-                                                bgcolor:
-                                                    theme.palette.mode === 'dark' ? theme.palette.secondary.main + 30 : 'secondary.light'
-                                            }
-                                        })
+                                            bgcolor:
+                                                theme.palette.mode === 'dark' ? theme.palette.secondary.main + 30 : 'secondary.light'
+                                        }
                                     })
+                                })
                             }}
                         >
                             {itemIcon}

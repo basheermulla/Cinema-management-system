@@ -68,7 +68,7 @@ const TotalOrderLineChartCard = ({ isLoading, popular_movies }) => {
     const [totalViews, setTotalViews] = useState(0);
 
     useEffect(() => {
-        const total_popular_subscriptions = popular_movies.reduce((accumulator, object) => accumulator + object.total_subscriptions, 0);
+        const total_popular_subscriptions = popular_movies?.reduce((accumulator, object) => accumulator + object.total_subscriptions, 0);
         setTotalViews(total_popular_subscriptions)
     }, []);
 

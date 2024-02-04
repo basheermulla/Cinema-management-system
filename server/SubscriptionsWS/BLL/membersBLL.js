@@ -10,7 +10,6 @@ const Subscription = require('../models/subscriptionModel.js');
 
 // GET - Get All Members with the widthly data by use MongoDB aggregation pipeline - Read
 const getAllMembersAggregation = async () => {
-    console.log('Hello from getAllMembersAggregation');
     const members = Member.aggregate(
         [
             {
@@ -58,9 +57,6 @@ const getAllMembersAggregation = async () => {
 
     // Accept the members as asynchronous to give us the ability to work with them
     const resp_members = await members;
-    resp_members.forEach((member) => {
-        console.log(member);
-    })
 
     // Calculate the amount of member's subscriptions and append to the certain member's document as a property object
     // Because I will probably use it during the development of the frontend
@@ -104,7 +100,6 @@ const getAllMembersAggregation = async () => {
         return member
     });
 
-    console.log(members);
     return members;
 };
 

@@ -6,14 +6,13 @@ import axios from 'axios';
 
 // initial state
 const initialState = {
-    selectedItem: ['dashboard'],
+    selectedItem: ['control-panel'],
     selectedID: null,
     drawerOpen: false,
     error: null,
-    menu: {}
+    menu: {},
+    chatOpen: false
 };
-
-// ==============================|| SLICE - MENU ||============================== //
 
 const menu = createSlice({
     name: 'menu',
@@ -39,21 +38,14 @@ const menu = createSlice({
         // get dashboard menu
         getMenuSuccess(state, action) {
             state.menu = action.payload;
-        }
+        },
+
+        openChat(state, action) {
+            state.chatOpen = action.payload;
+        },
     }
 });
 
 export default menu.reducer;
 
-export const { activeItem, openDrawer, activeID } = menu.actions;
-
-export function getMenu() {
-    return async () => {
-        try {
-            const response = await axios.get('/api/menu/widget');
-            dispatch(menu.actions.getMenuSuccess(response.data.widget));
-        } catch (error) {
-            dispatch(menu.actions.hasError(error));
-        }
-    };
-}
+export const { activeItem, openDrawer, activeID, openChat } = menu.actions;

@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 
 // material-ui
 import { styled, useTheme } from '@mui/material/styles';
@@ -14,8 +14,10 @@ import Breadcrumbs from 'components/extended/Breadcrumbs';
 import LAYOUT_CONST from 'utils/constant-layout';
 import useConfig from 'hooks/useConfig';
 import { drawerWidth } from 'utils/constant-theme';
-import { openDrawer } from 'store/slices/menu';
-import { useDispatch, useSelector } from '../../store/index';
+import { openDrawer, openChat } from 'store/slices/menu';
+import { useDispatch, useSelector } from 'store/index';
+import useSocket from 'hooks/useSocket';
+import useAuth from 'hooks/useAuth';
 
 // styles
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open, layout }) => ({
@@ -70,9 +72,14 @@ const MainLayout = () => {
     const matchDownMd = useMediaQuery(theme.breakpoints.down('md'));
 
     const dispatch = useDispatch();
-    const { drawerOpen } = useSelector((state) => state.menu);
-    console.log(drawerOpen);
+    const { drawerOpen, chatOpen, selectedItem } = useSelector((state) => state.menu);
     const { drawerType, container, layout } = useConfig();
+
+    // userLogin
+    const { user: userLogin } = useAuth();
+
+    const { pathname } = useLocation();
+    const { socket } = useSocket();
 
     useEffect(() => {
         if (drawerType === LAYOUT_CONST.DEFAULT_DRAWER) {
@@ -80,21 +87,35 @@ const MainLayout = () => {
         } else {
             dispatch(openDrawer(false));
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [drawerType]);
 
     useEffect(() => {
         if (drawerType === LAYOUT_CONST.DEFAULT_DRAWER) {
             dispatch(openDrawer(true));
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    //------------------------------------------------------
+    // useEffect -> Emit userLeaveChat event               -
+    //------------------------------------------------------
+    useEffect(() => {
+        console.log('pathname = ', pathname);
+        console.log('selectedItem = ', selectedItem);
+        console.log('chatOpen = ', chatOpen);
+        if (pathname === '/cinema/chat') {
+            console.log('Here we will dispatch open chat');
+            dispatch(openChat(true));
+        } else if (chatOpen) {
+            console.log('Leave chat now ');
+            dispatch(openChat(false));
+            socket?.emit('availableInSystem', { username: userLogin.username });
+        }
+    }, [pathname]);
 
     useEffect(() => {
         if (matchDownMd) {
             dispatch(openDrawer(true));
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [matchDownMd]);
 
     const condition = layout === LAYOUT_CONST.HORIZONTAL_LAYOUT && !matchDownMd;
@@ -105,7 +126,6 @@ const MainLayout = () => {
                 <Header />
             </Toolbar>
         ),
-        // eslint-disable-next-line react-hooks/exhaustive-deps
         [layout, matchDownMd]
     );
 

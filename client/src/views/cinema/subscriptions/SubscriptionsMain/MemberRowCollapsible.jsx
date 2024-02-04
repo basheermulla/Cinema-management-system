@@ -205,10 +205,25 @@ function MemberRowCollapsible({ ID, member, handleClickOpenMemberDialog, addSubs
                                                                 </IconButton>
                                                                 :
                                                                 <>
-                                                                    <IconButton color="secondary" onClick={() => removeSubscription(member._id, relatedMovieRow.subscriptionId)} size="large" aria-label="edit">
+                                                                    <IconButton
+                                                                        color="secondary"
+                                                                        onClick={() => {
+                                                                            member.relatedMovie.length === 1
+                                                                            ? removeSubscription(member._id, relatedMovieRow.subscriptionId, "deleteSubscription")
+                                                                            : removeSubscription(member._id, relatedMovieRow.subscriptionId, "deleteOneMovie")
+                                                                            console.log(member.relatedMovie.length);
+                                                                        }}
+                                                                        size="large"
+                                                                        aria-label="edit"
+                                                                    >
                                                                         <DeleteMember sx={{ fontSize: '1.3rem' }} color="error" />
                                                                     </IconButton>
-                                                                    <IconButton color="secondary" onClick={() => handleClickOpenSubscribeDialog(relatedMovieRow)} size="large" aria-label="edit">
+                                                                    <IconButton
+                                                                        color="secondary"
+                                                                        onClick={() => handleClickOpenSubscribeDialog(relatedMovieRow)}
+                                                                        size="large"
+                                                                        aria-label="edit"
+                                                                    >
                                                                         <EditTwoToneIcon sx={{ fontSize: '1.3rem' }} />
                                                                     </IconButton>
                                                                 </>

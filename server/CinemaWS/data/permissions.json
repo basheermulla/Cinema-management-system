@@ -1,1 +1,123 @@
-{"permissions":[{"id":"659580b42550ce9c8b0fb5f8","permissionsUser":[{"view_Subscriptions":true},{"create_Subscriptions":true},{"update_Subscriptions":true},{"delete_Subscriptions":true},{"view_Movies":true},{"create_Movies":true},{"update_Movies":true},{"delete_Movies":true}]},{"id":"659581031e6563e028455c14","permissionsUser":[{"view_Subscriptions":true},{"create_Subscriptions":true},{"update_Subscriptions":true},{"delete_Subscriptions":false},{"view_Movies":true},{"create_Movies":true},{"update_Movies":true},{"delete_Movies":false}]},{"id":"65958ddbe42e88c70887ab8d","permissionsUser":[{"view_Subscriptions":true},{"create_Subscriptions":true},{"update_Subscriptions":false},{"delete_Subscriptions":false},{"view_Movies":true},{"create_Movies":true},{"update_Movies":false},{"delete_Movies":false}]},{"id":"6595d4910961858ce69081f0"},{"id":"65964faa7cca73b7d577074d","permissionsUser":[{"view_Subscriptions":true},{"create_Subscriptions":false},{"update_Subscriptions":true},{"delete_Subscriptions":false},{"view_Movies":true},{"create_Movies":false},{"update_Movies":true},{"delete_Movies":false}]}]}
+{
+    "permissions": [
+        {
+            "id": "659580b42550ce9c8b0fb5f8",
+            "permissionsUser": [
+                {
+                    "view_Subscriptions": true
+                },
+                {
+                    "create_Subscriptions": true
+                },
+                {
+                    "update_Subscriptions": true
+                },
+                {
+                    "delete_Subscriptions": true
+                },
+                {
+                    "view_Movies": true
+                },
+                {
+                    "create_Movies": true
+                },
+                {
+                    "update_Movies": true
+                },
+                {
+                    "delete_Movies": true
+                }
+            ]
+        },
+        {
+            "id": "659581031e6563e028455c14",
+            "permissionsUser": [
+                {
+                    "view_Subscriptions": true
+                },
+                {
+                    "create_Subscriptions": true
+                },
+                {
+                    "update_Subscriptions": true
+                },
+                {
+                    "delete_Subscriptions": false
+                },
+                {
+                    "view_Movies": true
+                },
+                {
+                    "create_Movies": true
+                },
+                {
+                    "update_Movies": true
+                },
+                {
+                    "delete_Movies": false
+                }
+            ]
+        },
+        {
+            "id": "65958ddbe42e88c70887ab8d",
+            "permissionsUser": [
+                {
+                    "view_Subscriptions": true
+                },
+                {
+                    "create_Subscriptions": true
+                },
+                {
+                    "update_Subscriptions": false
+                },
+                {
+                    "delete_Subscriptions": false
+                },
+                {
+                    "view_Movies": true
+                },
+                {
+                    "create_Movies": true
+                },
+                {
+                    "update_Movies": false
+                },
+                {
+                    "delete_Movies": false
+                }
+            ]
+        },
+        {
+            "id": "6595d4910961858ce69081f0"
+        },
+        {
+            "id": "65964faa7cca73b7d577074d",
+            "permissionsUser": [
+                {
+                    "view_Subscriptions": true
+                },
+                {
+                    "create_Subscriptions": false
+                },
+                {
+                    "update_Subscriptions": true
+                },
+                {
+                    "delete_Subscriptions": false
+                },
+                {
+                    "view_Movies": true
+                },
+                {
+                    "create_Movies": false
+                },
+                {
+                    "update_Movies": true
+                },
+                {
+                    "delete_Movies": false
+                }
+            ]
+        }
+    ]
+}
