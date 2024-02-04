@@ -4,7 +4,6 @@ import { createSlice } from '@reduxjs/toolkit';
 // internal imports
 import axios from 'axios';
 import { dispatch } from '../index';
-import useSocket from 'hooks/useSocket';
 
 const USERS_URL = import.meta.env.VITE_APP_USERS_URL;
 
@@ -13,6 +12,7 @@ const USERS_URL = import.meta.env.VITE_APP_USERS_URL;
 const initialState = {
     error: null,
     users: [],
+    employees: []
 };
 
 const slice = createSlice({

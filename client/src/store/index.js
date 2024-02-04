@@ -1,19 +1,22 @@
+// third-party
 import { configureStore } from '@reduxjs/toolkit';
-import rootReducer from './rootReducer';
-import storage from 'redux-persist/lib/storage';
-import { persistReducer, persistStore } from 'redux-persist';
 import { useDispatch as useAppDispatch, useSelector as useAppSelector } from 'react-redux';
-// import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
+
+import { persistReducer, persistStore } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+
+// internal imports
+import rootReducer from './rootReducer';
 
 const persistConfig = {
-    key: 'my cinemadb', // whatever you want to keep as your key
+    key: 'my-db', 
     storage,
+    keyPrefix: 'cinema-'
     /*//-----------------------------------------------------------------------
     -   Other state reconcilers include hardSet,                              -
     -   which completely overrides the initial state with the incoming state, -
     -   and autoMergeLevel2, which merges two levels deep                     -
     *///-----------------------------------------------------------------------
-
     // stateReconciler: autoMergeLevel2  
 }
 

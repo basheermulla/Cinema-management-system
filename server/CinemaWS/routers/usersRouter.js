@@ -14,7 +14,6 @@ const router = express.Router();
 router.get('/', verifyToken, async (req, res) => {
     try {
         const users = await usersBLL.getAllUsersAndPermissionsData();
-        
         res.send(users);
     } catch (error) {
         console.error(error);
@@ -28,6 +27,19 @@ router.get('/:id', verifyToken, async (req, res) => {
         const { id } = req.params;
         const user = await usersBLL.getUserAndPermissionDataByUserId(id);
         res.send(user);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+});
+
+// GET - Get All Users and Messages By User Id
+router.get(`/chats/:id`, verifyToken, async (req, res) => {
+    try {
+        const { id } = req.params;
+        console.log(id);
+        const users = await usersBLL.getAllUsersAndMessagesByUserId(id);
+        res.send(users);
     } catch (error) {
         console.error(error);
         res.status(500).send(error);

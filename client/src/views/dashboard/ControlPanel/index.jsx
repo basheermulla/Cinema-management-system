@@ -13,10 +13,12 @@ import TotalSubscriptionBarChart from './TotalSubscriptionBarChart';
 import PopularMoviesCard from './PopularMoviesCard';
 import { gridSpacing } from 'utils/constant-theme';
 import useSocket from 'hooks/useSocket';
+import useAuth from 'hooks/useAuth';
 
 const ControlPanel = () => {
-    const { usersCount } = useSocket();
-
+    const { user } = useAuth();
+    const { usersCount, socket } = useSocket();
+    
     // dashboard data
     const initialdata = useLoaderData();
     const [subscriptions, setSubscriptions] = useState(initialdata.members);
@@ -30,6 +32,11 @@ const ControlPanel = () => {
     useEffect(() => {
         setLoading(false);
     }, []);
+
+    //sends the username and socket ID to the Node.js server
+    // useEffect(() => {
+    //     socket?.emit('newUser', { username: user.username, socketID: socket.id });
+    // }, []);
 
     return (
         <Grid container spacing={gridSpacing}>

@@ -16,7 +16,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import MainCard from 'components/cards/MainCard';
 import Transitions from 'components/extended/Transitions';
 import useAuth from 'hooks/useAuth';
-import User1 from 'assets/images/users/user-round.svg';
+import useSocket from 'hooks/useSocket';
 
 // assets
 import { IconLogout, IconSettings, IconUser } from '@tabler/icons-react';
@@ -26,6 +26,7 @@ const ProfileSection = () => {
     const theme = useTheme();
     const { borderRadius } = useConfig();
     const navigate = useNavigate();
+    const { socket } = useSocket();
 
     const [sdm, setSdm] = useState(true);
     const [value, setValue] = useState('');
@@ -39,6 +40,7 @@ const ProfileSection = () => {
     const anchorRef = useRef(null);
     const handleLogout = async () => {
         try {
+            socket?.emit('offlineInSystem', { username: user.username });
             await logout();
         } catch (err) {
             console.error(err);

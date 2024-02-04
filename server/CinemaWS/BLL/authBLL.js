@@ -68,7 +68,7 @@ const getUserByUsername = async (usernameCheck) => {
     // Map the desire user with its username and permissions    
     const obj_user = { 
         ...userDetails, 
-        username: result_user.username,
+        username: result_user.username,        
         password: result_user.password,
         ...getUserPermission
     }

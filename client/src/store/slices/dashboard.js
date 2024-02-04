@@ -47,7 +47,6 @@ export async function loader() {
         data.users = users.data;
         data.popular_movies = popular_movies.data;
         data.yearlySubscriptionsData = yearlySubscriptionsData.data;
-        console.log('response_For_Dashboard = ', data);
         return data;
     } catch (error) {
         return error;

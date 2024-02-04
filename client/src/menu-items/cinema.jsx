@@ -7,6 +7,8 @@ import {
     IconNfc, IconUsersGroup, IconUserCircle, IconUserPlus, IconBellCheck, IconMovie, IconStars, IconStar
 } from '@tabler/icons-react';
 
+
+
 // constant
 const icons = {
     IconApps,
@@ -37,7 +39,7 @@ const application = {
             title: <FormattedMessage id="chat" />,
             type: 'item',
             icon: icons.IconMessages,
-            url: '/chat'            
+            url: `/cinema/chat`           
         },
         {
             id: 'movies',

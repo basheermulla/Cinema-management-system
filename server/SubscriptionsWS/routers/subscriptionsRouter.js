@@ -13,7 +13,6 @@ const router = express.Router();
 router.get('/aggregate', async (req, res) => {
     try {
         const subscriptions = await subscriptionsBLL.getAllSubscriptionsAggregation();
-        // console.log('subscriptions = ', subscriptions);
         res.send(subscriptions);
     } catch (error) {
         console.error(error);
@@ -37,7 +36,6 @@ router.get('/yearlyData/:year', async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         const subscriptions = await subscriptionsBLL.getAllSubscriptions();
-
         res.send(subscriptions);
     } catch (error) {
         console.error(error);
@@ -61,7 +59,6 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         const obj = req.body; // In use
-        console.log(obj)
         const result = await subscriptionsBLL.addFirstSubscription(obj);
         res.status(201).send(result);
     } catch (error) {

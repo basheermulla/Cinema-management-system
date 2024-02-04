@@ -39,7 +39,7 @@ const MenuList = () => {
             })
         }));
     }
-
+    
     const navItems = menuItem.items.slice(0, lastItemIndex + 1).map((item) => {
         switch (item.type) {
             case 'group':

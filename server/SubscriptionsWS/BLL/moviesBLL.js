@@ -9,7 +9,6 @@ const Subscription = require('../models/subscriptionModel.js');
 
 // GET - Get All Movies with the widthly data by use MongoDB aggregation pipeline - Read
 const getAllMoviesAggregation = async () => {
-    console.log('Hello from getAllMoviesAggregation');
     return Movie.aggregate(
         [
             {
@@ -127,7 +126,6 @@ const getAllMoviesAggregation = async () => {
 
 // GET - Get All popular movies by [number of subscriptions] - Read
 const getAllPopularMovies = async () => {
-    console.log('Hello from getAllPopularMovies');
     return Movie.aggregate(
         [
             {
@@ -283,7 +281,6 @@ const addManyMovies = async (objMany) => {
 // GET - Get All Members - Read
 const getAllMoviesWS = async (id = '') => {
     const { data: movies } = await movieWS.getAllMoviesWS(id);    //From WS
-    // console.log('movies = ', movies);
     return movies;
 };
 

@@ -14,6 +14,8 @@ const moviesRouter = require('./routers/moviesRouter');
 const subscriptionsRouter = require('./routers/subscriptionsRouter');
 const usersRouter = require('./routers/usersRouter');
 const authRouter = require('./routers/authRouter');
+const conversationsRouter = require('./routers/conversationsRouter');
+const messagesRouter = require('./routers/messagesRouter');
 const http = require('http').Server(app);
 
 /*=======================================================================================================
@@ -72,44 +74,126 @@ const socketIO = require('socket.io')(http, {
     }
 });
 
-// Open socket.io to establish a connection with a React app 
+// Open socket.io to establish a connection with a React app
 let count = 0;
 let users = [];
 socketIO.on('connection', (socket) => {
+    //========================================================================================================================================
+    //===========================================//*⚡✅⚡ On - connection ⚡✅⚡*//*=======================================================
+    //========================================================================================================================================
     if (socket.handshake.headers.origin === 'http://localhost:5173' || socket.handshake.headers.origin === 'http://localhost:3000') {
-
-        console.log(`⚡: ${socket.id} user just connected!`);
-
-        // Triggers a "count" event when a user joins the server for the first time
+        console.log(
+            `⚡: ${socket.id} user just connected!`
+        );
+        //------------------------------------------------------------------------------------------------------------------------
+        //------1️⃣✔️ Triggers a "count" event when a user joins the server for the first time [Increase the amount users] -------
+        //------------------------------------------------------------------------------------------------------------------------
         count++;
         socketIO.emit('count', count);
         console.log(count);
 
-        // ===== Triggers a "newUser" event when a user joins the server for the first time
+        //------------------------------------------------------------------------------------------------------------------------
+        //------2️⃣✔️ Triggers a "newUser" event when a user joins the server for the first time [push to users array] -----------
+        //------------------------------------------------------------------------------------------------------------------------        
         socket.on('newUser', (data) => {
-            // ===== Adds the new user to the list of users
-            users.push(data);
+            // Adds the new user to the list of users
+            const isUserAvailable = users.find((user) => user.username === data.username);
+            if (!isUserAvailable) {
+                users.push(data);
+            }
+
+            console.log('users (newUser) = ');
             console.log(users);
-            // ===== Sends the list of users to the client
-            socketIO.emit('newUserResponse', users);
+            // Sends the list of users to the client
+            socket.broadcast.emit('newUserResponse', users);
         });
 
-        // Listens and logs the message to the console
+        //------------------------------------------------------------------------------------------------------------------------
+        //------3️⃣✔️ -------------- Listen and send a username of the user when he becomes online on the chat -------------------
+        //------------------------------------------------------------------------------------------------------------------------         
+        socket.on('onlineChat', (data) => {
+            const index = users.findIndex((user) => user.username === data.username);
+            if (index !== -1) {
+                users[index].online_status = 'online';
+            }
+
+            console.log('users (online) = ');
+            console.log(users);
+            socketIO.emit('onlineChatResponse', users);
+        });
+
+        //------------------------------------------------------------------------------------------------------------------------
+        //------4️⃣✔️ -------------- Listen and send a username of the user when he becomes online on the chat -------------------
+        //------------------------------------------------------------------------------------------------------------------------         
+        socket.on('offlineInSystem', (data) => {
+            const index = users.findIndex((user) => user.username === data.username);
+            if (index !== -1) {
+                users[index].online_status = 'offline';
+            }
+
+            console.log('users (offline) = ');
+            console.log(users);
+            socketIO.emit('offlineInSystemResponse', users);
+        });
+
+        //------------------------------------------------------------------------------------------------------------------------
+        //------5️⃣✔️ -------------- Listen and send a username of the user when he becomes online on the chat -------------------
+        //------------------------------------------------------------------------------------------------------------------------         
+        socket.on('availableInSystem', (data) => {
+            const index = users.findIndex((user) => user.username === data.username);
+            if (index !== -1) {
+                users[index].online_status = 'available';
+            }
+
+            console.log('users (available) = ');
+            console.log(users);
+            socketIO.emit('availableInSystemResponse', users);
+        });
+
+        //------------------------------------------------------------------------------------------------------------------------
+        //------6️⃣✔️------------ Listens and sends the message to all the users on the server -----------------------------------
+        //------------------------------------------------------------------------------------------------------------------------         
         socket.on('message', (data) => {
             console.log(data);
+            socketIO.emit('messageResponse', data);
         });
 
-        // Listens when a user disconnect
+        //------------------------------------------------------------------------------------------------------------------------
+        //------7️⃣✔️------------ Listens and sends the message to all the users on the server -----------------------------------
+        //------------------------------------------------------------------------------------------------------------------------
+        socket.on('typing', (data) => {
+            console.log(data);
+            socket.broadcast.emit('typingResponse', data);
+        });
+
+        //========================================================================================================================================
+        //============================================//*🔥⛔🔥 On - disconnect 🔥⛔🔥*//*========================================================
+        //========================================================================================================================================
         socket.on('disconnect', () => {
+            //------------------------------------------------------------------------------------------------------------------------
+            //-----1️⃣❌---------------------------- Decrease the amount users ["count" Event] ---------------------------------------
+            //------------------------------------------------------------------------------------------------------------------------
+            // Updates the amount of users online
             count--;
-            socket.broadcast.emit('count', count);
+            //Sends the amount of users to the clients
+            socketIO.emit('count', count);
             console.log(count);
-            console.log('🔥: A user disconnected');
+            //------------------------------------------------------------------------------------------------------------------------
+            //-----2️⃣❌------------------------ Updates the list of users ["newUserResponse" Event] ---------------------------------
+            //------------------------------------------------------------------------------------------------------------------------
+            //Updates the list of users when a user disconnects from the server
+            users = users.filter((user) => user.socketID !== socket.id);
+            //Sends the list of users to the clients
+            socketIO.emit('newUserResponse', users);
+            console.log('users = ');
+            console.log(users);
+
+            console.log('⛔: A user disconnected');
         });
     }
 
 });
- 
+
 /*=======================================================================================================
 /*==================================//* Routers - Logic goes here *//*===================================
 /*=====================================================================================================*/
@@ -118,6 +202,8 @@ app.use('/movies', moviesRouter);
 app.use('/subscriptions', subscriptionsRouter);
 app.use('/users', usersRouter);
 app.use('/authentication', authRouter);
+app.use('/conversations', conversationsRouter);
+app.use('/messages', messagesRouter);
 
 /*=======================================================================================================
 /*====================================//* server listening *//*==========================================
@@ -127,3 +213,4 @@ http.listen(port, () => {
     console.log(`- Subscription server is running at http://localhost: ${port} -`)
     console.log(`------------------------------------------------------------`)
 });
+/* //3️⃣2️⃣4️⃣5️⃣6️⃣7️⃣8️⃣9️⃣🔟🔚⛔❌✅❎✔️ 🎬🔜🔛🔄⏯️▶️♾️🆘🆗*/

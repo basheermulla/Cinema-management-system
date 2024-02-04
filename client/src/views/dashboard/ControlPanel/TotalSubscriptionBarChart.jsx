@@ -86,12 +86,12 @@ const TotalSubscriptionBarChart = ({ isLoading, yearlySubscriptionsData }) => {
 
     // Setting data that we recived from mongoDB in the series chart data - by year as a default configeration
     useEffect(() => {
-        const data = yearlySubscriptionsData.map((month) => month.total);
-        const total_data = data.reduce((a, b) => a + b, 0);
+        const data = yearlySubscriptionsData?.map((month) => month.total);
+        const total_data = data?.reduce((a, b) => a + b, 0);
         setTotal(total_data);
 
         const series_Subscription_Data = chartYearData.series[0].data.map((value, index) => {
-            const isMonthData = yearlySubscriptionsData.find((mon) => (index + 1) === mon.month);
+            const isMonthData = yearlySubscriptionsData?.find((mon) => (index + 1) === mon.month);
             return isMonthData ? isMonthData.total : 0;
         });
 

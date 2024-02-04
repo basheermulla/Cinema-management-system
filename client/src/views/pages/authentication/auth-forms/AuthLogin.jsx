@@ -26,7 +26,6 @@ const AuthLogin = ({ loginProp, ...others }) => {
 
     const { login } = useAuth();
     const scriptedRef = useScriptRef();
-    console.log(scriptedRef);
     const [checked, setChecked] = useState(true);
 
     const [showPassword, setShowPassword] = useState(false);
@@ -52,7 +51,6 @@ const AuthLogin = ({ loginProp, ...others }) => {
             onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                 try {
                     const response = await login(values.username, values.password);
-                    console.log('response = ', response);
                     if (scriptedRef.current) {
                         setStatus({ success: true });
                         setSubmitting(false);

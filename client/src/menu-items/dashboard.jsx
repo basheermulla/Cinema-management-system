@@ -16,8 +16,8 @@ const dashboard = {
     type: 'group',
     children: [
         {
-            id: 'control panel',
-            title: <FormattedMessage id="control panel" />,
+            id: 'control-panel',
+            title: <FormattedMessage id="control-panel" />,
             type: 'item',
             url: '/dashboard/control-panel',
             icon: icons.IconDashboard,            
