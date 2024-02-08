@@ -114,7 +114,7 @@ export async function filterMovies() {
         const response = await axios.get(`${MOVIES_URL}/aggregate`, { headers: { "Authorization": `Bearer ${token}` } });
         dispatch(slice.actions.getMoviesSuccess(response.data));
         return response.data;
-        
+
     } catch (error) {
         console.error(error);
     }
@@ -130,7 +130,7 @@ export async function movieLoader({ params }) {
     try {
         let token = window.localStorage.getItem('accessToken');
         const id = params.id;
-        // console.log('<=== M o v i e Loader ===>');
+        console.log('<=== M o v i e Loader ===>');
         const response = await axios.get(`${MOVIES_URL}/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
         return response.data;
     } catch (error) {
@@ -174,4 +174,16 @@ export function deleteMovie(id) {
             console.error(error);
         }
     };
+}
+
+export async function getRelatedMovies(id) {
+    try {
+        let token = window.localStorage.getItem('accessToken');
+        console.log('<=== M o v i e getRelatedMovies ===> ', id);
+        const response = await axios.get(`${MOVIES_URL}/related-movies/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
+        console.log('related-movies = ', response.data);
+        return response.data;
+    } catch (error) {
+        return error;
+    }
 }

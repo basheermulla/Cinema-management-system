@@ -14,6 +14,9 @@ const getAllMoviesAggregationWS = () => axios.get(`${MOVIES_WS_URL}/aggregate`);
 // GET - Get All popular movies by [number of subscriptions] - Read
 const getAllPopularMoviesWS = () => axios.get(`${MOVIES_WS_URL}/mostPopular`);
 
+// GET - Get Related Movies by User Id - Read
+const getRelatedMoviesWS = (id) => axios.get(`${MOVIES_WS_URL}/related-movies/${id}`);
+
 // GET - Get All Movies - Read
 const getAllMoviesWS = () => axios.get(`${MOVIES_WS_URL}`);
 
@@ -32,6 +35,7 @@ const deleteMovieWS = (id) => axios.delete(`${MOVIES_WS_URL}/${id}`);
 module.exports = {
     getAllMoviesAggregationWS,
     getAllPopularMoviesWS,
+    getRelatedMoviesWS,
     getAllMoviesWS,
     getMovieByIdWS,
     addMovieWS,
