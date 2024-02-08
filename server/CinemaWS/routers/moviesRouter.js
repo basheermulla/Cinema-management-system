@@ -14,7 +14,6 @@ const router = express.Router();
 router.get('/aggregate', verifyToken, async (req, res) => {
     try {
         const movies = await moviesBLL.getAllMoviesAggregation();
-        
         res.send(movies);
     } catch (error) {
         console.error(error);
@@ -26,7 +25,18 @@ router.get('/aggregate', verifyToken, async (req, res) => {
 router.get('/mostPopular', verifyToken, async (req, res) => {
     try {
         const movies = await moviesBLL.getAllPopularMovies();
-        
+        res.send(movies);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+});
+
+// GET - Get Related Movies by User Id - Read
+router.get('/related-movies/:id', verifyToken, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const movies = await moviesBLL.getRelatedMovies(id);
         res.send(movies);
     } catch (error) {
         console.error(error);

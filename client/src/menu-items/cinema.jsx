@@ -60,7 +60,7 @@ const application = {
             title: <FormattedMessage id="recommendations" />,
             type: 'item',
             icon: icons.IconStars,
-            url: '/recommendations',
+            url: '/cinema/recommendations',
         }
     ]
 };

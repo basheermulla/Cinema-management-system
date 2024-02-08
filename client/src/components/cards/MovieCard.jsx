@@ -67,7 +67,7 @@ const MovieCard = ({ id, name, genres, image, type, language, premiered, rating 
                                     </Typography>
                                     <Typography variant="h5" sx={{ color: 'grey.500' }}>({new Date(premiered).getFullYear()})</Typography>
                                 </Grid>
-                                <Grid container spacing={1}>                                
+                                <Grid container spacing={1}>
                                     {
                                         genres.map((genre, index) => (
                                             <Grid key={index} item>

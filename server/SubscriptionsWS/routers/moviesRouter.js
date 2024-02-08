@@ -31,6 +31,19 @@ router.get('/mostPopular', async (req, res) => {
     }
 });
 
+// GET - Get Related Movies by User Id - Read
+router.get('/related-movies/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const movies = await moviesBLL.getRelatedMovies(id);
+        res.send(movies);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+});
+
+
 // Get All Movies
 router.get('/', async (req, res) => {
     try {

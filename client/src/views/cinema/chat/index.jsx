@@ -181,7 +181,7 @@ const ChatMainPage = () => {
         setOnlineUsers(() => incomingUsersArray);
         const old_user = userRef.current;
         if (old_user && old_user._id) {
-            const online_status = incomingUsersArray.find((incomingUser) => incomingUser.username === old_user.username).online_status;
+            const online_status = incomingUsersArray.find((incomingUser) => incomingUser.username === old_user.username)?.online_status;
             old_user.online_status = online_status
             setUser(old_user)
         }

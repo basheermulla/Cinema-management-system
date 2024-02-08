@@ -27,7 +27,8 @@ const SubscriptionsMain = () => {
 
     const dispatch = useDispatch();
     const navigete = useNavigate();
-    // member include subscriptions data
+    
+    // member include subscriptions data & movies
     const initialdata = useLoaderData();
     const [subscriptions, setSubscriptions] = useState(initialdata.members);
     const [movies, setMovies] = useState(initialdata.movies);

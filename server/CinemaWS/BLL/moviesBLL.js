@@ -17,6 +17,12 @@ const getAllPopularMovies = async () => {
     return movies;
 }
 
+// GET - Get Related Movies by User Id - Read
+const getRelatedMovies = async (id) => {
+    let { data: movies } = await MoviesWS.getRelatedMoviesWS(id);
+    return movies;
+}
+
 // GET - Get All Movies
 const getAllMovies = async () => {
     let { data: movies } = await MoviesWS.getAllMoviesWS();
@@ -50,6 +56,7 @@ const deleteMovie = async (id) => {
 module.exports = { 
     getAllMoviesAggregation,
     getAllPopularMovies,
+    getRelatedMovies,
     getAllMovies,
     getMovieById,
     addMovie,

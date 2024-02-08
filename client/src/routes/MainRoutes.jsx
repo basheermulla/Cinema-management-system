@@ -27,6 +27,9 @@ const CinemaMemberProfile = Loadable(lazy(() => import('views/cinema/subscriptio
 // cinema - chat
 const CinemaChat = Loadable(lazy(() => import('views/cinema/chat')));
 
+// cinema - recommendations routing
+const CinemaRecommendations = Loadable(lazy(() => import('views/cinema/recommendations')));
+
 // management - users routing
 const UsersManagementMain = Loadable(lazy(() => import('views/UsersManagement/UsersManagementMain')));
 const UsersAddEditUser = Loadable(lazy(() => import('views/UsersManagement/AddEditUser')));
@@ -88,7 +91,11 @@ const MainRoutes = {
             path: '/cinema/chat',
             element: <CinemaChat />,
         },
-
+        {
+            path: '/cinema/recommendations',
+            element: <CinemaRecommendations />,
+            loader: membersLoader
+        },
     ]
 }
 
