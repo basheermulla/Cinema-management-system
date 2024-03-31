@@ -62,7 +62,7 @@ const MainRoutes = {
         {
             path: '/cinema/movies/movie-details/:id',
             element: <CinemaMovieDetails />,
-            // loader: movieLoader
+            loader: movieLoader
         },
         {
             path: '/cinema/subscriptions',

@@ -50,7 +50,8 @@ const validationSchema = yup.object({
     type: yup.string().required('Type selection is required'),
     language: yup.string().required('Language selection is required'),
     premiered: yup.date().nullable().required('Premiered date is required'),
-    summary: yup.string().required('Summary is required')
+    summary: yup.string().required('Summary is required'),
+    rating: yup.number().min(1).max(10).required('Please rate this movie.')
 });
 
 const Transition = forwardRef((props, ref) => <Zoom ref={ref} {...props} />);
@@ -71,6 +72,7 @@ const AddMovie = ({ open, handleCloseDialog, addMovie }) => {
             language: '',
             premiered: new Date(),
             summary: '',
+            rating: 0
         },
         validationSchema,
         onSubmit: (values) => {
@@ -144,7 +146,7 @@ const AddMovie = ({ open, handleCloseDialog, addMovie }) => {
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
-                                fullWidth
+                                    fullWidth
                                     id="image-medium"
                                     name="image.medium"
                                     label="Medium Image"
@@ -161,22 +163,38 @@ const AddMovie = ({ open, handleCloseDialog, addMovie }) => {
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextField
-                                fullWidth
-                                    id="image-original"
-                                    name="image.original"
-                                    label="Original Image"
-                                    value={formik.values['image'].original}
-                                    onChange={formik.handleChange}
-                                    error={Boolean(
-                                        getIn(formik.touched, 'image.original') &&
-                                        getIn(formik.errors, 'image.original')
-                                    )}
-                                    helperText={
-                                        getIn(formik.touched, 'image.original') &&
-                                        getIn(formik.errors, 'image.original')
-                                    }
-                                />
+                                <Grid container spacing={1} sx={{ textAlign: 'left' }}>
+                                    <Grid item xs={8}>
+                                        <TextField
+                                            fullWidth
+                                            id="image-original"
+                                            name="image.original"
+                                            label="Original Image"
+                                            value={formik.values['image'].original}
+                                            onChange={formik.handleChange}
+                                            error={Boolean(
+                                                getIn(formik.touched, 'image.original') &&
+                                                getIn(formik.errors, 'image.original')
+                                            )}
+                                            helperText={
+                                                getIn(formik.touched, 'image.original') &&
+                                                getIn(formik.errors, 'image.original')
+                                            }
+                                        />
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <TextField
+                                            fullWidth
+                                            id="rating"
+                                            name="rating"
+                                            label="Movie rating"
+                                            value={formik.values.rating}
+                                            onChange={formik.handleChange}
+                                            error={formik.touched.rating && Boolean(formik.errors.rating)}
+                                            helperText={formik.touched.rating && formik.errors.rating}
+                                        />
+                                    </Grid>
+                                </Grid>
                             </Grid>
                             <Grid item xs={12}>
                                 <Autocomplete
@@ -252,7 +270,7 @@ const AddMovie = ({ open, handleCloseDialog, addMovie }) => {
                                         {genresOptions
                                             .filter((skill) => formik.values.genres && !formik.values.genres.map((item) => item).includes(skill))
                                             .map((option, index) => (
-                                                <Grid item key={index} xs={6} sm={3} md={2} lg={1.3}>
+                                                <Grid item key={index} xs={6} sm={3} md={2} lg={2}>
                                                     <Chip
                                                         sx={{ mb: { xs: '4px !important', sm: 0 } }}
                                                         variant="outlined"
@@ -269,7 +287,7 @@ const AddMovie = ({ open, handleCloseDialog, addMovie }) => {
                                     </Grid>
                                 </Stack>
                             </Grid>
-                            <Grid container spacing={2} sx={{ textAlign: 'left', mt: 2, p: 1 }}>
+                            <Grid container spacing={2} sx={{ textAlign: 'left', mt: 0, p: 1 }}>
                                 <Grid item xs={12} sm={6} md={4} lg={4}>
                                     <FormControl sx={{ m: 1, minWidth: 120 }}>
                                         <InputLabel id="type-select">Type</InputLabel>

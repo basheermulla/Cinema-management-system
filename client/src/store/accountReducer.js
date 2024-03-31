@@ -6,7 +6,8 @@ import { LOGIN, LOGOUT, REGISTER } from './actions';
 const initialState = {
     isLoggedIn: false,
     isInitialized: false,
-    user: null
+    user: null,
+    loginTimeOut: null
 };
 
 // eslint-disable-next-line
@@ -20,11 +21,12 @@ const accountReducer = (state = initialState, action) => {
             };
         }
         case LOGIN: {
-            const { user } = action.payload;
+            const { user, loginTimeOut } = action.payload;
             return {
                 ...state,
                 isLoggedIn: true,
                 isInitialized: true,
+                loginTimeOut,
                 user
             };
         }

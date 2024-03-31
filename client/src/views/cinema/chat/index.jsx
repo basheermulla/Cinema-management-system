@@ -121,6 +121,7 @@ const ChatMainPage = () => {
 
     useEffect(() => {
         setData(chatState.chats);
+        console.log(chatState.chats);
         const converstationId = chatState.chats[0]?.converstationId;
         setConverstationId(converstationId);
 
@@ -363,7 +364,7 @@ const ChatMainPage = () => {
                 />
                 <Stack spacing={1}>
                     <Typography variant="h1" color="inherit" component="div">
-                        Welcome to the chat messenger chat
+                        Welcome to the chat messenger
                     </Typography>
                     <Typography variant="body2" align="center">Here you could chat with our company's users</Typography>
                 </Stack>

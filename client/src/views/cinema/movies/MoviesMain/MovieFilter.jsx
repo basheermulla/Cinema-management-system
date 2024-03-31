@@ -70,7 +70,7 @@ const Genres = ({ genres, handelFilter }) => {
         <Grid container spacing={1}>
             {isGenresLoading ? (
                 <Grid item xs={12}>
-                    <Skeleton variant="rectangular" width="100%" height={200} />
+                    <Skeleton variant="rectangular" width="100%" height={470} />
                 </Grid>
             ) : (
                 <>
@@ -251,7 +251,7 @@ const Premiered = ({ premiered, handelFilter }) => {
     return (
         <>
             {isPremieredLoading ? (
-                <Skeleton variant="rectangular" width="100%" height={172} />
+                <Skeleton variant="rectangular" width="100%" height={192} />
             ) : (
                 <FormControl component="fieldset">
                     <RadioGroup
@@ -264,9 +264,9 @@ const Premiered = ({ premiered, handelFilter }) => {
                         <Grid container spacing={0.25}>
                             <Grid item xs={6}>
                                 <FormControlLabel
-                                    value="Last 5 years"
+                                    value={new Date().getFullYear() - 5}
                                     control={<Radio />}
-                                    label="Below $10"
+                                    label="Last 5 years"
                                     sx={{
                                         '& .MuiSvgIcon-root': { fontSize: 28 },
                                         '& .MuiFormControlLabel-label': { color: 'grey.900' }
@@ -275,9 +275,9 @@ const Premiered = ({ premiered, handelFilter }) => {
                             </Grid>
                             <Grid item xs={6}>
                                 <FormControlLabel
-                                    value="Last 6 to 10 years"
+                                    value={new Date().getFullYear() - 10}
                                     control={<Radio />}
-                                    label="$10 - $50"
+                                    label="Last 10 years"
                                     sx={{
                                         '& .MuiSvgIcon-root': { fontSize: 28 },
                                         '& .MuiFormControlLabel-label': { color: 'grey.900' }
@@ -286,9 +286,9 @@ const Premiered = ({ premiered, handelFilter }) => {
                             </Grid>
                             <Grid item xs={6}>
                                 <FormControlLabel
-                                    value="Last 11 to 15 years"
+                                    value={new Date().getFullYear() - 15}
                                     control={<Radio />}
-                                    label="$50 - $100"
+                                    label="Last 15 years"
                                     sx={{
                                         '& .MuiSvgIcon-root': { fontSize: 28 },
                                         '& .MuiFormControlLabel-label': { color: 'grey.900' }
@@ -297,9 +297,9 @@ const Premiered = ({ premiered, handelFilter }) => {
                             </Grid>
                             <Grid item xs={6}>
                                 <FormControlLabel
-                                    value="Last 16 to 20 years"
+                                    value={new Date().getFullYear() - 20}
                                     control={<Radio />}
-                                    label="$100 - $150"
+                                    label="Last 20 years"
                                     sx={{
                                         '& .MuiSvgIcon-root': { fontSize: 28 },
                                         '& .MuiFormControlLabel-label': { color: 'grey.900' }
@@ -308,9 +308,9 @@ const Premiered = ({ premiered, handelFilter }) => {
                             </Grid>
                             <Grid item xs={6}>
                                 <FormControlLabel
-                                    value="Last 21 to 30 years"
+                                    value={new Date().getFullYear() - 30}
                                     control={<Radio />}
-                                    label="$150 - $200"
+                                    label="Last 30 years"
                                     sx={{
                                         '& .MuiSvgIcon-root': { fontSize: 28 },
                                         '& .MuiFormControlLabel-label': { color: 'grey.900' }
@@ -319,9 +319,20 @@ const Premiered = ({ premiered, handelFilter }) => {
                             </Grid>
                             <Grid item xs={6}>
                                 <FormControlLabel
-                                    value="Over 30 years"
+                                    value={"Over 31 years"}
                                     control={<Radio />}
-                                    label="Over $200"
+                                    label="Over 31 years"
+                                    sx={{
+                                        '& .MuiSvgIcon-root': { fontSize: 28 },
+                                        '& .MuiFormControlLabel-label': { color: 'grey.900' }
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <FormControlLabel
+                                    value={""}
+                                    control={<Radio />}
+                                    label="Reset time periods"
                                     sx={{
                                         '& .MuiSvgIcon-root': { fontSize: 28 },
                                         '& .MuiFormControlLabel-label': { color: 'grey.900' }
@@ -350,13 +361,14 @@ const RatingSection = ({ rating, handelFilter }) => {
     return (
         <>
             {isRatingLoading ? (
-                <Skeleton variant="rectangular" width="100%" height={172} />
+                <Skeleton variant="rectangular" width="100%" height={48} />
             ) : (
                 <Stack direction="row" spacing={1} alignItems="center">
                     <Rating
-                        precision={0.5}
+                        precision={0.1}
                         name="simple-controlled"
                         value={rating}
+                        max={10}
                         onChange={(event, newValue) => handelFilter('rating', '', newValue)}
                     />
                     <Typography component="legend">({rating})</Typography>

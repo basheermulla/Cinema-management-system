@@ -1,23 +1,19 @@
 const SortOptions = [
     {
         value: 'high',
-        label: 'Premiered: High To Low'
+        label: 'Name: High To Low'
     },
     {
         value: 'low',
-        label: 'Premiered: Low To High'
+        label: 'Name: Low To High'
     },
     {
-        value: 'popularity',
-        label: 'Popularity'
+        value: 'rating',
+        label: 'High rating'
     },
     {
-        value: 'type',
-        label: 'Type'
-    },
-    {
-        value: 'language',
-        label: 'Language'
+        value: 'premiered',
+        label: 'premiered year'
     }
 ];
 

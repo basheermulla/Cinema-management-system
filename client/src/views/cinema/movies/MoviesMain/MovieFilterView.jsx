@@ -12,15 +12,15 @@ import { gridSpacing } from 'utils/constant-theme';
 // assets
 import CloseIcon from '@mui/icons-material/Close';
 
-const MovieFilterView = ({ filter, filterIsEqual, handelFilter, initialState }) => {
+const MovieFilterView = ({ filter, filterSearchAndSort, filterIsEqual, filterSearchAndSortIsEqual, handelFilter, initialState, initialSearchAndSort}) => {
     const theme = useTheme();
     const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
 
     return (
-        <>
-            {!filterIsEqual(initialState, filter) && (
+        <> 
+            {(!filterIsEqual(initialState, filter) || !filterSearchAndSortIsEqual(initialSearchAndSort, filterSearchAndSort)) && (
                 <Grid container spacing={gridSpacing} sx={{ pb: gridSpacing }} alignItems="center">
-                    {!(initialState.search === filter.search) && (
+                    {!(initialSearchAndSort.search === filterSearchAndSort.search) && (
                         <Grid item>
                             <SubCard content={false}>
                                 <CardContent sx={{ pb: '12px !important', p: 1.5 }}>
@@ -28,7 +28,7 @@ const MovieFilterView = ({ filter, filterIsEqual, handelFilter, initialState }) 
                                         <Grid item>
                                             <Chip
                                                 size={matchDownMD ? 'small' : undefined}
-                                                label={filter.search}
+                                                label={filterSearchAndSort.search}
                                                 chipcolor="secondary"
                                                 onDelete={() => handelFilter('search', '')}
                                                 sx={{ borderRadius: '4px', textTransform: 'capitalize' }}
@@ -39,7 +39,7 @@ const MovieFilterView = ({ filter, filterIsEqual, handelFilter, initialState }) 
                             </SubCard>
                         </Grid>
                     )}
-                    {!(initialState.sort === filter.sort) && (
+                    {!(initialSearchAndSort.sort === filterSearchAndSort.sort) && (
                         <Grid item>
                             <SubCard content={false}>
                                 <CardContent sx={{ pb: '12px !important', p: 1.5 }}>
@@ -50,9 +50,9 @@ const MovieFilterView = ({ filter, filterIsEqual, handelFilter, initialState }) 
                                         <Grid item>
                                             <Chip
                                                 size={matchDownMD ? 'small' : undefined}
-                                                label={filter.sort}
+                                                label={filterSearchAndSort.sort}
                                                 chipcolor="secondary"
-                                                onDelete={() => handelFilter('sort', initialState.sort)}
+                                                onDelete={() => handelFilter('sort', initialSearchAndSort.sort)}
                                                 sx={{ borderRadius: '4px', textTransform: 'capitalize' }}
                                             />
                                         </Grid>
@@ -200,9 +200,12 @@ const MovieFilterView = ({ filter, filterIsEqual, handelFilter, initialState }) 
 
 MovieFilterView.propTypes = {
     filter: PropTypes.object,
+    filterSearchAndSort: PropTypes.object,
     filterIsEqual: PropTypes.func,
+    filterSearchAndSortIsEqual: PropTypes.func,
+    handelFilter: PropTypes.func,
     initialState: PropTypes.object,
-    handelFilter: PropTypes.func
+    initialSearchAndSort: PropTypes.object
 }
 
 export default MovieFilterView;

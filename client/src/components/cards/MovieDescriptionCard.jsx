@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // material-ui
@@ -16,7 +17,7 @@ import AnimateButton from 'components/extended/AnimateButton';
 // assets
 import StarTwoToneIcon from '@mui/icons-material/StarTwoTone';
 import StarBorderTwoToneIcon from '@mui/icons-material/StarBorderTwoTone';
-import { useState } from 'react';
+import { IconMovie, IconWorld, IconSquareRoundedPlusFilled, IconCircleLetterG, IconCalendarClock } from '@tabler/icons-react';
 
 
 const MovieDescriptionCard = ({ id, name, genres, image, type, language, summary, premiered, rating, removeMovie }) => {
@@ -30,7 +31,7 @@ const MovieDescriptionCard = ({ id, name, genres, image, type, language, summary
         return newString;
     }
 
-    const [numberr, setNumberr] = useState(3)
+    const [number, setNumber] = useState(rating)
 
     const handleDelete = () => {
         removeMovie(id);
@@ -45,12 +46,12 @@ const MovieDescriptionCard = ({ id, name, genres, image, type, language, summary
                 borderColor: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.grey[100],
             }}
         >
-            <Grid container spacing={2}>
-
+            <Grid container layout={'row'} spacing={2}>
                 <Grid item xs={12} md={5} lg={4}>
                     <SubCard>
                         <Stack direction="row" alignItems="center" spacing={2}>
                             <CardMedia
+
                                 component="img"
                                 src={image.original}
                                 title="Movie's image"
@@ -58,9 +59,8 @@ const MovieDescriptionCard = ({ id, name, genres, image, type, language, summary
                         </Stack>
                     </SubCard>
                 </Grid>
-
                 <Grid item xs={12} md={7} lg={8}>
-                    <SubCard>
+                    <SubCard sx={{ height: '100%' }}>
                         <Grid container spacing={0}>
                             <Grid item xs={12} sx={{ mb: 1 }}>
                                 <Typography
@@ -79,20 +79,32 @@ const MovieDescriptionCard = ({ id, name, genres, image, type, language, summary
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} sx={{ mb: 1 }}>
-                                <Rating
-                                    size="large"
-                                    name="simple-controlled"
-                                    value={numberr}
-                                    icon={<StarTwoToneIcon fontSize="inherit" />}
-                                    emptyIcon={<StarBorderTwoToneIcon fontSize="inherit" />}
-                                    precision={0.1}
-                                    readOnly
-                                />
+                                <Grid container direction="row" alignItems="center" sx={{ color: 'grey.500' }}>
+                                    <Rating
+                                        size="large"
+                                        name="simple-controlled"
+                                        value={number}
+                                        max={10}
+                                        icon={<StarTwoToneIcon fontSize="inherit" />}
+                                        emptyIcon={<StarBorderTwoToneIcon fontSize="inherit" />}
+                                        precision={0.1}
+                                        readOnly
+                                    />
+                                    <Typography variant="h4" sx={{ color: 'grey.500' }}> &nbsp;({rating}) </Typography>
+
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12} sx={{ mb: 1 }}>
+                            <Grid item xs={12} sx={{ mb: 3 }}>
                                 <Divider />
                             </Grid>
-                            <Grid container spacing={1} sx={{ mb: 1 }}>
+                            <Grid item xs={12} sx={{ mb: 3 }}>
+                                <Grid container direction="row" justifyContent="left" alignItems="center" sx={{ color: 'grey.500' }}>
+                                    <IconMovie size={20} stroke={2} />
+                                    <Typography variant="h4">&nbsp;   {type} </Typography>
+                                </Grid>
+                            </Grid>
+                            <Grid container spacing={1} sx={{ mb: 3 }}>
+                                <Grid item><IconCircleLetterG size={20} stroke={2} /></Grid>
                                 {
                                     genres.map((genre, index) => (
                                         <Grid key={index} item>
@@ -104,16 +116,14 @@ const MovieDescriptionCard = ({ id, name, genres, image, type, language, summary
                                     )
                                 }
                             </Grid>
-                            <Grid container spacing={1} sx={{ mb: 2 }}>
-                                <Grid item>
-                                    <Typography variant="h4" sx={{ color: 'grey.500' }}>{type}, </Typography>
-                                </Grid>
-                                <Grid item>
-                                    <Typography variant="h4" sx={{ color: 'grey.500' }}>{' ' + language}</Typography>
+                            <Grid item xs={12} sx={{ mb: 3 }}>
+                                <Grid container direction="row" justifyContent="left" alignItems="center">
+                                    <IconWorld size={20} stroke={2} />
+                                    <Typography variant="h4"> &nbsp;{language}</Typography>
                                 </Grid>
                             </Grid>
                             <Grid item xs={12} sx={{ mb: 4 }}>
-                                <Typography variant="p">{stripHtmlTags(summary)}</Typography>
+                                <Typography variant="h5" sx={{ lineHeight: 2, fontSize: 16 }} >{stripHtmlTags(summary)}</Typography>
                             </Grid>
                             <Grid item xs={12} sx={{ mb: 4 }}>
                                 <Divider />
@@ -145,8 +155,8 @@ const MovieDescriptionCard = ({ id, name, genres, image, type, language, summary
                         </Grid>
                     </SubCard>
                 </Grid>
-            </Grid>
-        </MainCard>
+            </Grid >
+        </MainCard >
     );
 };
 

@@ -46,7 +46,8 @@ const validationSchema = yup.object({
     type: yup.string().required('Type selection is required'),
     language: yup.string().required('Language selection is required'),
     premiered: yup.date().nullable().required('Language selection is required'),
-    summary: yup.string().required('Summary is required')
+    summary: yup.string().required('Summary is required'),
+    rating: yup.number().min(1).max(10).required('Please rate this movie.')
 });
 
 const MovieUpdate = ({ movie, editMovie }) => {
@@ -64,7 +65,8 @@ const MovieUpdate = ({ movie, editMovie }) => {
             type: movie.type,
             language: movie.language,
             premiered: movie.premiered,
-            summary: movie.summary
+            summary: movie.summary,
+            rating: movie.rating
         },
         validationSchema,
         onSubmit: (values) => {
@@ -111,6 +113,7 @@ const MovieUpdate = ({ movie, editMovie }) => {
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <TextField
+                                    fullWidth
                                     id="name"
                                     name="name"
                                     label="Movie Name"
@@ -118,7 +121,6 @@ const MovieUpdate = ({ movie, editMovie }) => {
                                     onChange={formik.handleChange}
                                     error={formik.touched.name && Boolean(formik.errors.name)}
                                     helperText={formik.touched.name && formik.errors.name}
-                                    fullWidth
                                     autoComplete="given-name"
                                 />
                             </Grid>
@@ -141,24 +143,41 @@ const MovieUpdate = ({ movie, editMovie }) => {
                                     autoComplete="given-name"
                                 />
                             </Grid>
+
                             <Grid item xs={12}>
-                                <TextField
-                                    id="image-original"
-                                    name="image.original"
-                                    label="Original Image"
-                                    value={formik.values['image'].original}
-                                    onChange={formik.handleChange}
-                                    error={Boolean(
-                                        getIn(formik.touched, 'image.original') &&
-                                        getIn(formik.errors, 'image.original')
-                                    )}
-                                    helperText={
-                                        getIn(formik.touched, 'image.original') &&
-                                        getIn(formik.errors, 'image.original')
-                                    }
-                                    fullWidth
-                                    autoComplete="given-name"
-                                />
+                                <Grid container spacing={1} sx={{ textAlign: 'left' }}>
+                                    <Grid item xs={8}>
+                                        <TextField
+                                            id="image-original"
+                                            name="image.original"
+                                            label="Original Image"
+                                            value={formik.values['image'].original}
+                                            onChange={formik.handleChange}
+                                            error={Boolean(
+                                                getIn(formik.touched, 'image.original') &&
+                                                getIn(formik.errors, 'image.original')
+                                            )}
+                                            helperText={
+                                                getIn(formik.touched, 'image.original') &&
+                                                getIn(formik.errors, 'image.original')
+                                            }
+                                            fullWidth
+                                            autoComplete="given-name"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <TextField
+                                            fullWidth
+                                            id="rating"
+                                            name="rating"
+                                            label="Movie rating"
+                                            value={formik.values.rating}
+                                            onChange={formik.handleChange}
+                                            error={formik.touched.rating && Boolean(formik.errors.rating)}
+                                            helperText={formik.touched.rating && formik.errors.rating}
+                                        />
+                                    </Grid>
+                                </Grid>
                             </Grid>
                             <Grid item xs={12}>
                                 <Autocomplete
@@ -283,7 +302,7 @@ const MovieUpdate = ({ movie, editMovie }) => {
                                     </Stack>
                                 </Grid>
                                 <Grid item xs={12} sm={6} md={4}>
-                                    <Stack direction="row" sx={{ justifyContent: 'center' }}>                                        
+                                    <Stack direction="row" sx={{ justifyContent: 'center' }}>
                                         <FormControl>
                                             <RadioGroup
                                                 row

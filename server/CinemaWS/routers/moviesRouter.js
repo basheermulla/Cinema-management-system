@@ -56,6 +56,18 @@ router.get('/', verifyToken, async (req, res) => {
     }
 });
 
+// GET - Get Movie By Id With Subscription - Read
+router.get('/movie-subscriptions/:id', verifyToken, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const movie = await moviesBLL.getMovieByIdWithSubscriptions(id);
+        res.send(movie);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+});
+
 // GET - Get Movie By Id
 router.get('/:id', verifyToken, async (req, res) => {
     try {
@@ -73,6 +85,18 @@ router.post('/', verifyToken, async (req, res) => {
     try {
         const obj = req.body; // In use        
         const result = await moviesBLL.addMovie(obj);
+        res.status(201).send(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+});
+
+// POST - filter Movies by Multiple Conditions
+router.post('/filter', verifyToken, async (req, res) => {
+    try {
+        const obj = req.body; // In use        
+        const result = await moviesBLL.filterMovies(obj);
         res.status(201).send(result);
     } catch (error) {
         console.error(error);

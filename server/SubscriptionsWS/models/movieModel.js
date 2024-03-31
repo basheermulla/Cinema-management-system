@@ -11,7 +11,8 @@ const moviesSchema = new Schema({
         original: { type: String, require: true }
     },
     genres: [{ type: String, require: true }],
-    premiered: { type: Date, require: true }
+    premiered: { type: Date, require: true },
+    rating: { type: Number, require: true }
 },
     { versionKey: false }
 );

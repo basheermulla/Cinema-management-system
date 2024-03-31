@@ -13,7 +13,8 @@ import Loader from 'components/Loader';
 const initialState = {
     isLoggedIn: false,
     isInitialized: false,
-    user: null
+    user: null,
+    loginTimeOut: null
 };
 
 const AuthContext = createContext(null);
@@ -27,7 +28,15 @@ export const AuthProvider = ({ children }) => {
         if (user) {
             localStorage.setItem('userLogin', JSON.stringify(user));
             localStorage.setItem('accessToken', accessToken);
-            dispatch({ type: LOGIN, payload: { isLoggedIn: true, user } });
+            console.log(user.sessionTimeOut);
+            const current_time = new Date();
+            const loginTimeOut = new Date(current_time.getTime() + user.sessionTimeOut * 60000);
+            console.log(loginTimeOut);
+            setTimeout(() => {
+                localStorage.removeItem('userLogin');
+                localStorage.removeItem('accessToken');
+            }, user.sessionTimeOut * 60000);
+            dispatch({ type: LOGIN, payload: { isLoggedIn: true, loginTimeOut, user } });
         }
     };
 
@@ -41,18 +50,29 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = () => {
+        console.log('LogOut ===>');
         localStorage.removeItem('userLogin');
-        localStorage.removeItem('accessToken');        
+        localStorage.removeItem('accessToken');
         dispatch({ type: LOGOUT });
     };
 
+    const checkTokenExpired = () => {
+        const current_time = new Date();
+        if (current_time > initialState.loginTimeOut) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     useEffect(() => {
         const init = async () => {
-            try {
+            try {                
                 const userLogin = window.localStorage.getItem('userLogin');
-                const user = JSON.parse(userLogin);                
-                const accessToken = window.localStorage.getItem('accessToken');
-                if (user) {
+                const user = JSON.parse(userLogin);
+                const isTokenExpired = checkTokenExpired();
+                console.log('*** init - AuthContext ***');
+                if (user && !isTokenExpired) {
                     dispatch({ type: LOGIN, payload: { isLoggedIn: true, user } });
                 } else {
                     dispatch({ type: LOGOUT });
@@ -65,7 +85,7 @@ export const AuthProvider = ({ children }) => {
         init();
     }, []);
 
-    if (state.isInitialized !== undefined && !state.isInitialized) {        
+    if (state.isInitialized !== undefined && !state.isInitialized) {
         return <Loader />;
     }
 

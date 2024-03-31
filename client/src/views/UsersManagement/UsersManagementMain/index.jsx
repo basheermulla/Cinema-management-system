@@ -3,7 +3,7 @@ import { useLoaderData, useNavigate } from 'react-router-dom';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Button, Fab, Grid, InputAdornment, Menu, MenuItem, OutlinedInput, Pagination, Stack, TableContainer, Tooltip, Typography } from '@mui/material';
+import { Button, Divider, Fab, Grid, InputAdornment, Menu, MenuItem, OutlinedInput, Pagination, Skeleton, Stack, TableContainer, Tooltip, Typography } from '@mui/material';
 
 // internal imports
 import UsersList from './UsersList';
@@ -30,6 +30,12 @@ const UsersManagementMain = () => {
     const initialUsers = useLoaderData();
     const [users, setUsers] = useState(initialUsers);
 
+    const [userLoading, setUserLoading] = useState(true);
+
+    useEffect(() => {
+        setUserLoading(false);
+    }, []);
+
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -39,9 +45,10 @@ const UsersManagementMain = () => {
     };
 
     const removeUser = (userId) => {
+        setUserLoading(true);
         dispatch(deleteUser(userId)).then(() => {
             loadDataAfterAction();
-            
+            setUserLoading(false);
         });
     };
 
@@ -53,12 +60,12 @@ const UsersManagementMain = () => {
     let userResult = <></>;
     if (users && users.length > 0) {
         {
-            userResult = (<UsersList users={users} removeUser={removeUser} />)
+            userResult = (<UsersList users={users} removeUser={removeUser} userLoading={userLoading} />)
         }
     } else {
         userResult = (
             <TableContainer>
-                    <UserEmpty />
+                <UserEmpty />
             </TableContainer>
         );
     }
@@ -113,9 +120,8 @@ const UsersManagementMain = () => {
             }
             content={false}
         >
-
             {userResult}
-
+            
             <Grid item xs={12} sx={{ p: 3 }}>
                 <Grid container justifyContent="space-between" spacing={gridSpacing}>
                     <Grid item>

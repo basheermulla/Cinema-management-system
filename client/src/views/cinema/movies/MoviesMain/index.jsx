@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useLoaderData, useParams } from 'react-router-dom';
 
 // material-ui
@@ -25,13 +25,17 @@ import useConfig from 'hooks/useConfig';
 import { useDispatch, useSelector } from 'store/index';
 import { appDrawerWidth, gridSpacing } from 'utils/constant-theme';
 import { filterMovies, createMovie } from 'store/slices/movie';
+import { createSubscription } from 'store/slices/member';
+
 import AddMovie from './AddMovie';
+import AddSubscriptionByMember from './AddSubscriptionByMember';
 
 // assets
 import SearchIcon from '@mui/icons-material/Search';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import member from 'store/slices/member';
 
 // movie list container
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
@@ -56,11 +60,9 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({
 
 const MoviesMain = () => {
     const theme = useTheme();
-    
+
     const { borderRadius } = useConfig();
     const dispatch = useDispatch();
-
-    // const mov = useSelector((state) => state.movies);
 
     const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
     const matchDownLG = useMediaQuery(theme.breakpoints.down('xl'));
@@ -78,27 +80,37 @@ const MoviesMain = () => {
         setOpen((prevState) => !prevState);
     };
 
-    // movie data
-    const initialMovies = useLoaderData();    
+    // movies data
+    const initialMovies = useLoaderData();
     const [movies, setMovies] = useState(initialMovies);
-    console.log(initialMovies);
+    
+    // members data
+    const initialMembers = useSelector((state) => state.members);
+    const [members, setMembers] = useState(initialMembers.subscriptions.map((member) => ({_id: member._id, name: member.name})));
 
     // filter
     const initialState = {
-        search: '',
-        sort: 'low',
         type: [],
         genres: ['all'],
         language: [],
         premiered: '',
         rating: 0
     };
+
+    // filter
+    const initialSearchAndSort = {
+        search: '',
+        sort: 'low',
+    };
+
     const [filter, setFilter] = useState(initialState);
+    const [filterSearchAndSort, setFilterSearchAndSort] = useState(initialSearchAndSort);
 
     // search filter
-    const handleSearch = async (event) => {
+    const handleSearch = async (event) => { ////////////////////////////////*************************** Search */
+        console.log(event?.target.value);
         const newString = event?.target.value;
-        setFilter({ ...filter, search: newString });
+        setFilterSearchAndSort({ ...filterSearchAndSort, search: newString });
     };
 
     // sort options
@@ -115,13 +127,17 @@ const MoviesMain = () => {
     const filterIsEqual = (a1, a2) =>
         a1 === a2 ||
         (a1.length === a2.length &&
-            a1.search === a2.search &&
-            a1.sort === a2.sort &&
             a1.premiered === a2.premiered &&
             a1.rating === a2.rating &&
             JSON.stringify(a1.type) === JSON.stringify(a2.type) &&
             JSON.stringify(a1.genres) === JSON.stringify(a2.genres) &&
             JSON.stringify(a1.language) === JSON.stringify(a2.language));
+
+    const filterSearchAndSortIsEqual = (a1, a2) =>
+        a1 === a2 ||
+        (a1.length === a2.length &&
+            a1.search === a2.search &&
+            a1.sort === a2.sort);
 
     const handelFilter = (typeFilter, params, rating) => {
         setMovieLoading(true);
@@ -154,16 +170,19 @@ const MoviesMain = () => {
                 setFilter({ ...filter, premiered: params });
                 break;
             case 'search':
-                setFilter({ ...filter, search: params });
+                setFilterSearchAndSort({ ...filterSearchAndSort, search: params });
+                setMovieLoading(false);
                 break;
             case 'sort':
-                setFilter({ ...filter, sort: params });
+                setFilterSearchAndSort({ ...filterSearchAndSort, sort: params });
+                setMovieLoading(false);
                 break;
             case 'rating':
                 setFilter({ ...filter, rating });
                 break;
             case 'reset':
                 setFilter(initialState);
+                setFilterSearchAndSort(initialSearchAndSort)
                 break;
             default:
             // no options
@@ -171,15 +190,14 @@ const MoviesMain = () => {
     };
 
     const filterData = async () => {
-        console.log('await filterMovies()');
-        // const movies = await filterMovies();
-        // setMovies(movies);
-        setMovieLoading(false);
+        await filterMovies(filter).then((response) => {
+            setMovies(response);
+            setMovieLoading(false);
+        });
     };
 
     useEffect(() => {
-        filterData();        
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        filterData();
     }, [filter]);
 
     useEffect(() => {
@@ -188,19 +206,49 @@ const MoviesMain = () => {
 
     // sort filter
     const handleMenuItemClick = (event, index) => {
-        setFilter({ ...filter, sort: index });
+        setFilterSearchAndSort({ ...filterSearchAndSort, sort: index });
         setAnchorEl(null);
     };
 
-    const addMovie = (movieNew) => {
-        dispatch(createMovie(movieNew));
+    const addSubscriptionByMember = (method, memberId, obj_SubscriptionMovie) => {
+        dispatch(createSubscription(method, memberId.id, obj_SubscriptionMovie));
     };
 
-    const sortLabel = SortOptions.filter((items) => items.value === filter.sort);
+    // movieId state for creating a new subscription for a desired member
+    const [movieId, setMovieId] = useState({});
+
+    // open a dialog alert when clicking on subscribe in a certain movie
+    const [openSubscribeDialog, setOpenSubscribeDialog] = useState(false);
+
+    const handleClickOpenSubscribeDialog = (newMovieId) => {
+        setOpenSubscribeDialog(true);
+        setMovieId(newMovieId);
+    };
+
+    const handleCloseSubscribeDialog = () => {
+        setMovieId(null);
+        setOpenSubscribeDialog(false);
+    };
+
+    const sortLabel = SortOptions.filter((items) => items.value === filterSearchAndSort.sort);
 
     let movieResult = <></>;
     if (movies && movies.length > 0) {
-        movieResult = movies.map((movie, index) => (
+        movieResult = [...movies].filter((item) => item.name.toLowerCase().includes(filterSearchAndSort.search.toLowerCase())).sort((movie_A, movie_B) => {
+            switch (filterSearchAndSort.sort) {
+                case "low":
+                    return movie_A.name.localeCompare(movie_B.name);
+                case "high":
+                    return movie_B.name.localeCompare(movie_A.name);
+                case "rating":
+                    return (+movie_B.rating) - (+movie_A.rating);
+                case "premiered":
+                    console.log("premiered");
+                    return -(movie_A.premiered.localeCompare(movie_B.premiered));
+                default:
+                    break;
+            }
+        }).map((movie, index) => (
             <Grid key={index} item xs={12} sm={6} md={4} lg={3}>
                 <MovieCard
                     id={movie._id}
@@ -211,6 +259,7 @@ const MoviesMain = () => {
                     language={movie.language}
                     premiered={movie.premiered}
                     rating={movie.rating}
+                    handleClickOpenSubscribeDialog={handleClickOpenSubscribeDialog}
                 />
             </Grid>
         ));
@@ -222,7 +271,11 @@ const MoviesMain = () => {
         );
     }
 
-    // open a dialog alert when clicked on new movie
+    const addMovie = (movieNew) => {
+        dispatch(createMovie(movieNew));
+    };
+
+    // open a dialog alert when clicking on a new movie
     const [openAddDialog, setOpenAddDialog] = useState(false);
 
     const handleClickOpenDialog = () => {
@@ -266,7 +319,7 @@ const MoviesMain = () => {
                                         </InputAdornment>
                                     )
                                 }}
-                                value={filter.search}
+                                value={filterSearchAndSort.search}
                                 placeholder="Search Movie"
                                 size="small"
                                 onChange={handleSearch}
@@ -318,7 +371,7 @@ const MoviesMain = () => {
                                         <MenuItem
                                             sx={{ p: 1.5 }}
                                             key={index}
-                                            selected={option.value === filter.sort}
+                                            selected={option.value === filterSearchAndSort.sort}
                                             onClick={(event) => handleMenuItemClick(event, option.value)}
                                         >
                                             {option.label}
@@ -338,9 +391,12 @@ const MoviesMain = () => {
                     <Main open={open}>
                         <MovieFilterView
                             filter={filter}
+                            filterSearchAndSort={filterSearchAndSort}
                             filterIsEqual={filterIsEqual}
+                            filterSearchAndSortIsEqual={filterSearchAndSortIsEqual}
                             handelFilter={handelFilter}
                             initialState={initialState}
+                            initialSearchAndSort={initialSearchAndSort}
                         />
                         <Grid container spacing={gridSpacing}>
                             {movieLoading
@@ -382,8 +438,16 @@ const MoviesMain = () => {
                     </Drawer>
                 </Box>
             </Grid>
-            <AddMovie open={openAddDialog} handleCloseDialog={handleCloseDialog} addMovie={addMovie}/>
+            <AddMovie open={openAddDialog} handleCloseDialog={handleCloseDialog} addMovie={addMovie} />
+            <AddSubscriptionByMember
+                open={openSubscribeDialog}
+                movieId={movieId}
+                handleCloseSubscribeDialog={handleCloseSubscribeDialog}
+                addSubscriptionByMember={addSubscriptionByMember}
+                members={members}
+            />
         </Grid>
+
     )
 }
 

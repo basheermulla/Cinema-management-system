@@ -29,6 +29,12 @@ const getAllMovies = async () => {
     return movies;
 }
 
+// GET - Get Movie By Id With Subscription - Read
+const getMovieByIdWithSubscriptions = async (id) => {
+    let { data: movie } = await MoviesWS.getMovieByIdWithSubscriptionsWS(id);
+    return movie;
+}
+
 // GET - Get Movie By Id
 const getMovieById = async (id) => {
     let { data: movie } = await MoviesWS.getMovieByIdWS(id);
@@ -38,6 +44,12 @@ const getMovieById = async (id) => {
 // POST - Create a Movie
 const addMovie = async (obj) => {
     const { data: result } = await MoviesWS.addMovieWS(obj);
+    return result;
+}
+
+// POST - filter Movies by Multiple Conditions
+const filterMovies = async (obj) => {
+    const { data: result } = await MoviesWS.filterMoviesWS(obj);
     return result;
 }
 
@@ -58,8 +70,10 @@ module.exports = {
     getAllPopularMovies,
     getRelatedMovies,
     getAllMovies,
+    getMovieByIdWithSubscriptions,
     getMovieById,
     addMovie,
+    filterMovies,
     updateMovie,
     deleteMovie,
 }

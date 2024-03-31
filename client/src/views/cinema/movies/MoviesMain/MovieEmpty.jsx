@@ -27,7 +27,7 @@ const MovietEmpty = () => {
                             <Grid container spacing={gridSpacing}>
                                 <Grid item xs={12}>
                                     <Typography variant="h1" color="inherit" component="div">
-                                        There is no Movies
+                                        There are no movies
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={12}>

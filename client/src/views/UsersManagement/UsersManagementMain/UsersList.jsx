@@ -4,33 +4,22 @@ import { useNavigate } from 'react-router-dom';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import {
-    Chip, Grid, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-    Tooltip, Typography
-} from '@mui/material';
+import { Chip, Divider, Grid, IconButton, Skeleton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip } from '@mui/material';
 
 // internal imports
 import Avatar from 'components/extended/Avatar';
-import { useDispatch } from 'store';
-import { Link } from 'react-router-dom';
 
 // third-party
 import { format } from 'date-fns';
 
 // assets
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ChatBubbleTwoToneIcon from '@mui/icons-material/ChatBubbleTwoTone';
-import BlockTwoToneIcon from '@mui/icons-material/BlockTwoTone';
 import DeleteMember from '@mui/icons-material/Delete';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 
-const UsersList = ({ users, removeUser }) => {
+const UsersList = ({ users, removeUser, userLoading }) => {
     const theme = useTheme();
 
-    const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    const [data, setData] = useState([]);
 
     let permissionsResult = <></>;
     const permissionAdapter = (action, model) => {
@@ -113,7 +102,7 @@ const UsersList = ({ users, removeUser }) => {
                         }}
                     />
                 ) : (
-                    <Chip label="Create Movies" size="small"
+                    <Chip label="View Movies" size="small"
                         sx={{
                             background:
                                 theme.palette.mode === 'dark'
@@ -145,7 +134,16 @@ const UsersList = ({ users, removeUser }) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {users &&
+                    {users && userLoading
+                        ? [1, 2, 3, 4].map((item) => (
+                            <TableRow key={item}>
+                                <TableCell colSpan={9}>
+                                    <Skeleton variant="rectangular" sx={{ height: "144px" }} />
+                                    <Divider sx={{ mt: 2, mb: 2 }} />
+                                </TableCell>
+                            </TableRow>
+                        ))
+                        :
                         users?.map((user, index) => (
                             <TableRow hover key={index}>
                                 <TableCell sx={{ pl: 3 }}>{index + 1}</TableCell>
@@ -208,7 +206,8 @@ const UsersList = ({ users, removeUser }) => {
 
 UsersList.propTypes = {
     users: PropTypes.array,
-    removeUser: PropTypes.func
+    removeUser: PropTypes.func,
+    userLoading: PropTypes.bool
 };
 
 export default UsersList;

@@ -27,38 +27,27 @@ import HighlightOffTwoToneIcon from '@mui/icons-material/HighlightOffTwoTone';
 
 const validationSchema = yup.object({
     memberId: yup.string().required('Member Id is required'),
-    subscriptionId: yup.string(),
     movieId: yup.string().required('Movie Id selection is required'),
     date: yup.date().nullable().required('Subscription date is required'),
 });
 
 const Transition = forwardRef((props, ref) => <Zoom ref={ref} {...props} />);
 
-const AddSubscription = ({ open, member, subscription, handleCloseSubscribeDialog, addSubscription, editSubscription, movies }) => {
+const AddSubscriptionByMember = ({ open, movieId, handleCloseSubscribeDialog, addSubscriptionByMember, members }) => {
     const theme = useTheme();
     const dispatch = useDispatch();
-    const edit = subscription && subscription.subscriptionId;
-    console.log(subscription);
+
     const formik = useFormik({
         enableReinitialize: true,
         initialValues: {
-            memberId: member._id,
-            subscriptionId: edit ? subscription.subscriptionId : '',
-            movieId: edit ? subscription.movie._id : '',
-            date: edit ? subscription.date : '',
+            memberId: '',
+            movieId: movieId?.movieId,
+            date: '',
         },
         validationSchema,
         onSubmit: (values, { resetForm }) => {
-            if (edit) {
-                // Update future subscription for this member 
-                editSubscription({ id: values.memberId }, { subscriptionId: values.subscriptionId, movieId: values.movieId, date: values.date });
-            } else if (member.relatedMovie[0].date !== undefined) {
-                // Add another subscription for this member
-                addSubscription('put', { id: values.memberId }, { movieId: values.movieId, date: values.date });
-            } else {
-                // Make the first subscription for this member 
-                addSubscription('post', { id: values.memberId }, { subscriptionMovies: [{ movieId: values.movieId, date: values.date }] });
-            }
+            // Add a subscription for the selected member with a given movie
+            addSubscriptionByMember('put', { id: values.memberId }, { movieId: values.movieId, date: values.date });
 
             resetForm();
             handleCloseSubscribeDialog();
@@ -106,29 +95,29 @@ const AddSubscription = ({ open, member, subscription, handleCloseSubscribeDialo
                         <Grid container spacing={gridSpacing}>
                             <Grid item xs={12} md={6}>
                                 <FormControl sx={{ m: 1, minWidth: 120 }}>
-                                    <InputLabel id="movieId-select">Movie</InputLabel>
+                                    <InputLabel id="memberId-select">Members</InputLabel>
                                     <Select
                                         fullWidth
-                                        labelId="movieId-select"
-                                        id="movieId"
-                                        name="movieId"
-                                        value={formik.values.movieId}
+                                        labelId="memberId-select"
+                                        id="memberId"
+                                        name="memberId"
+                                        value={formik.values.memberId}
                                         onChange={formik.handleChange}
-                                        label="Movie"
+                                        label="Member"
                                     >
                                         <MenuItem value="">
                                             <em>None</em>
                                         </MenuItem>
                                         {
-                                            movies.map((movie) => (
-                                                <MenuItem key={movie._id} value={movie._id}>{movie.name}</MenuItem>
+                                            members?.map((member) => (
+                                                <MenuItem key={member._id} value={member._id}>{member.name}</MenuItem>
                                             ))
                                         }
                                     </Select>
-                                    {formik.errors.movieId && (
+                                    {formik.errors.memberId && (
                                         <FormHelperText error id="standard-weight-helper-text-email-login">
                                             {' '}
-                                            {formik.errors.movieId}{' '}
+                                            {formik.errors.memberId}{' '}
                                         </FormHelperText>
                                     )}
                                 </FormControl>
@@ -170,13 +159,12 @@ const AddSubscription = ({ open, member, subscription, handleCloseSubscribeDialo
     );
 };
 
-AddSubscription.propTypes = {
+AddSubscriptionByMember.propTypes = {
     open: PropTypes.bool,
-    member: PropTypes.object,
-    subscription: PropTypes.object,
+    movieId: PropTypes.object,
     handleCloseSubscribeDialog: PropTypes.func,
-    addSubscription: PropTypes.func,
-    movies: PropTypes.array
+    addSubscriptionByMember: PropTypes.func,
+    members: PropTypes.array
 };
 
-export default AddSubscription;
+export default AddSubscriptionByMember;
