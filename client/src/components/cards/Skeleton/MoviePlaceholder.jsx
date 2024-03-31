@@ -1,12 +1,12 @@
 // material-ui
 import { CardContent, Grid, Skeleton, Stack } from '@mui/material';
 
-// project import
+// internal import
 import MainCard from '../MainCard';
 
 const MoviePlaceholder = () => (
     <MainCard content={false} boxShadow>
-        <Skeleton variant="rectangular" height={220} />
+        <Skeleton variant="rectangular" height={520} />
         <CardContent sx={{ p: 2 }}>
             <Grid container spacing={2}>
                 <Grid item xs={12}>

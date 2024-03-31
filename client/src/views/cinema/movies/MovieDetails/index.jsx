@@ -46,13 +46,12 @@ function a11yProps(index) {
 const MovieDetails = () => {
     const { id } = useParams();
 
-    const [movie, setMovie] = useState('');
+    // movie data
+    const initialMovie = useLoaderData();
+
+    const [movie, setMovie] = useState(initialMovie[0]);
 
     const dispatch = useDispatch();
-
-    // movies
-    const { movies } = useSelector((state) => state.movies);
-    // const movie = useLoaderData();
 
     // movie description tabs
     const [value, setValue] = useState(0);
@@ -74,12 +73,6 @@ const MovieDetails = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [pathname]);
-
-    useEffect(() => {
-        const movie = movies.find((movie) => movie._id === id)
-        setMovie(movie);
-        console.log(movie);
-    }, [movie]);
 
     return (
         <>

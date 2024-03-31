@@ -12,10 +12,6 @@ import useConfig from 'hooks/useConfig';
 import { gridSpacing } from 'utils/constant-theme';
 
 // assets
-import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';
-import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
-import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
-import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 import BestMovie from 'assets/images/cinema/best_movies_6.png';
 import { IconBrandYoutube } from '@tabler/icons-react';
 

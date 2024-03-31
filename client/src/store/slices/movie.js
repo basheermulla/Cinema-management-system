@@ -11,7 +11,6 @@ const MOVIES_URL = import.meta.env.VITE_APP_MOVIES_URL;
 
 const initialState = {
     error: null,
-    addresses: [],
     movies: []
 };
 
@@ -24,73 +23,24 @@ const slice = createSlice({
             state.error = action.payload;
         },
 
-        // GET ADDRESSES
-        // getAddressesSuccess(state, action) {
-        //     state.addresses = action.payload;
-        // },
-
-        // ADD ADDRESS
-        // addAddressSuccess(state, action) {
-        //     state.addresses = action.payload;
-        // },
-
-        // EDIT ADDRESS
-        // editAddressSuccess(state, action) {
-        //     state.addresses = action.payload;
-        // },
         // GET Movies
         getMoviesSuccess: (state, action) => {
             state.movies = action.payload;
             state.error = null;
         },
-
     }
 });
 
 // Reducer
 export default slice.reducer;
 
-// ⬇️ this is the redux functions
 
-// export function getAddresses() {
-//     return async () => {
-//         try {
-//             const response = await axios.get('/api/address/list');
-//             dispatch(slice.actions.getAddressesSuccess(response.data.address));
-//         } catch (error) {
-//             dispatch(slice.actions.hasError(error));
-//         }
-//     };
-// }
-
-// export function addAddress(address) {
-//     return async () => {
-//         try {
-//             const response = await axios.post('/api/address/new', address);
-//             dispatch(slice.actions.addAddressSuccess(response.data.address));
-//         } catch (error) {
-//             dispatch(slice.actions.hasError(error));
-//         }
-//     };
-// }
-
-// export function editAddress(address) {
-//     return async () => {
-//         try {
-//             const response = await axios.post('/api/address/edit', address);
-//             dispatch(slice.actions.editAddressSuccess(response.data.address));
-//         } catch (error) {
-//             dispatch(slice.actions.hasError(error));
-//         }
-//     };
-// }
-
-// ⬇️ this is the loader and error boundary (Until now, the loader includes redux functions)
+// ⬇️ this is the <movies && movie loader> and error boundary for movie model
 export async function loader() {
     try {
         let token = window.localStorage.getItem('accessToken');
         console.log('<=== Movies Loader ===>');
-        const response = await axios.get(`${MOVIES_URL}/aggregate`, { headers: { "Authorization": `Bearer ${token}` } });
+        const response = await axios.get(`${MOVIES_URL}`, { headers: { "Authorization": `Bearer ${token}` } });
         console.log(response.data);
         dispatch(slice.actions.getMoviesSuccess(response.data));
         return response.data;
@@ -99,40 +49,40 @@ export async function loader() {
     }
 }
 
-/**********************************************************
- *                                                        *
- *      todo -----> filter in the server [moviesBLL]      *
- *                                                        *
- *//******************************************************/
-// export async function filterProducts(filter) {
-//     return await axios.post('/api/products/filter', { filter });
-// }
-
-export async function filterMovies() {
+export async function movieLoader({ params }) {
     try {
         let token = window.localStorage.getItem('accessToken');
-        const response = await axios.get(`${MOVIES_URL}/aggregate`, { headers: { "Authorization": `Bearer ${token}` } });
-        dispatch(slice.actions.getMoviesSuccess(response.data));
+        const id = params.id;
+        console.log('<=== M o v i e Loader ===> ', params);
+        const response = await axios.get(`${MOVIES_URL}/movie-subscriptions/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
+        console.log('<=== M o v i e Loader ===> ', response.data);
         return response.data;
+    } catch (error) {
+        return error;
+    }
+}
 
+
+// ⬇️ this is the <CRUD && filter && related functions> for movie model
+
+export async function filterMovies(filter) {
+    try {
+        let token = window.localStorage.getItem('accessToken');
+        const response = await axios.post(`${MOVIES_URL}/filter`,filter , { headers: { "Authorization": `Bearer ${token}` } });
+        return response.data;
     } catch (error) {
         console.error(error);
     }
 }
 
-/*******************************************************************************
- *                                                                             *
- *      todo -----> get by Id with other data from the server [moviesBLL]      *
- *                                                                             *
- *//***************************************************************************/
-
-export async function movieLoader({ params }) {
+export async function getRelatedMovies(id) {
     try {
         let token = window.localStorage.getItem('accessToken');
-        const id = params.id;
-        console.log('<=== M o v i e Loader ===>');
-        const response = await axios.get(`${MOVIES_URL}/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
-        return response.data;
+        console.log('<=== M o v i e getRelatedMovies ===> ', id);
+        if (id) {            
+            const response = await axios.get(`${MOVIES_URL}/related-movies/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
+            return response.data;
+        }
     } catch (error) {
         return error;
     }
@@ -144,7 +94,6 @@ export function createMovie(movie) {
             let token = window.localStorage.getItem('accessToken');
             console.log('Here we create movie');
             const response = await axios.post(`${MOVIES_URL}`, movie, { headers: { "Authorization": `Bearer ${token}` } });
-            console.log(response);
         } catch (error) {
             console.error(error);
         }
@@ -156,7 +105,6 @@ export function updateMovie(id, movie) {
         try {
             let token = window.localStorage.getItem('accessToken');
             const response = await axios.put(`${MOVIES_URL}/${id}`, movie, { headers: { "Authorization": `Bearer ${token}` } });
-            console.log(response);
         } catch (error) {
             console.error(error);
         }
@@ -174,16 +122,4 @@ export function deleteMovie(id) {
             console.error(error);
         }
     };
-}
-
-export async function getRelatedMovies(id) {
-    try {
-        let token = window.localStorage.getItem('accessToken');
-        console.log('<=== M o v i e getRelatedMovies ===> ', id);
-        const response = await axios.get(`${MOVIES_URL}/related-movies/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
-        console.log('related-movies = ', response.data);
-        return response.data;
-    } catch (error) {
-        return error;
-    }
 }

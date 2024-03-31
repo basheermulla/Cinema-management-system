@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 // third-party
 import { format } from 'date-fns';
@@ -14,9 +15,7 @@ import StarIcon from '@mui/icons-material/Star'
 
 // internal imports
 import Avatar from 'components/extended/Avatar';
-
 import { useDispatch } from 'store';
-import { Link } from 'react-router-dom';
 
 
 const SubscriptionList = ({ movie }) => {

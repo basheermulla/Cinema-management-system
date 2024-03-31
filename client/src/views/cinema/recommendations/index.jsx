@@ -1,6 +1,6 @@
 
 import { useState, useEffect, useMemo } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 
 // material-ui
@@ -10,10 +10,13 @@ import { Autocomplete, Avatar, Box, Button, CardActions, CardContent, CardMedia,
 // internal imports
 import MainCard from 'components/cards/MainCard';
 import SubCard from 'components/cards/SubCard';
-import SecondaryAction from 'components/cards/CardSecondaryAction';
-import AnimateButton from 'components/extended/AnimateButton';
+import SkeletonRecommendedPlaceholder from 'components/cards/Skeleton/RecommendedPlaceholder';
+import SelectedMember from './SelectedMember';
+import MembersDetails from './MembersDetails';
+import LastMembersSubscriptions from './LastMembersSubscriptions';
 import RelatedMovies from './RelatedMovies';
-import { loader, createSubscription, updateMember } from 'store/slices/member';
+import AddSubscriptionByMember from '../movies/MoviesMain/AddSubscriptionByMember';
+import { createSubscription } from 'store/slices/member';
 import { gridSpacing } from 'utils/constant-theme';
 import useConfig from 'hooks/useConfig';
 
@@ -36,7 +39,7 @@ const iconSX = {
 
 // table data
 function createData(members) {
-    return members.map((member) => { return { label: member.name, _id: member._id } })
+    return members?.map((member) => { return { label: member.name, _id: member._id } })
 }
 
 const RecommendationMain = () => {
@@ -48,9 +51,16 @@ const RecommendationMain = () => {
     const [members, setMembers] = useState(initialdata.members);
     const [movies, setMovies] = useState(initialdata.movies);
 
-    const [member, setMember] = useState(members[0]);
-    const [lastSubscriptions, setLastSubscriptions] = useState(members[0].relatedMovie.slice(0, 3));
+    const [member, setMember] = useState({});
+    const [lastSubscriptions, setLastSubscriptions] = useState([]);
     const [optionsFilms, setOptionsFilms] = useState([]);
+
+    useEffect(() => {
+        if (movies) {
+            setMember(members[0]);
+            setLastSubscriptions(members[0].relatedMovie.slice(0, 3));
+        }
+    }, [movies]);
 
     const handleAutocomplete = (new_member) => {
         console.log(new_member);
@@ -63,147 +73,77 @@ const RecommendationMain = () => {
         setOptionsFilms(data);
     }, [movies]);
 
-    const relatedProducts = useMemo(() => <RelatedMovies id={member._id} />, [member._id]);
+    const addSubscriptionByMember = (method, memberId, obj_SubscriptionMovie) => {
+        dispatch(createSubscription(method, memberId.id, obj_SubscriptionMovie));
+    };
+
+    // movieId state for creating a new subscription for a desired member
+    const [movieId, setMovieId] = useState({});
+
+    // open a dialog alert when clicking on subscribe in a certain movie
+    const [openSubscribeDialog, setOpenSubscribeDialog] = useState(false);
+
+    const handleClickOpenSubscribeDialog = (newMovieId) => {
+        setOpenSubscribeDialog(true);
+        setMovieId(newMovieId);
+    };
+
+    const handleCloseSubscribeDialog = () => {
+        setMovieId(null);
+        setOpenSubscribeDialog(false);
+    };
+
+    const [isLoading, setLoading] = useState(true);
+
+    useEffect(() => {
+        setLoading(false);
+    }, []);
+
+    const relatedProducts = useMemo(() => (
+        <RelatedMovies
+            id={member?._id}
+            isLoading={isLoading}
+            handleClickOpenSubscribeDialog={handleClickOpenSubscribeDialog}
+        />
+    ), [member?._id]);
 
     return (
-        <Grid container alignItems="center" justifyContent="center" spacing={0}>
-            <Grid item xs={12}>
+        <>
+            <Grid container alignItems="center" justifyContent="center" spacing={0}>
+                <Grid item xs={12}>
+                    <MainCard>
+                        <Grid container spacing={gridSpacing}>
+                            <Grid item xs={12} md={6} lg={4}>
+                                <SelectedMember
+                                    isLoading={isLoading}
+                                    member={member}
+                                    optionsFilms={optionsFilms}
+                                    handleAutocomplete={handleAutocomplete}
+                                />
+                            </Grid>
+                            <Grid item xs={12} md={6} lg={4}>
+                                <MembersDetails isLoading={isLoading} member={member} />
+                            </Grid>
+                            {lastSubscriptions && lastSubscriptions[0]?.date && (
+                                <Grid item xs={12} md={6} lg={4}>
+                                    <LastMembersSubscriptions lastSubscriptions={lastSubscriptions} />
+                                </Grid>)}
 
-                <MainCard>
-                    <Grid container spacing={gridSpacing}>
-                        <Grid item xs={12} md={6} lg={4}>
-                            <SubCard title="Member">
-                                <Grid container direction="column" spacing={3}>
-                                    <Grid item>
-                                        <Grid container spacing={2}>
-                                            <Grid item xs={12}>
-                                                <Avatar alt="User 1" src={member.image} sx={{ width: 75, height: 75, margin: '0 auto' }} />
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <Typography variant="h5" align="center">
-                                                    {member.name}
-                                                </Typography>
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography variant="subtitle2" align="left" mb={0.5}>
-                                            Choose member:
-                                        </Typography>
-                                        <Autocomplete
-                                            disableClearable
-                                            onChange={(e, value) => {
-                                                handleAutocomplete(value)
-                                            }}
-                                            defaultChecked={{ label: member.name, _id: member._id }}
-                                            options={optionsFilms}
-                                            getOptionLabel={(option) => option.label}
-                                            renderInput={(params) => <TextField {...params} label="" />}
-                                        />
-                                    </Grid>
-                                </Grid>
-                            </SubCard>
                         </Grid>
-                        <Grid item xs={12} md={6} lg={4}>
-                            <SubCard title="Member's Details" contentSX={{ textAlign: 'center' }}>
-                                <Grid container spacing={2} alignItems="center" justifyContent="center" mb={4}>
-                                    <Grid item>
-                                        <Typography
-                                            sx={{
-                                                width: 40,
-                                                height: 40,
-                                                color: theme.palette.secondary.main,
-                                                borderRadius: '12px',
-                                                padding: 1,
-                                                backgroundColor: theme.palette.mode === 'dark' ? theme.palette.background.default : '#c0c9e9'
-                                            }}
-                                        >
-                                            <IconMail stroke={2} />
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item xs zeroMinWidth>
-                                        <Grid container spacing={1}>
-                                            <Grid item xs zeroMinWidth>
-                                                <Typography align="left" variant="h5">
-                                                    {member.email}
-                                                </Typography>
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                                <Grid container spacing={2} alignItems="center" justifyContent="center">
-                                    <Grid item>
-                                        <Typography
-                                            sx={{
-                                                width: 40,
-                                                height: 40,
-                                                color: theme.palette.primary.main,
-                                                borderRadius: '12px',
-                                                padding: 1,
-                                                backgroundColor: theme.palette.mode === 'dark' ? theme.palette.background.default : '#c0c9e9'
-                                            }}
-                                        >
-                                            <IconBuildingCommunity stroke={2} />
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item xs zeroMinWidth>
-                                        <Grid container spacing={1}>
-                                            <Grid item xs zeroMinWidth>
-                                                <Typography align="left" variant="h5">
-                                                    {member.city}
-                                                </Typography>
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-
-                            </SubCard>
-                        </Grid>
-                        {lastSubscriptions && lastSubscriptions[0].date && <Grid item xs={12} md={6} lg={4}>
-                            <SubCard title="Last Member's Subscriptions" contentSX={{ textAlign: 'center' }}>
-                                <Grid container spacing={gridSpacing} alignItems="center">
-                                    {lastSubscriptions.map((subscription, index) => (
-                                        <Grid item xs={12} key={index}>
-                                            <Grid container spacing={2}>
-                                                <Grid item>
-                                                    <CardMedia
-                                                        component="img"
-                                                        image={subscription.movie?.image.medium}
-                                                        sx={{ borderRadius: `${borderRadius}px`, width: 45, height: 50 }}
-                                                        alt="external image"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs zeroMinWidth>
-                                                    <Typography align="left" component="div" variant="subtitle1">
-                                                        {subscription.movie?.name}
-                                                    </Typography>
-                                                    <Grid container spacing={2}>
-                                                        <Grid item xs zeroMinWidth>
-                                                            <Typography align="left" component="div" variant="subtitle2">
-                                                                {new Date(subscription.movie?.premiered).toLocaleDateString()}
-                                                            </Typography>
-                                                        </Grid>
-                                                        <Grid item>
-                                                            <Typography align="left" component="div" variant="caption">
-                                                                {new Date(subscription.date).toLocaleDateString()}
-                                                            </Typography>
-                                                        </Grid>
-                                                    </Grid>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                    ))}
-                                </Grid>
-                            </SubCard>
-                        </Grid>}
-
-                    </Grid>
-                </MainCard>
+                    </MainCard>
+                </Grid>
+                <Grid item xs={11}>
+                    {relatedProducts}
+                </Grid>
+                <AddSubscriptionByMember
+                    open={openSubscribeDialog}
+                    movieId={movieId}
+                    handleCloseSubscribeDialog={handleCloseSubscribeDialog}
+                    addSubscriptionByMember={addSubscriptionByMember}
+                    members={members}
+                />
             </Grid>
-            <Grid item xs={11}>
-                {relatedProducts}
-            </Grid>
-        </Grid>
+        </>
     );
 };
 

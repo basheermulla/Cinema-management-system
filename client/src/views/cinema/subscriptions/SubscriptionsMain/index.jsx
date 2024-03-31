@@ -5,7 +5,7 @@ import { useLoaderData, useNavigate } from 'react-router-dom';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Box, Collapse, Grid, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Box, Collapse, Grid, IconButton, Skeleton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 
 // internal imports
 import MainCard from 'components/cards/MainCard';
@@ -27,11 +27,17 @@ const SubscriptionsMain = () => {
 
     const dispatch = useDispatch();
     const navigete = useNavigate();
-    
+
     // member include subscriptions data & movies
     const initialdata = useLoaderData();
     const [subscriptions, setSubscriptions] = useState(initialdata.members);
     const [movies, setMovies] = useState(initialdata.movies);
+
+    const [memberLoading, setMemberLoading] = useState(true);
+
+    useEffect(() => {
+        setMemberLoading(false);
+    }, []);
 
     const subscriptionsToExport = [];
     if (subscriptions) {
@@ -61,39 +67,51 @@ const SubscriptionsMain = () => {
     };
 
     const addSubscription = (method, memberId, obj_SubscriptionMovie) => {
+        setMemberLoading(true);
         dispatch(createSubscription(method, memberId.id, obj_SubscriptionMovie)).then(() => {
             loadDataAfterAction();
+            setMemberLoading(false);
         });
     };
 
     const editSubscription = (memberId, obj_SubscriptionMovie) => {
+        setMemberLoading(true);
         dispatch(updateSubscription(memberId.id, obj_SubscriptionMovie)).then(() => {
             loadDataAfterAction();
+            setMemberLoading(false);
         });
     };
 
     const removeSubscription = (memberId, subscriptionId, action) => {
+        setMemberLoading(true);
         dispatch(deleteSubscription(memberId, subscriptionId, action)).then(() => {
             loadDataAfterAction();
-        });;
+            setMemberLoading(false);
+        });
     };
 
     const addMember = (memberNew) => {
+        setMemberLoading(true);
         dispatch(createMember(memberNew)).then(() => {
             loadDataAfterAction();
-        });;
+            setMemberLoading(false);
+        });
     };
 
     const editMember = (id, memberEdit) => {
+        setMemberLoading(true);
         dispatch(updateMember(id, memberEdit)).then(() => {
             loadDataAfterAction();
-        });;
+            setMemberLoading(false);
+        });
     };
 
     const removeMember = (id) => {
+        setMemberLoading(true);
         dispatch(deleteMember(id)).then(() => {
             loadDataAfterAction();
-        });;
+            setMemberLoading(false);
+        });
     };
 
     const loadDataAfterAction = async () => {
@@ -195,7 +213,16 @@ const SubscriptionsMain = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {memberResult}
+                        {memberLoading
+                            ? [1, 2, 3, 4].map((item) => (
+                                <TableRow key={item}>
+                                    <TableCell colSpan={7}>
+                                        <Skeleton variant="rectangular" sx={{ height: "42px" }} />
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                            :
+                            memberResult}
                     </TableBody>
                 </Table>
             </TableContainer >

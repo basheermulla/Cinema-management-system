@@ -47,6 +47,7 @@ const getAllMoviesAggregation = async () => {
                     image: 1,
                     genres: 1,
                     premiered: 1,
+                    rating: 1,
                     subscriptionWatched: {
                         $filter: {
                             input: "$subscriptionWatched",
@@ -106,6 +107,7 @@ const getAllMoviesAggregation = async () => {
                     image: 1,
                     genres: 1,
                     premiered: 1,
+                    rating: 1,
                     subscriptionWatched: {
                         $map: {
                             input: "$subscriptionWatched",
@@ -164,6 +166,7 @@ const getAllPopularMovies = async () => {
                     image: 1,
                     genres: 1,
                     premiered: 1,
+                    rating: 1,
                     subscriptionWatched: {
                         $filter: {
                             input: "$subscriptionWatched",
@@ -187,6 +190,7 @@ const getAllPopularMovies = async () => {
                     image: 1,
                     genres: 1,
                     premiered: 1,
+                    rating: 1,
                     subscriptionWatched: {
                         $map: {
                             input: "$subscriptionWatched",
@@ -389,7 +393,7 @@ const getRelatedMovies = async (memberId) => {
 
     const movies = recommendations.map((index) => (movies_indexes[index]))
 
-    const respons = await Movie.find({_id: {$in: movies}});
+    const respons = await Movie.find({ _id: { $in: movies } });
 
     return respons;
 };
@@ -397,6 +401,128 @@ const getRelatedMovies = async (memberId) => {
 // GET - Get All Movies - Read
 const getAllMovies = async () => {
     return Movie.find();
+};
+
+// GET - Get Movie By Id With Subscription - Read
+const getMovieByIdWithSubscriptions = (movieId) => {
+    return Movie.aggregate(
+        [
+            {
+                $match: { $expr: { $eq: ["$_id", { $toObjectId: movieId }] } }
+            },
+            {
+                $lookup:
+                {
+                    from: 'subscriptions',
+                    let: { id: "$_id" },
+                    pipeline: [
+                        {
+                            $project:
+                            {
+                                memberId: 1,
+                                subscriptionMovies: {
+                                    $filter: {
+                                        input: "$subscriptionMovies",
+                                        cond: { $eq: ["$$movie.movieId", "$$id"] },
+                                        as: "movie"
+                                    }
+                                }
+                            }
+
+                        }
+                    ],
+                    as: "subscriptionWatched"
+                }
+            },
+            {
+                $project:
+                {
+                    name: 1,
+                    type: 1,
+                    language: 1,
+                    summary: 1,
+                    image: 1,
+                    genres: 1,
+                    premiered: 1,
+                    rating: 1,
+                    subscriptionWatched: {
+                        $filter: {
+                            input: "$subscriptionWatched",
+                            as: "subscription",
+                            cond: {
+                                $and: [
+                                    { $ne: ["$$subscription.subscriptionMovies", []] },
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                $lookup:
+                {
+                    from: "members",
+                    localField: "subscriptionWatched.memberId",
+                    foreignField: "_id",
+                    as: "members"
+                }
+            },
+            {
+                $addFields: {
+                    subscriptionWatched: {
+                        $map: {
+                            input: "$subscriptionWatched",
+                            as: "i",
+                            in: {
+                                $mergeObjects: [
+                                    "$$i",
+                                    {
+                                        $arrayElemAt: [
+                                            {
+                                                $filter: {
+                                                    input: "$members",
+                                                    cond: { $eq: ["$$this._id", "$$i.memberId"] }
+                                                }
+                                            },
+                                            0
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    members: "$$REMOVE"
+                }
+            },
+            {
+                $project:
+                {
+                    name: 1,
+                    type: 1,
+                    language: 1,
+                    summary: 1,
+                    image: 1,
+                    genres: 1,
+                    premiered: 1,
+                    rating: 1,
+                    subscriptionWatched: {
+                        $map: {
+                            input: "$subscriptionWatched",
+                            as: "member",
+                            in: {
+                                memberId: "$$member.memberId",
+                                name: "$$member.name",
+                                email: "$$member.email",
+                                city: "$$member.city",
+                                image: "$$member.image",
+                                dates: "$$member.subscriptionMovies.date"
+                            }
+                        }
+                    }
+                }
+            }
+        ]
+    ).exec();
 };
 
 // GET - Get Movie By Id - Read
@@ -410,6 +536,306 @@ const addMovie = async (obj) => {
     await movie.save();
     return 'Created';
 };
+
+const filter = [{
+    search: "Bi",
+    sort: "low",
+    type: ["Animation"],
+    genres: [
+        "Drama",
+        "Science-Fiction",
+        "Family"
+    ],
+    language: ["English", "Japanese", "Hebrew"],
+    premiered: "Last 10 years",
+    rating: 6.7
+}]
+
+const just_rating = {
+    search: "",
+    sort: "low",
+    type: [],
+    genres: [],
+    language: [],
+    premiered: "",
+    rating: 4.6
+}
+
+const search111 = "Some text";
+const sort112 = ["low", "high", "popularity", "type", "language"];
+
+const type334 = ["Scripted", "Reality", "Animation"];
+const genres5566 = [  // 21 options
+    "All", "Drama", "Science-Fiction", "Thriller", "Action", "Crime", "Horror", "Romance", "Adventure", "Espionage", "Music", "Mystery", "Supernatural",
+    "Fantasy", "Family", "Anime", "Comedy", "History", "Medical", "Legal", "Western"
+];
+const language7788 = ["English", "Japanese", "Hebrew"];
+const premiered99876 = 2014; // Number
+const rating89898 = 7.6; // Number
+
+// POST - filter Movies by Multiple Conditions
+const filterMovies = async (filter) => {
+    console.log(filter);
+
+    const type_arr = filter.type;
+    const genres_arr = filter.genres;
+    const language_arr = filter.language;
+    const premiered_year = filter.premiered;
+    const rating_movie = filter.rating;
+
+    const result = await Movie.aggregate(
+        [
+            {
+                $match: {
+                    $or: [
+                        {
+                            $expr: {
+                                $switch: {
+                                    branches: [
+                                        {
+                                            case: { $in: ["$type", type_arr] }, then: "$type"
+                                        },
+                                    ],
+                                    default: {
+                                        $and: [
+                                            { $eq: [type_arr, []] },
+                                            { $eq: [genres_arr, ["all"]] },
+                                            { $eq: [language_arr, []] },
+                                            { $eq: [premiered_year, ""] },
+                                            { $eq: [rating_movie, 0] }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            $expr: {
+                                $switch: {
+                                    branches: [
+                                        {
+                                            case: { $in: ["$language", language_arr] }, then: "$language"
+                                        },
+                                    ],
+                                    default: {
+                                        $and: [
+                                            { $eq: [type_arr, []] },
+                                            { $eq: [genres_arr, ["all"]] },
+                                            { $eq: [language_arr, []] },
+                                            { $eq: [premiered_year, ""] },
+                                            { $eq: [rating_movie, 0] }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            $expr: {
+                                $switch: {
+                                    branches: [
+                                        {
+                                            case: { $not: { $eq: [{ $setIntersection: ["$genres", genres_arr] }, []] } }, then: "$genres"
+                                        },
+                                    ],
+                                    default: {
+                                        $and: [
+                                            { $eq: [type_arr, []] },
+                                            { $eq: [genres_arr, ["all"]] },
+                                            { $eq: [language_arr, []] },
+                                            { $eq: [premiered_year, ""] },
+                                            { $eq: [rating_movie, 0] }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            $expr: {
+                                $switch: {
+                                    branches: [
+                                        {
+                                            case: {
+                                                $and: [
+                                                    { $gte: [{ $year: "$premiered" }, +premiered_year] },
+                                                    {
+                                                        $gte: ["$premiered", {
+                                                            $dateSubtract: {
+                                                                startDate: "$$NOW",
+                                                                unit: "year",
+                                                                amount: 30
+                                                            }
+                                                        }]
+                                                    },
+                                                    { $ne: [premiered_year, "Over 31 years"] },
+                                                    { $ne: [premiered_year, ""] }
+                                                ]
+                                            }, then: "$premiered"
+                                        },
+                                        {
+                                            case: {
+                                                $and: [
+                                                    { $eq: [premiered_year, "Over 31 years"] },
+                                                    { $gte: [{ $subtract: [{ $year: new Date() }, { $year: "$premiered" }] }, 31] }
+                                                ]
+                                            }, then: "$premiered"
+                                        }
+                                    ],
+                                    default: {
+                                        $and: [
+                                            { $eq: [type_arr, []] },
+                                            { $eq: [genres_arr, ["all"]] },
+                                            { $eq: [language_arr, []] },
+                                            { $eq: [premiered_year, ""] },
+                                            { $eq: [rating_movie, 0] }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            $expr: {
+                                $switch: {
+                                    branches: [
+                                        {
+                                            case: {
+                                                $and: [
+                                                    { $gte: ["$rating", rating_movie] },
+                                                    { $ne: [rating_movie, 0] }
+                                                ]                                                
+                                            }, then: "$rating"
+                                        },
+                                    ],
+                                    default: {
+                                        $and: [
+                                            { $eq: [type_arr, []] },
+                                            { $eq: [genres_arr, ["all"]] },
+                                            { $eq: [language_arr, []] },
+                                            { $eq: [premiered_year, ""] },
+                                            { $eq: [rating_movie, 0] }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            // {
+            //     $lookup:
+            //     {
+            //         from: 'subscriptions',
+            //         let: { id: "$_id" },
+            //         pipeline: [
+            //             {
+            //                 $project:
+            //                 {
+            //                     memberId: 1,
+            //                     subscriptionMovies: {
+            //                         $filter: {
+            //                             input: "$subscriptionMovies",
+            //                             cond: { $eq: ["$$movie.movieId", "$$id"] },
+            //                             as: "movie"
+            //                         }
+            //                     }
+            //                 }
+
+            //             }
+            //         ],
+            //         as: "subscriptionWatched"
+            //     }
+            // },
+            // {
+            //     $project:
+            //     {
+            //         name: 1,
+            //         type: 1,
+            //         language: 1,
+            //         summary: 1,
+            //         image: 1,
+            //         genres: 1,
+            //         premiered: 1,
+            //         rating: 1,
+            //         subscriptionWatched: {
+            //             $filter: {
+            //                 input: "$subscriptionWatched",
+            //                 as: "subscription",
+            //                 cond: {
+            //                     $and: [
+            //                         { $ne: ["$$subscription.subscriptionMovies", []] },
+            //                     ]
+            //                 }
+            //             }
+            //         }
+            //     }
+            // },
+            // {
+            //     $lookup:
+            //     {
+            //         from: "members",
+            //         localField: "subscriptionWatched.memberId",
+            //         foreignField: "_id",
+            //         as: "members"
+            //     }
+            // },
+            // {
+            //     $addFields: {
+            //         subscriptionWatched: {
+            //             $map: {
+            //                 input: "$subscriptionWatched",
+            //                 as: "i",
+            //                 in: {
+            //                     $mergeObjects: [
+            //                         "$$i",
+            //                         {
+            //                             $arrayElemAt: [
+            //                                 {
+            //                                     $filter: {
+            //                                         input: "$members",
+            //                                         cond: { $eq: ["$$this._id", "$$i.memberId"] }
+            //                                     }
+            //                                 },
+            //                                 0
+            //                             ]
+            //                         }
+            //                     ]
+            //                 }
+            //             }
+            //         },
+            //         members: "$$REMOVE"
+            //     }
+            // },
+            // {
+            //     $project:
+            //     {
+            //         name: 1,
+            //         type: 1,
+            //         language: 1,
+            //         summary: 1,
+            //         image: 1,
+            //         genres: 1,
+            //         premiered: 1,
+            //         rating: 1,
+            //         subscriptionWatched: {
+            //             $map: {
+            //                 input: "$subscriptionWatched",
+            //                 as: "member",
+            //                 in: {
+            //                     memberId: "$$member.memberId",
+            //                     name: "$$member.name",
+            //                     email: "$$member.email",
+            //                     city: "$$member.city",
+            //                     image: "$$member.image",
+            //                     dates: "$$member.subscriptionMovies.date"
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
+        ]
+    ).exec();
+    console.log(result);
+    return result;
+};
+
 
 // PUT - Update a Movie
 const updateMovie = async (id, obj, options) => {
@@ -456,8 +882,10 @@ module.exports = {
     getAllPopularMovies,
     getRelatedMovies,
     getAllMovies,
+    getMovieByIdWithSubscriptions,
     getMovieById,
     addMovie,
+    filterMovies,
     addManyMovies,
     updateMovie,
     deleteMovie,

@@ -20,11 +20,17 @@ const getRelatedMoviesWS = (id) => axios.get(`${MOVIES_WS_URL}/related-movies/${
 // GET - Get All Movies - Read
 const getAllMoviesWS = () => axios.get(`${MOVIES_WS_URL}`);
 
+// GET - Get Movie By Id With Subscription - Read
+const getMovieByIdWithSubscriptionsWS = (id) => axios.get(`${MOVIES_WS_URL}/movie-subscriptions/${id}`);
+
 // GET - Get Movie By Id - Read
 const getMovieByIdWS = (id) => axios.get(`${MOVIES_WS_URL}/${id}`);
 
 // POST - Create a Movie
 const addMovieWS = (obj) => axios.post(MOVIES_WS_URL, obj);
+
+// POST - Create a Movie
+const filterMoviesWS = (obj) => axios.post(`${MOVIES_WS_URL}/filter`, obj);
 
 // PUT - Update a Movie
 const updateMovieWS = (id, obj) => axios.put(`${MOVIES_WS_URL}/${id}`, obj);
@@ -37,8 +43,10 @@ module.exports = {
     getAllPopularMoviesWS,
     getRelatedMoviesWS,
     getAllMoviesWS,
+    getMovieByIdWithSubscriptionsWS,
     getMovieByIdWS,
     addMovieWS,
+    filterMoviesWS,
     updateMovieWS,
     deleteMovieWS,
 };

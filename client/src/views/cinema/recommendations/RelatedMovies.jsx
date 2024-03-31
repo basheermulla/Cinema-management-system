@@ -31,8 +31,7 @@ function SamplePrevArrow(props) {
     );
 }
 
-
-const RelatedMovies = ({ id }) => {
+const RelatedMovies = ({ id, isLoading, handleClickOpenSubscribeDialog }) => {
     const theme = useTheme();
     const [related, setRelated] = useState([]);
     const [itemsToShow, setItemsToShow] = useState(5);
@@ -47,7 +46,7 @@ const RelatedMovies = ({ id }) => {
     useEffect(() => {
         (async () => {
             await getRelatedMovies(id).then((response) => {
-                console.log(response.length);
+                console.log(response?.length);
                 setRelated(response);
                 setLoader(false);
             });
@@ -101,6 +100,7 @@ const RelatedMovies = ({ id }) => {
                     language={movie.language}
                     premiered={movie.premiered}
                     rating={movie.rating}
+                    handleClickOpenSubscribeDialog={handleClickOpenSubscribeDialog}
                 />
             </Box>
         ));
@@ -114,7 +114,9 @@ const RelatedMovies = ({ id }) => {
 };
 
 RelatedMovies.propTypes = {
-    id: PropTypes.string
+    id: PropTypes.string,
+    isLoading: PropTypes.bool,
+    handleClickOpenSubscribeDialog: PropTypes.func
 };
 
 export default RelatedMovies;

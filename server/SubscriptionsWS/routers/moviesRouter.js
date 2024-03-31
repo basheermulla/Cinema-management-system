@@ -43,12 +43,24 @@ router.get('/related-movies/:id', async (req, res) => {
     }
 });
 
-
 // Get All Movies
 router.get('/', async (req, res) => {
     try {
         const movies = await moviesBLL.getAllMovies();
         res.send(movies);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+});
+
+// GET - Get Movie By Id With Subscription - Read
+router.get('/movie-subscriptions/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const movie = await moviesBLL.getMovieByIdWithSubscriptions(id);
+        console.log(movie);
+        res.send(movie);
     } catch (error) {
         console.error(error);
         res.status(500).send(error);
@@ -72,6 +84,18 @@ router.post('/', async (req, res) => {
     try {
         const obj = req.body; // In use
         const result = await moviesBLL.addMovie(obj);
+        res.status(201).send(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+});
+
+// POST - filter Movies by Multiple Conditions
+router.post('/filter', async (req, res) => {
+    try {
+        const obj = req.body; // In use
+        const result = await moviesBLL.filterMovies(obj);
         res.status(201).send(result);
     } catch (error) {
         console.error(error);

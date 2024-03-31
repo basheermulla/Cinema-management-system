@@ -3,27 +3,26 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // material-ui
-import { Button, CardContent, CardMedia, Grid, Rating, Stack, Typography } from '@mui/material';
+import { CardContent, CardMedia, Grid, Rating, Typography, IconButton } from '@mui/material';
 
 // internal import
 import MainCard from './MainCard';
 import SkeletonMoviePlaceholder from './Skeleton/MoviePlaceholder';
-import { useDispatch, useSelector } from 'store';
-// import { addProduct } from 'store/slices/cart'; // =======||  todo  ||======= //
+import { useDispatch } from 'store';
+import AnimateButton from 'components/extended/AnimateButton';
 // import { openSnackbar } from 'store/slices/snackbar'; // =======||  todo  ||======= //
-import { getImageUrl, ImagePath } from 'utils/getImageUrl';
 
 // assets
-import ShoppingCartTwoToneIcon from '@mui/icons-material/ShoppingCartTwoTone'; // =======||  todo  ||======= //
+import { IconMovie, IconWorld, IconSquareRoundedPlusFilled, IconCircleLetterG, IconCalendarClock } from '@tabler/icons-react';
 
-const MovieCard = ({ id, name, genres, image, type, language, premiered, rating }) => {
+const MovieCard = ({ id, name, genres, image, type, language, premiered, rating, handleClickOpenSubscribeDialog }) => {
     const dispatch = useDispatch();
 
     const [movieRating] = useState(rating);
 
-    const handleRating = () => {
-        console.log('handleRating [Inside Movie Card] = Designate it to fill a rating');
-        // dispatch(subscribeMove(id));
+    const handleSubscribe = () => {
+        const movieId = { movieId: id };
+        handleClickOpenSubscribeDialog(movieId)
     }
 
     const [isLoading, setLoading] = useState(true);
@@ -44,66 +43,79 @@ const MovieCard = ({ id, name, genres, image, type, language, premiered, rating 
                             '&:hover': {
                                 transform: 'scale3d(1.02, 1.02, 1)',
                                 transition: 'all .4s ease-in-out'
-                            }
+                            },
+                            // height: '100%'
                         }}
                     >
-                        <CardMedia
-                            sx={{ height: 360 }}
-                            image={image.medium}
-                            title="Cinema Movie"
-                            component={Link}
-                            to={`/cinema/movies/movie-details/${id}`}
-                        />
-                        <CardContent sx={{ p: 2 }}>
+                        <Grid container justifyContent="space-between" height='100%' alignItems="center" >
                             <Grid container spacing={0}>
-                                <Grid item xs={12} sx={{ mb: 2 }}>
-                                    <Typography
+                                <Grid item xs={12}>
+                                    <CardMedia
+                                        sx={{ height: 520 }}
+                                        image={image.original}
+                                        title="Cinema Movie"
                                         component={Link}
                                         to={`/cinema/movies/movie-details/${id}`}
-                                        variant="subtitle1"
-                                        sx={{ textDecoration: 'none' }}
-                                    >
-                                        {name}
-                                    </Typography>
-                                    <Typography variant="h5" sx={{ color: 'grey.500' }}>({new Date(premiered).getFullYear()})</Typography>
-                                </Grid>
-                                <Grid container spacing={1}>
-                                    {
-                                        genres.map((genre, index) => (
-                                            <Grid key={index} item>
-                                                <Typography variant="p">
-                                                    {genre}
-                                                </Typography>
-
-                                            </Grid>)
-                                        )
-                                    }
-                                </Grid>
-                                <Grid container spacing={1}>
-                                    <Grid item>
-                                        <Typography variant="h5" sx={{ color: 'grey.500' }}>{type}, </Typography>
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography variant="h5" sx={{ color: 'grey.500' }}>{' ' + language}</Typography>
-                                    </Grid>
+                                    />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <Stack direction="row" justifyContent="space-between" alignItems="center">
-                                        <Grid item xs={12} sx={{ pt: '8px !important' }}>
-                                            <Stack direction="row" alignItems="center" spacing={1}>
-                                                <Rating precision={0.5} name="size-small" value={movieRating} size="small" readOnly />
-                                            </Stack>
+                                    <CardContent sx={{ p: 2 }}>
+                                        <Grid item container>
+                                            <Grid item xs={12} sx={{ mb: 1 }}>
+                                                <Typography
+                                                    component={Link}
+                                                    to={`/cinema/movies/movie-details/${id}`}
+                                                    variant="h4"
+                                                    sx={{ textDecoration: 'none' }}
+                                                >
+                                                    {name}
+                                                </Typography>
+                                                &nbsp;({new Date(premiered).getFullYear()})
+                                            </Grid>
+                                            <Grid item xs={12} sx={{ mb: 1 }}>
+                                                <Grid container direction="row" justifyContent="left" alignItems="center" sx={{ color: 'grey.500' }}>
+                                                    <IconMovie size={16} stroke={1} /> &nbsp; {type}
+                                                </Grid>
+                                            </Grid>
+                                            <Grid item xs={12} sx={{ mb: 1 }}>
+                                                <Grid container spacing={1}>
+                                                    <Grid item><IconCircleLetterG size={16} stroke={1} /></Grid>
+                                                    {
+                                                        genres.map((genre, index) => (
+                                                            <Grid key={index} item sx={{ color: 'grey.500' }}>
+                                                                <Typography variant="p">
+                                                                    {genre}
+                                                                </Typography>
+
+                                                            </Grid>)
+                                                        )
+                                                    }
+                                                </Grid>
+                                            </Grid>
+                                            <Grid item xs={12} sx={{ mb: 1 }}>
+                                                <Grid container direction="row" justifyContent="left" alignItems="center" sx={{ color: 'grey.500' }}>
+                                                    <IconWorld size={16} stroke={1} /> &nbsp; {language}
+                                                </Grid>
+                                            </Grid>
+                                            <Grid item xs={12} sx={{ mb: 1 }}>
+                                                <Grid container direction="row" sx={{ color: 'grey.500' }}>
+                                                    <Rating precision={0.1} name="size-small" value={movieRating} max={10} size="small" readOnly />
+                                                    <Typography>&nbsp;({rating})</Typography>
+                                                </Grid>
+                                            </Grid>
                                         </Grid>
-                                        <Button variant="contained" sx={{ minWidth: 0 }} onClick={handleRating} aria-label="Rating movie">
-                                            <ShoppingCartTwoToneIcon
-                                                fontSize="small" // =======||  todo  ||======= //
-                                            />
-                                        </Button>
-                                    </Stack>
+                                    </CardContent>
                                 </Grid>
                             </Grid>
-                        </CardContent>
-                    </MainCard>
+                            <Grid item xs={12} textAlign="center">
+                                <AnimateButton >
+                                    <IconButton color="primary" onClick={handleSubscribe} aria-label="Subscribe a movie">
+                                        <IconSquareRoundedPlusFilled size={36} />
+                                    </IconButton>
+                                </AnimateButton>
+                            </Grid>
+                        </Grid>
+                    </MainCard >
                 )
             }
         </>
@@ -123,7 +135,8 @@ MovieCard.propTypes = {
         PropTypes.instanceOf(Date),
     ]).isRequired
     ,
-    rating: PropTypes.string
+    rating: PropTypes.number,
+    handleClickOpenSubscribeDialog: PropTypes.func
 };
 
 export default MovieCard;
