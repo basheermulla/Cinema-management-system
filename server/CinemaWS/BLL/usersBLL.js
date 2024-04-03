@@ -10,7 +10,6 @@ const User = require('../models/userModel');
 
 // GET - Get All Users and Permissions
 const getAllUsersAndPermissionsData = async () => {
-    console.log('getAllUsersAndPermissionsData');
     // Get username from mongoDB Users Collection
     const users = await User.find();
     // Read users and permissions json file
@@ -35,7 +34,6 @@ const getAllUsersAndPermissionsData = async () => {
 
 // GET - Get User and Permission By User Id
 const getUserAndPermissionDataByUserId = async (id) => {
-    console.log('getUserAndPermissionDataByUserId = ', id);
     // Get username from mongoDB Users Collection
     const { _id, username } = await User.findById({ _id: id });
 
@@ -60,7 +58,6 @@ const getUserAndPermissionDataByUserId = async (id) => {
 
 // GET - Get All Users and Messages By User Id
 const getAllUsersAndMessagesByUserId = async (id) => {
-    console.log('getAllUsersAndMessagesByUserId = ', id);
     // Get username from mongoDB Users Collection
     const users = await User.aggregate(
         [
@@ -175,7 +172,6 @@ const getAllUsersAndMessagesByUserId = async (id) => {
 
 // POST - Create a User and Default Permission
 const addUserAndDefaultPermissionData = async (obj) => {
-    console.log('addUserAndDefaultPermissionData = ', obj);
     // Extract received data regarding the new user 
     const { username, user, permissionsUser } = obj
 
@@ -201,7 +197,6 @@ const addUserAndDefaultPermissionData = async (obj) => {
 
 // PUT - Update a User and Permission
 const updateUserAndPermissionData = async (id, obj, options) => {
-    console.log('updateUserAndPermissionData = ', id);
     // Extract received data regarding the user's updating 
     const { username, user, permissionsUser } = obj
 
@@ -231,7 +226,6 @@ const updateUserAndPermissionData = async (id, obj, options) => {
 
 // DELETE - Delete a User and Permission
 const deleteUserAndPermissionData = async (id) => {
-    console.log('deleteUserAndPermissionData = ', id);
     // Delete user [username and password] from mongoDB Users Collection
     await User.findByIdAndDelete(id);
 

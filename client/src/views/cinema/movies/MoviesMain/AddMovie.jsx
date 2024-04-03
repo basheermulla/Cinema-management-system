@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
-import { useDispatch } from 'store';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -23,6 +22,8 @@ import MainCard from 'components/cards/MainCard';
 import AnimateButton from 'components/extended/AnimateButton';
 import { gridSpacing } from 'utils/constant-theme';
 import { typeOptions, genresOptions } from '../MovieDetails/DataOptions';
+import { useDispatch, useSelector } from 'store';
+import { openSnackbar } from "store/slices/snackbar";
 
 // assets
 import HighlightOffTwoToneIcon from '@mui/icons-material/HighlightOffTwoTone';
@@ -77,25 +78,20 @@ const AddMovie = ({ open, handleCloseDialog, addMovie }) => {
         validationSchema,
         onSubmit: (values) => {
             addMovie(values);
+
+            dispatch(
+                openSnackbar({
+                    open: true,
+                    message: 'The movie ' + values.name + ' generated successfully 🙂',
+                    variant: 'alert',
+                    alert: {
+                        color: 'success'
+                    },
+                    close: false
+                })
+            );
+
             handleCloseDialog();
-
-            /************************************************************************************************
-            *                                                                                              *
-            *      todo -----> dispatch(openSnackbar({message: 'Radio - Update Success'}) [moviesBLL]      *
-            *                                                                                              *
-            *//********************************************************************************************/
-
-            // dispatch(
-            //     openSnackbar({
-            //         open: true,
-            //         message: 'Submit Success',
-            //         variant: 'alert',
-            //         alert: {
-            //             color: 'success'
-            //         },
-            //         close: false
-            //     })
-            // );
         }
     });
 
@@ -351,7 +347,7 @@ const AddMovie = ({ open, handleCloseDialog, addMovie }) => {
                                                 label="Japanese"
                                             />
                                             <FormControlLabel
-                                                value="Spanish"
+                                                value="Hebrew"
                                                 control={
                                                     <Radio
                                                         sx={{
@@ -360,7 +356,7 @@ const AddMovie = ({ open, handleCloseDialog, addMovie }) => {
                                                         }}
                                                     />
                                                 }
-                                                label="Spanish"
+                                                label="Hebrew"
                                             />
                                         </RadioGroup>
                                     </FormControl>

@@ -4,9 +4,8 @@ import { useState } from 'react';
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
-    Avatar, Box, ButtonBase, Collapse, Icon, IconButton, ListItemIcon, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-    Tooltip,
-    Typography
+    Avatar, Box, Collapse, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
+    Typography, Dialog, DialogActions, DialogContent, DialogContentText, Button
 } from '@mui/material';
 
 // internal imports
@@ -15,6 +14,7 @@ import { CSVExport } from '../MemberExports';
 import { header } from '../HeaderOptions';
 import SecondaryAction from 'components/cards/CardSecondaryAction';
 import AddSubscription from './AddSubscription';
+import useAuth from 'hooks/useAuth';
 
 // third-party
 import { parseISO } from 'date-fns';
@@ -29,9 +29,17 @@ import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DoneIcon from '@mui/icons-material/Done';
 import { Link } from 'react-router-dom';
 
-function MemberRowCollapsible({ ID, member, handleClickOpenMemberDialog, addSubscription, editSubscription, removeSubscription, removeMember, movies }) {
+function MemberRowCollapsible({ ID, member, handleClickOpenMemberDialog, addSubscription, editSubscription, removeSubscription, removeMember, movies, isOwnerCallback }) {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
+
+    // Dialog state
+    const [openDialog, setOpenDialog] = useState(false);
+    const [dialogRole, setDialogRole] = useState('');
+    const [helperDeleteSubscription, setHelperDeleteSubscription] = useState({ relatedMovie_length: -1, subscriptionId: '' })
+
+    // userLogin
+    const { user: userLogin } = useAuth();
 
     const subscriptionsMember_ToExport = [];
     member.relatedMovie.forEach((movie) => {
@@ -70,10 +78,39 @@ function MemberRowCollapsible({ ID, member, handleClickOpenMemberDialog, addSubs
                 handleClickOpenMemberDialog(member);
                 break;
             case "deleteMember":
-                removeMember(member._id);
+                setOpenDialog(true);
+                setDialogRole('member');
                 break;
             default:
                 break;
+        }
+    }
+
+    const handleDeleteSubscription = (relatedMovie_length, subscriptionId) => {
+        setHelperDeleteSubscription({ relatedMovie_length, subscriptionId });
+        setOpenDialog(true);
+        setDialogRole('subscription');
+    }
+    const handleDialog = () => {
+        console.log(helperDeleteSubscription);
+        dialogRole === 'member'
+            ? removeMember(member._id, member.name)
+            : helperDeleteSubscription.relatedMovie_length === 1
+                ? removeSubscription(member._id, helperDeleteSubscription.subscriptionId, "deleteSubscription")
+                : removeSubscription(member._id, helperDeleteSubscription.subscriptionId, "deleteOneMovie")
+
+        setOpenDialog(false);
+        setDialogRole('');
+    }
+
+    // Checking if a userLogin has a certain permission [View or Update or Create or Delete] for Subscriptions Model
+    let subscriptionCheck_Roles = (permission_action) => {
+        if (userLogin?.SubscriptionsRoles.includes(permission_action)) {
+            console.log('True');
+            return true;
+        } else {
+            console.log('False');
+            return false;
         }
     }
 
@@ -120,27 +157,29 @@ function MemberRowCollapsible({ ID, member, handleClickOpenMemberDialog, addSubs
                                         content={false}
                                         secondary={
                                             <Stack direction="row" spacing={2} alignItems="center">
-                                                <SecondaryAction
+                                                {subscriptionCheck_Roles('C') && <SecondaryAction
                                                     title="New Subscribe"
                                                     icon={<IconBellPlus />}
                                                     color="secondary"
                                                     action="addSubscription"
                                                     action_func={handleAction}
-                                                />
-                                                <SecondaryAction
-                                                    title="Edit Member"
-                                                    icon={<IconEditCircle />}
-                                                    color="info"
-                                                    action="updateMember"
-                                                    action_func={handleAction}
-                                                />
-                                                <SecondaryAction
-                                                    title="Delete Member"
-                                                    icon={<DeleteMember />}
-                                                    color="error"
-                                                    action="deleteMember"
-                                                    action_func={handleAction}
-                                                />
+                                                />}
+                                                {isOwnerCallback(userLogin?.permissionsUser) && <>
+                                                    <SecondaryAction
+                                                        title="Edit Member"
+                                                        icon={<IconEditCircle />}
+                                                        color="info"
+                                                        action="updateMember"
+                                                        action_func={handleAction}
+                                                    />
+                                                    <SecondaryAction
+                                                        title="Delete Member"
+                                                        icon={<DeleteMember />}
+                                                        color="error"
+                                                        action="deleteMember"
+                                                        action_func={handleAction}
+                                                    />
+                                                </>}
                                                 {member.relatedMovie[0].date !== undefined && <>
                                                     <CSVExport
                                                         data={subscriptionsMember_ToExport?.map((relatedMovieRow) => relatedMovieRow)}
@@ -205,27 +244,22 @@ function MemberRowCollapsible({ ID, member, handleClickOpenMemberDialog, addSubs
                                                                 </IconButton>
                                                                 :
                                                                 <>
-                                                                    <IconButton
+                                                                    {subscriptionCheck_Roles('D') && <IconButton
                                                                         color="secondary"
-                                                                        onClick={() => {
-                                                                            member.relatedMovie.length === 1
-                                                                            ? removeSubscription(member._id, relatedMovieRow.subscriptionId, "deleteSubscription")
-                                                                            : removeSubscription(member._id, relatedMovieRow.subscriptionId, "deleteOneMovie")
-                                                                            console.log(member.relatedMovie.length);
-                                                                        }}
+                                                                        onClick={() => handleDeleteSubscription(member.relatedMovie.length, relatedMovieRow.subscriptionId)}
                                                                         size="large"
-                                                                        aria-label="edit"
+                                                                        aria-label="remove"
                                                                     >
                                                                         <DeleteMember sx={{ fontSize: '1.3rem' }} color="error" />
-                                                                    </IconButton>
-                                                                    <IconButton
+                                                                    </IconButton>}
+                                                                    {subscriptionCheck_Roles('U') && <IconButton
                                                                         color="secondary"
                                                                         onClick={() => handleClickOpenSubscribeDialog(relatedMovieRow)}
                                                                         size="large"
                                                                         aria-label="edit"
                                                                     >
                                                                         <EditTwoToneIcon sx={{ fontSize: '1.3rem' }} />
-                                                                    </IconButton>
+                                                                    </IconButton>}
                                                                 </>
                                                             }
                                                         </TableCell>
@@ -249,6 +283,27 @@ function MemberRowCollapsible({ ID, member, handleClickOpenMemberDialog, addSubs
                 editSubscription={editSubscription}
                 movies={movies}
             />
+            <Dialog open={openDialog}>
+                <DialogContent>
+                    {dialogRole === 'member' ?
+                        <DialogContentText sx={{ fontWeight: 500, color: 'secondary.dark' }}>
+                            Are you sure you want to delete this member? <br /><br />
+                            {member.name}
+                        </DialogContentText>
+                        :
+                        <DialogContentText sx={{ fontWeight: 500, color: 'secondary.dark' }}>
+                            Are you sure you want to delete this subscription?
+                        </DialogContentText>}
+                </DialogContent>
+                <DialogActions sx={{ pr: '20px' }}>
+                    <Button autoFocus variant='contained' onClick={handleDialog}>
+                        Ok
+                    </Button>
+                    <Button autoFocus variant='contained' color='error' onClick={() => { setOpenDialog(false); setDialogRole(''); }}>
+                        Cancel
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </>
     );
 }
@@ -261,7 +316,8 @@ MemberRowCollapsible.propTypes = {
     editSubscription: PropTypes.func,
     removeSubscription: PropTypes.func,
     removeMember: PropTypes.func,
-    movies: PropTypes.array
+    movies: PropTypes.array,
+    isOwnerCallback: PropTypes.func
 };
 
 export default MemberRowCollapsible;

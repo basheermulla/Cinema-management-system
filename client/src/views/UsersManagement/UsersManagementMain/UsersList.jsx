@@ -1,13 +1,17 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Chip, Divider, Grid, IconButton, Skeleton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip } from '@mui/material';
+import {
+    Chip, Divider, Grid, IconButton, Skeleton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip,
+    Dialog, DialogActions, DialogContent, DialogContentText, Button
+} from '@mui/material';
 
 // internal imports
 import Avatar from 'components/extended/Avatar';
+import useAuth from 'hooks/useAuth';
 
 // third-party
 import { format } from 'date-fns';
@@ -16,10 +20,30 @@ import { format } from 'date-fns';
 import DeleteMember from '@mui/icons-material/Delete';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 
-const UsersList = ({ users, removeUser, userLoading }) => {
+const UsersList = ({ users, removeUser, userLoading, isOwnerCallback }) => {
+
+    // Dialog state
+    const [openDialog, setOpenDialog] = useState(false);
+    const [usertoDelete, setUsertoDelete] = useState({ userId: '', fullName: '' });
+
     const theme = useTheme();
 
     const navigate = useNavigate();
+
+    // userLogin
+    const { user: userLogin } = useAuth();
+
+    const handleDelete = (userId, fullName) => {
+        console.log(userId, fullName);
+        setUsertoDelete({ userId, fullName });
+        setOpenDialog(true);
+    }
+
+    const handleDialog = () => {
+        setOpenDialog(false);
+        removeUser(usertoDelete.userId, usertoDelete.fullName);
+        setUsertoDelete({ userId: '', fullName: '' });
+    }
 
     let permissionsResult = <></>;
     const permissionAdapter = (action, model) => {
@@ -174,11 +198,11 @@ const UsersList = ({ users, removeUser, userLoading }) => {
                                     </Grid>
                                 </TableCell>
                                 <TableCell align="center" sx={{ pr: 3 }}>
-                                    <Stack direction="row" justifyContent="center" alignItems="center">
+                                    {isOwnerCallback(userLogin?.permissionsUser) && <Stack direction="row" justifyContent="center" alignItems="center">
                                         <Tooltip placement="top" title="Delete">
                                             <IconButton
                                                 color="primary"
-                                                onClick={() => removeUser(user._id)}
+                                                onClick={() => handleDelete(user._id, user.user.firstName + ' ' + user.user.lastName)}
                                                 aria-label="delete"
                                                 size="large"
                                             >
@@ -194,12 +218,28 @@ const UsersList = ({ users, removeUser, userLoading }) => {
                                                 <EditTwoToneIcon sx={{ fontSize: '1.1rem' }} />
                                             </IconButton>
                                         </Tooltip>
-                                    </Stack>
+                                    </Stack>}
                                 </TableCell>
                             </TableRow>
                         ))}
                 </TableBody>
             </Table>
+            <Dialog open={openDialog}>
+                <DialogContent>
+                    <DialogContentText sx={{ fontWeight: 500, color: 'secondary.dark' }}>
+                        Are you sure you want to delete this user? <br /><br />
+                        {usertoDelete.fullName }
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions sx={{ pr: '20px' }}>
+                    <Button autoFocus variant='contained' onClick={handleDialog}>
+                        Ok
+                    </Button>
+                    <Button autoFocus variant='contained' color='error' onClick={() => { setOpenDialog(false); setUsertoDelete({ userId: '', fullName: '' }); }}>
+                        Cancel
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </TableContainer>
     );
 };
@@ -207,7 +247,8 @@ const UsersList = ({ users, removeUser, userLoading }) => {
 UsersList.propTypes = {
     users: PropTypes.array,
     removeUser: PropTypes.func,
-    userLoading: PropTypes.bool
+    userLoading: PropTypes.bool,
+    isOwnerCallback: PropTypes.func
 };
 
 export default UsersList;

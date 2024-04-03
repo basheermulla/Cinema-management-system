@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'store';
 import { useLoaderData, useNavigate, useParams, useLocation } from 'react-router-dom';
 
 // material-ui
@@ -19,6 +18,8 @@ import SubCard from 'components/cards/SubCard';
 import AnimateButton from 'components/extended/AnimateButton';
 import { gridSpacing } from 'utils/constant-theme';
 import { getDesireUserById, createUser, updateUser } from 'store/slices/user';
+import { useDispatch, useSelector } from 'store';
+import { openSnackbar } from "store/slices/snackbar";
 
 // assets
 import HighlightOffTwoToneIcon from '@mui/icons-material/HighlightOffTwoTone';
@@ -126,6 +127,17 @@ const AddEditUser = () => {
                 }
                 console.log(obj_user)
                 dispatch(updateUser({ _id: userEdit._id }, obj_user));
+                dispatch(
+                    openSnackbar({
+                        open: true,
+                        message: 'User of ' + values.user.firstName + ' ' + values.user.lastName + ' updated successfully 🙂',
+                        variant: 'alert',
+                        alert: {
+                            color: 'success'
+                        },
+                        close: false
+                    })
+                );
             } else {
                 // Generate new user
                 const obj_user = { 
@@ -135,28 +147,21 @@ const AddEditUser = () => {
                 }
                 console.log(obj_user)
                 dispatch(createUser(obj_user));
+                dispatch(
+                    openSnackbar({
+                        open: true,
+                        message: 'User for ' + values.user.firstName + ' ' + values.user.lastName + ' generated successfully 🙂',
+                        variant: 'alert',
+                        alert: {
+                            color: 'success'
+                        },
+                        close: false
+                    })
+                );
             }
 
             navigate('/management/users')
             resetForm();
-
-            /************************************************************************************************
-            *                                                                                              *
-            *      todo -----> dispatch(openSnackbar({message: 'Submit Success'})                          *
-            *                                                                                              *
-            *//********************************************************************************************/
-
-            // dispatch(
-            //     openSnackbar({
-            //         open: true,
-            //         message: 'Submit Success',
-            //         variant: 'alert',
-            //         alert: {
-            //             color: 'success'
-            //         },
-            //         close: false
-            //     })
-            // );
         }
     });
 

@@ -30,6 +30,8 @@ import { createSubscription } from 'store/slices/member';
 import AddMovie from './AddMovie';
 import AddSubscriptionByMember from './AddSubscriptionByMember';
 
+import useAuth from 'hooks/useAuth';
+
 // assets
 import SearchIcon from '@mui/icons-material/Search';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
@@ -80,13 +82,16 @@ const MoviesMain = () => {
         setOpen((prevState) => !prevState);
     };
 
+    // userLogin
+    const { user: userLogin } = useAuth();
+
     // movies data
     const initialMovies = useLoaderData();
     const [movies, setMovies] = useState(initialMovies);
-    
+
     // members data
     const initialMembers = useSelector((state) => state.members);
-    const [members, setMembers] = useState(initialMembers.subscriptions.map((member) => ({_id: member._id, name: member.name})));
+    const [members, setMembers] = useState(initialMembers.subscriptions.map((member) => ({ _id: member._id, name: member.name })));
 
     // filter
     const initialState = {
@@ -108,7 +113,6 @@ const MoviesMain = () => {
 
     // search filter
     const handleSearch = async (event) => { ////////////////////////////////*************************** Search */
-        console.log(event?.target.value);
         const newString = event?.target.value;
         setFilterSearchAndSort({ ...filterSearchAndSort, search: newString });
     };
@@ -232,6 +236,24 @@ const MoviesMain = () => {
 
     const sortLabel = SortOptions.filter((items) => items.value === filterSearchAndSort.sort);
 
+    // Checking if a userLogin has a certain permission [View or Update or Create or Delete] for Movies Model
+    let moviesCheck_Roles = (permission_action) => {
+        if (userLogin?.MoviesRoles.includes(permission_action)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // Checking if a userLogin has a certain permission [View or Update or Create or Delete] for Subscriptions Model
+    let subscriptionCheck_Roles = (permission_action) => {
+        if (userLogin?.SubscriptionsRoles.includes(permission_action)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     let movieResult = <></>;
     if (movies && movies.length > 0) {
         movieResult = [...movies].filter((item) => item.name.toLowerCase().includes(filterSearchAndSort.search.toLowerCase())).sort((movie_A, movie_B) => {
@@ -243,7 +265,6 @@ const MoviesMain = () => {
                 case "rating":
                     return (+movie_B.rating) - (+movie_A.rating);
                 case "premiered":
-                    console.log("premiered");
                     return -(movie_A.premiered.localeCompare(movie_B.premiered));
                 default:
                     break;
@@ -260,6 +281,7 @@ const MoviesMain = () => {
                     premiered={movie.premiered}
                     rating={movie.rating}
                     handleClickOpenSubscribeDialog={handleClickOpenSubscribeDialog}
+                    subscriptionCheck_RolesCallback={subscriptionCheck_Roles}
                 />
             </Grid>
         ));
@@ -300,7 +322,7 @@ const MoviesMain = () => {
                     <Grid item>
                         <Stack direction="row" alignItems="center" justifyContent="center" spacing={{ xs: 0.5, sm: 1, md: 1.5 }}>
                             {/* product add & dialog */}
-                            <Tooltip title="Add Product">
+                            {moviesCheck_Roles('C') && <Tooltip title="Add Movie">
                                 <Fab
                                     color="primary"
                                     size="small"
@@ -309,7 +331,7 @@ const MoviesMain = () => {
                                 >
                                     <AddIcon fontSize="small" />
                                 </Fab>
-                            </Tooltip>
+                            </Tooltip>}
                             <TextField
                                 sx={{ width: { xs: 140, md: 'auto' } }}
                                 InputProps={{

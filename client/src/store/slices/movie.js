@@ -39,12 +39,12 @@ export default slice.reducer;
 export async function loader() {
     try {
         let token = window.localStorage.getItem('accessToken');
-        console.log('<=== Movies Loader ===>');
+        // console.log('<=== Movies Loader ===>');
         const response = await axios.get(`${MOVIES_URL}`, { headers: { "Authorization": `Bearer ${token}` } });
-        console.log(response.data);
         dispatch(slice.actions.getMoviesSuccess(response.data));
         return response.data;
     } catch (error) {
+        dispatch(slice.actions.hasError(error));
         return error;
     }
 }
@@ -53,12 +53,11 @@ export async function movieLoader({ params }) {
     try {
         let token = window.localStorage.getItem('accessToken');
         const id = params.id;
-        console.log('<=== M o v i e Loader ===> ', params);
+        // console.log('<=== M o v i e Loader ===> ', params);
         const response = await axios.get(`${MOVIES_URL}/movie-subscriptions/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
-        console.log('<=== M o v i e Loader ===> ', response.data);
         return response.data;
     } catch (error) {
-        return error;
+        dispatch(slice.actions.hasError(error));
     }
 }
 
@@ -71,20 +70,20 @@ export async function filterMovies(filter) {
         const response = await axios.post(`${MOVIES_URL}/filter`,filter , { headers: { "Authorization": `Bearer ${token}` } });
         return response.data;
     } catch (error) {
-        console.error(error);
+        dispatch(slice.actions.hasError(error));
     }
 }
 
 export async function getRelatedMovies(id) {
     try {
         let token = window.localStorage.getItem('accessToken');
-        console.log('<=== M o v i e getRelatedMovies ===> ', id);
+        // console.log('<=== M o v i e getRelatedMovies ===> ', id);
         if (id) {            
             const response = await axios.get(`${MOVIES_URL}/related-movies/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
             return response.data;
         }
     } catch (error) {
-        return error;
+        dispatch(slice.actions.hasError(error));
     }
 }
 
@@ -92,10 +91,10 @@ export function createMovie(movie) {
     return async () => {
         try {
             let token = window.localStorage.getItem('accessToken');
-            console.log('Here we create movie');
+            // console.log('Here we create movie');
             const response = await axios.post(`${MOVIES_URL}`, movie, { headers: { "Authorization": `Bearer ${token}` } });
         } catch (error) {
-            console.error(error);
+            dispatch(slice.actions.hasError(error));
         }
     };
 }
@@ -106,7 +105,7 @@ export function updateMovie(id, movie) {
             let token = window.localStorage.getItem('accessToken');
             const response = await axios.put(`${MOVIES_URL}/${id}`, movie, { headers: { "Authorization": `Bearer ${token}` } });
         } catch (error) {
-            console.error(error);
+            dispatch(slice.actions.hasError(error));
         }
     };
 }
@@ -115,11 +114,10 @@ export function deleteMovie(id) {
     return async () => {
         try {
             let token = window.localStorage.getItem('accessToken');
-            console.log('Pay attention - You may delete the movie');
-            // const response = await axios.delete(`${MOVIES_URL}/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
-            // console.log(response);
+            // console.log('Pay attention - You may delete the movie');
+            const response = await axios.delete(`${MOVIES_URL}/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
         } catch (error) {
-            console.error(error);
+            dispatch(slice.actions.hasError(error));
         }
     };
 }

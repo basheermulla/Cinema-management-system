@@ -38,7 +38,6 @@ router.get('/:id', verifyToken, async (req, res) => {
 router.post('/', verifyToken, async (req, res) => {
     try {
         const obj = req.body; // In use
-        console.log('obj = ', obj);
         const result = await conversationsBLL.addConversation(obj);
         res.status(201).send(result);
     } catch (error) {

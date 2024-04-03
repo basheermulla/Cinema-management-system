@@ -41,7 +41,7 @@ router.get('/subscriptionsUnwind', verifyToken, async (req, res) => {
 router.get('/', verifyToken, async (req, res) => {
     try {
         const members = await membersBLL.getAllMembers();
-        console.log('Hi from server and your accessToken is: ', req.headers['authorization']);
+        // console.log('Hi from server and your accessToken is: ', req.headers['authorization']);
         res.send(members);
     } catch (error) {
         console.error(error);

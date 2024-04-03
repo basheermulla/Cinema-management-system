@@ -12,11 +12,13 @@ import { createFilterOptions } from '@mui/material/Autocomplete';
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
-// project imports
+// internal imports
 import SubCard from 'components/cards/SubCard';
 import AnimateButton from 'components/extended/AnimateButton';
 import { gridSpacing } from 'utils/constant-theme';
 import { typeOptions, genresOptions } from './DataOptions';
+import { useDispatch, useSelector } from 'store';
+import { openSnackbar } from "store/slices/snackbar";
 
 // third-party
 import { useFormik, getIn } from 'formik';
@@ -51,7 +53,7 @@ const validationSchema = yup.object({
 });
 
 const MovieUpdate = ({ movie, editMovie }) => {
-
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const formik = useFormik({
@@ -71,24 +73,20 @@ const MovieUpdate = ({ movie, editMovie }) => {
         validationSchema,
         onSubmit: (values) => {
             editMovie(movie._id, values)
-            navigate(-1);
 
-            /************************************************************************************************
-             *                                                                                              *
-             *      todo -----> dispatch(openSnackbar({message: 'Radio - Update Success'}) [moviesBLL]      *
-             *                                                                                              *
-             *//********************************************************************************************/
-            // dispatch(
-            //     openSnackbar({
-            //         open: true,
-            //         message: 'Radio - Submit Success',
-            //         variant: 'alert',
-            //         alert: {
-            //             color: 'success'
-            //         },
-            //         close: false
-            //     })
-            // );
+            dispatch(
+                openSnackbar({
+                    open: true,
+                    message: 'Update Movie Success',
+                    variant: 'alert',
+                    alert: {
+                        color: 'success'
+                    },
+                    close: false
+                })
+            );
+
+            navigate(-1);
         }
     });
 
@@ -337,7 +335,7 @@ const MovieUpdate = ({ movie, editMovie }) => {
                                                     label="Japanese"
                                                 />
                                                 <FormControlLabel
-                                                    value="Spanish"
+                                                    value="Hebrew"
                                                     control={
                                                         <Radio
                                                             sx={{
@@ -346,7 +344,7 @@ const MovieUpdate = ({ movie, editMovie }) => {
                                                             }}
                                                         />
                                                     }
-                                                    label="Spanish"
+                                                    label="Hebrew"
                                                 />
                                             </RadioGroup>
                                         </FormControl>

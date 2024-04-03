@@ -4,7 +4,6 @@ import { createSlice } from '@reduxjs/toolkit';
 // internal imports
 import axios from 'axios';
 import { dispatch } from '../index';
-import useSocket from 'hooks/useSocket';
 
 const USERS_URL = import.meta.env.VITE_APP_USERS_URL;
 const MOVIES_URL = import.meta.env.VITE_APP_MOVIES_URL;
@@ -38,7 +37,7 @@ export async function loader() {
 
         // Optional optimization - to reduce the number of requests to the server, in my case, I have chosen the following way for learning
         let token = window.localStorage.getItem('accessToken');
-        console.log('<=== Dashboard Loader ===>');        
+        // console.log('<=== Dashboard Loader ===>');        
         const { data } = await axios.get(`${MEMBERS_URL}/subscriptionsUnwind`, { headers: { "Authorization": `Bearer ${token}` } });
         const users = await axios.get(`${USERS_URL}`, { headers: { "Authorization": `Bearer ${token}` } });
         const popular_movies = await axios.get(`${MOVIES_URL}/mostPopular`, { headers: { "Authorization": `Bearer ${token}` } });
@@ -49,6 +48,7 @@ export async function loader() {
         data.yearlySubscriptionsData = yearlySubscriptionsData.data;
         return data;
     } catch (error) {
+        dispatch(slice.actions.hasError(error));
         return error;
     }
 };

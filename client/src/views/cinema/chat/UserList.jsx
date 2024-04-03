@@ -18,7 +18,6 @@ const UserList = ({ alterUserDisplay, messageSocket, onlineUsers, setTypingStatu
     const { usersMoreInfo } = useSelector((state) => state.chat);
 
     useEffect(() => {
-        console.log(onlineUsers);
         dispatch(getUsersWithChatsData(userLogin?.id));
     }, [userLogin?.id]);
 
@@ -41,7 +40,7 @@ const UserList = ({ alterUserDisplay, messageSocket, onlineUsers, setTypingStatu
 
             setData((prevData) => new_data);
         } else {
-            messageSocket.length ? console.log('I got message but it still un read ', messageSocket.length) : null
+            // messageSocket.length ? console.log('I got message but it still un read ', messageSocket.length) : null
         }
     }, [messageSocket]);
 

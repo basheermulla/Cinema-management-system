@@ -69,7 +69,7 @@ export function getUsersWithChatsData(id) {
     return async () => {
         try {
             let token = window.localStorage.getItem('accessToken');
-            console.log('<=== Users getUsersWithChatsData ===> ', id);
+            // console.log('<=== Users getUsersWithChatsData ===> ', id);
             const response = await axios.get(`${USERS_URL}/chats/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
             dispatch(slice.actions.getUsersMoreInfoSuccess(response.data));
         } catch (error) {
@@ -88,7 +88,7 @@ export function getUserChats(userLoginId, userId) {
     return async () => {
         try {
             let token = window.localStorage.getItem('accessToken');
-            console.log('<=== Messages getUserChats ===> ', userLoginId, userId);
+            // console.log('<=== Messages getUserChats ===> ', userLoginId, userId);
             if (userLoginId && userId) {
                 //=====================================================================================================================
                 // Get all chats between two users [userLoginId, userId] and set the chats array in the  ===>  cinema server/messages =
@@ -143,7 +143,7 @@ export function setReadChatByRecipient(obj_updateIsReadMessage, incomingMessageI
     return async () => {
         try {
             let token = window.localStorage.getItem('accessToken');
-            console.log('<=== Messages setReadChatByRecipient ===> ', obj_updateIsReadMessage, incomingMessageId);
+            // console.log('<=== Messages setReadChatByRecipient ===> ', obj_updateIsReadMessage, incomingMessageId);
 
             //================================================================================================
             // Update boolean value of isReadByRecipient               ===>       mongo DB / messages        =
@@ -171,7 +171,7 @@ export function insertChat(newMessage) {
     return async () => {
         try {
             let token = window.localStorage.getItem('accessToken');
-            console.log('<=== Messages insertChat ===> ', newMessage);
+            // console.log('<=== Messages insertChat ===> ', newMessage);
 
             //====================================================================================================================
             //      insert to the                       ===>                          mongo DB /messages                         =

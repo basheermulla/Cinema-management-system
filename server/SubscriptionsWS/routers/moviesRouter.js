@@ -59,7 +59,6 @@ router.get('/movie-subscriptions/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const movie = await moviesBLL.getMovieByIdWithSubscriptions(id);
-        console.log(movie);
         res.send(movie);
     } catch (error) {
         console.error(error);

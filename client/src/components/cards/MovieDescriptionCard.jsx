@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Button, CardMedia, Divider, Grid, Rating, Stack, Typography } from '@mui/material';
+import { Button, CardMedia, Divider, Grid, Rating, Stack, Typography, Dialog, DialogActions, DialogContent, DialogContentText } from '@mui/material';
 
 // third-party
 import { format } from 'date-fns';
@@ -13,6 +13,8 @@ import { format } from 'date-fns';
 import MainCard from './MainCard';
 import SubCard from './SubCard';
 import AnimateButton from 'components/extended/AnimateButton';
+import useAuth from 'hooks/useAuth';
+import { useDispatch, useSelector } from 'store';
 
 // assets
 import StarTwoToneIcon from '@mui/icons-material/StarTwoTone';
@@ -20,10 +22,14 @@ import StarBorderTwoToneIcon from '@mui/icons-material/StarBorderTwoTone';
 import { IconMovie, IconWorld, IconSquareRoundedPlusFilled, IconCircleLetterG, IconCalendarClock } from '@tabler/icons-react';
 
 
-const MovieDescriptionCard = ({ id, name, genres, image, type, language, summary, premiered, rating, removeMovie }) => {
+const MovieDescriptionCard = ({ id, name, genres, image, type, language, summary, premiered, rating, removeMovie, moviesCheck_RolesCallback }) => {
     const theme = useTheme();
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    // userLogin
+    const { user: userLogin } = useAuth();
 
     const stripHtmlTags = (input) => {
         const regex = /(<([^>]+)>)/gi;
@@ -34,7 +40,17 @@ const MovieDescriptionCard = ({ id, name, genres, image, type, language, summary
     const [number, setNumber] = useState(rating)
 
     const handleDelete = () => {
-        removeMovie(id);
+        setOpenDialog(true);
+    }
+    
+    // Dialog state
+    const [openDialog, setOpenDialog] = useState(false);
+    
+    const handleDialog = () => {
+        setOpenDialog(false);
+        removeMovie(id, name);
+        navigate(-1);
+
     }
 
     return (
@@ -130,7 +146,7 @@ const MovieDescriptionCard = ({ id, name, genres, image, type, language, summary
                             </Grid>
                             <Grid item xs={12} sx={{ mb: 1 }}>
                                 <Stack direction="row" alignItems="center" spacing={2}>
-                                    <AnimateButton>
+                                    {moviesCheck_RolesCallback('D') && <AnimateButton>
                                         <Button
                                             type="button"
                                             variant="contained"
@@ -139,7 +155,7 @@ const MovieDescriptionCard = ({ id, name, genres, image, type, language, summary
                                         >
                                             Delete
                                         </Button>
-                                    </AnimateButton>
+                                    </AnimateButton>}
                                     <AnimateButton>
                                         <Button
                                             type="button"
@@ -156,6 +172,23 @@ const MovieDescriptionCard = ({ id, name, genres, image, type, language, summary
                     </SubCard>
                 </Grid>
             </Grid >
+            <Dialog open={openDialog}>
+                <DialogContent>
+                    <DialogContentText sx={{ fontWeight: 500, color: 'secondary.dark' }}>
+                        Are you sure you want to delete this movie? <br /><br />
+                        {name}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions sx={{ pr: '20px' }}>
+                    <Button autoFocus variant='contained' onClick={handleDialog}>
+                        Ok
+                    </Button>
+                    <Button autoFocus variant='contained' color='error' onClick={() => setOpenDialog(false)}>
+                        Cancel
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
         </MainCard >
     );
 };
@@ -174,7 +207,8 @@ MovieDescriptionCard.propTypes = {
         PropTypes.instanceOf(Date),
     ]).isRequired,
     rating: PropTypes.number,
-    removeMovie: PropTypes.func
+    removeMovie: PropTypes.func,
+    moviesCheck_RolesCallback: PropTypes.func
 };
 
 export default MovieDescriptionCard;

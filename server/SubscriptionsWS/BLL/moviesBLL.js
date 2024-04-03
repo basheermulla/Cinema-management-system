@@ -235,8 +235,6 @@ const getAllPopularMovies = async () => {
 
 // GET - Get Related Movies by User Id - Read
 const getRelatedMovies = async (memberId) => {
-    console.log(memberId);
-
     const result = await Member.aggregate(
         [
             {
@@ -387,9 +385,7 @@ const getRelatedMovies = async (memberId) => {
 
     const movies_indexes = result[0].subscriptions.map((movie, index) => (movie.movieId));
     const memberId_index = result.findIndex((member) => member.memberId.toHexString() === memberId);
-    console.log(memberId_index);
     const recommendations = recommend.cFilter(matrix, memberId_index);
-    console.log(recommendations);
 
     const movies = recommendations.map((index) => (movies_indexes[index]))
 
@@ -575,8 +571,6 @@ const rating89898 = 7.6; // Number
 
 // POST - filter Movies by Multiple Conditions
 const filterMovies = async (filter) => {
-    console.log(filter);
-
     const type_arr = filter.type;
     const genres_arr = filter.genres;
     const language_arr = filter.language;
@@ -832,7 +826,6 @@ const filterMovies = async (filter) => {
             // }
         ]
     ).exec();
-    console.log(result);
     return result;
 };
 

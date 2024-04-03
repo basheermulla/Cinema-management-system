@@ -27,7 +27,6 @@ router.get('/', verifyToken, async (req, res) => {
 router.get('/:id', verifyToken, async (req, res) => {
     try {
         const { id } = req.params;
-        // console.log(req.params);
         const message = await messagesBLL.getMessageById(id);
         res.send(message);
     } catch (error) {
@@ -42,7 +41,6 @@ router.get('/:userLoginId/:userId', verifyToken, async (req, res) => {
         const { userLoginId, userId } = req.params;
         
         const messages = await messagesBLL.getChatsByBoth_UserLoginId_userId(userLoginId, userId);
-        // console.log('messages = ', messages);
         res.send(messages);
     } catch (error) {
         console.error(error);
@@ -80,7 +78,6 @@ router.put('/:id', verifyToken, async (req, res) => {
 router.put('/:userLoginId/:userId', verifyToken, async (req, res) => {
     try {
         const { userLoginId, userId } = req.params;
-        console.log(req.params);
         const result = await messagesBLL.updateReadChatsByUser(userLoginId, userId);
         res.send(result);
     } catch (error) {

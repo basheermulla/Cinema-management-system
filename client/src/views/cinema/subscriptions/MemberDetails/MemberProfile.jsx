@@ -19,6 +19,7 @@ import MainCard from 'components/cards/MainCard';
 import AnimateButton from 'components/extended/AnimateButton';
 import Avatar from 'components/extended/Avatar';
 import { gridSpacing } from 'utils/constant-theme';
+import { openSnackbar } from "store/slices/snackbar";
 
 // assets
 import Avatar1 from 'assets/images/users/avatar-1.png';
@@ -51,25 +52,20 @@ const MemberProfile = ({ member, editMember }) => {
         validationSchema,
         onSubmit: (values, { resetForm }) => {
             editMember(member._id, values);
+
+            dispatch(
+                openSnackbar({
+                    open: true,
+                    message: 'Member of ' + values.name + ' updated successfully 🙂',
+                    variant: 'alert',
+                    alert: {
+                        color: 'success'
+                    },
+                    close: false
+                })
+            );
+
             navigate(-1);           
-
-            /************************************************************************************************
-            *                                                                                              *
-            *      todo -----> dispatch(openSnackbar({message: 'Submit Success'})                          *
-            *                                                                                              *
-            *//********************************************************************************************/
-
-            // dispatch(
-            //     openSnackbar({
-            //         open: true,
-            //         message: 'Submit Success',
-            //         variant: 'alert',
-            //         alert: {
-            //             color: 'success'
-            //         },
-            //         close: false
-            //     })
-            // );
         }
     });
 

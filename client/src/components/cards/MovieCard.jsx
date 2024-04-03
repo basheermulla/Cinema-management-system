@@ -10,15 +10,19 @@ import MainCard from './MainCard';
 import SkeletonMoviePlaceholder from './Skeleton/MoviePlaceholder';
 import { useDispatch } from 'store';
 import AnimateButton from 'components/extended/AnimateButton';
+import useAuth from 'hooks/useAuth';
 // import { openSnackbar } from 'store/slices/snackbar'; // =======||  todo  ||======= //
 
 // assets
 import { IconMovie, IconWorld, IconSquareRoundedPlusFilled, IconCircleLetterG, IconCalendarClock } from '@tabler/icons-react';
 
-const MovieCard = ({ id, name, genres, image, type, language, premiered, rating, handleClickOpenSubscribeDialog }) => {
+const MovieCard = ({ id, name, genres, image, type, language, premiered, rating, handleClickOpenSubscribeDialog, subscriptionCheck_RolesCallback }) => {
     const dispatch = useDispatch();
 
     const [movieRating] = useState(rating);
+
+    // userLogin
+    const { user: userLogin } = useAuth();
 
     const handleSubscribe = () => {
         const movieId = { movieId: id };
@@ -108,11 +112,11 @@ const MovieCard = ({ id, name, genres, image, type, language, premiered, rating,
                                 </Grid>
                             </Grid>
                             <Grid item xs={12} textAlign="center">
-                                <AnimateButton >
+                                {subscriptionCheck_RolesCallback('C') && <AnimateButton >
                                     <IconButton color="primary" onClick={handleSubscribe} aria-label="Subscribe a movie">
                                         <IconSquareRoundedPlusFilled size={36} />
                                     </IconButton>
-                                </AnimateButton>
+                                </AnimateButton>}
                             </Grid>
                         </Grid>
                     </MainCard >
@@ -136,7 +140,8 @@ MovieCard.propTypes = {
     ]).isRequired
     ,
     rating: PropTypes.number,
-    handleClickOpenSubscribeDialog: PropTypes.func
+    handleClickOpenSubscribeDialog: PropTypes.func,
+    subscriptionCheck_RolesCallback: PropTypes.func
 };
 
 export default MovieCard;
