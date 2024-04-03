@@ -5,7 +5,6 @@ import React from 'react';
 import { Collapse, Fade, Box, Grow, Slide, Zoom } from '@mui/material';
 
 const Transitions = React.forwardRef(({ children, position, type, direction, ...others }, ref) => {
-    console.log(type);
     let positionSX = {
         transformOrigin: '0 0 0'
     };

@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import { forwardRef, useEffect } from 'react';
-import { useDispatch } from 'store';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -21,6 +20,8 @@ import * as yup from 'yup';
 import MainCard from 'components/cards/MainCard';
 import AnimateButton from 'components/extended/AnimateButton';
 import { gridSpacing } from 'utils/constant-theme';
+import { useDispatch, useSelector } from 'store';
+import { openSnackbar } from "store/slices/snackbar";
 
 // assets
 import HighlightOffTwoToneIcon from '@mui/icons-material/HighlightOffTwoTone';
@@ -48,27 +49,22 @@ const AddSubscriptionByMember = ({ open, movieId, handleCloseSubscribeDialog, ad
         onSubmit: (values, { resetForm }) => {
             // Add a subscription for the selected member with a given movie
             addSubscriptionByMember('put', { id: values.memberId }, { movieId: values.movieId, date: values.date });
+            const memberName = members.find((member) => member._id === values.memberId).name;
+
+            dispatch(
+                openSnackbar({
+                    open: true,
+                    message: 'Subscription for ' + memberName + ' generated successfully 🙂',
+                    variant: 'alert',
+                    alert: {
+                        color: 'success'
+                    },
+                    close: false
+                })
+            );
 
             resetForm();
             handleCloseSubscribeDialog();
-
-            /************************************************************************************************
-            *                                                                                              *
-            *      todo -----> dispatch(openSnackbar({message: 'Submit Success'})                          *
-            *                                                                                              *
-            *//********************************************************************************************/
-
-            // dispatch(
-            //     openSnackbar({
-            //         open: true,
-            //         message: 'Submit Success',
-            //         variant: 'alert',
-            //         alert: {
-            //             color: 'success'
-            //         },
-            //         close: false
-            //     })
-            // );
         }
     });
 

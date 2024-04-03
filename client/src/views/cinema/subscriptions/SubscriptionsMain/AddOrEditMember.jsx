@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
-import { forwardRef, useEffect } from 'react';
-import { useDispatch } from 'store';
+import { forwardRef } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -18,6 +17,8 @@ import * as yup from 'yup';
 import MainCard from 'components/cards/MainCard';
 import AnimateButton from 'components/extended/AnimateButton';
 import { gridSpacing } from 'utils/constant-theme';
+import { useDispatch, useSelector } from 'store';
+import { openSnackbar } from "store/slices/snackbar";
 
 // assets
 import HighlightOffTwoToneIcon from '@mui/icons-material/HighlightOffTwoTone';
@@ -50,31 +51,35 @@ const AddOrEditMember = ({ open, member, handleCloseMemberDialog, addMember, edi
             if (edit) {
                 console.log('values = ', values);
                 editMember(member._id, values);
+                dispatch(
+                    openSnackbar({
+                        open: true,
+                        message: 'Member of ' + values.name + ' updated successfully 🙂',
+                        variant: 'alert',
+                        alert: {
+                            color: 'success'
+                        },
+                        close: false
+                    })
+                );
             } else {
                 console.log('values = ', values);
                 addMember(values);
+                dispatch(
+                    openSnackbar({
+                        open: true,
+                        message: 'Member for ' + values.name + ' generated successfully 🙂',
+                        variant: 'alert',
+                        alert: {
+                            color: 'success'
+                        },
+                        close: false
+                    })
+                );
             }
             resetForm();
             handleCloseMemberDialog();
             // navigete('/cinema/subscriptions');
- 
-            /************************************************************************************************
-            *                                                                                              *
-            *      todo -----> dispatch(openSnackbar({message: 'Submit Success'})                          *
-            *                                                                                              *
-            *//********************************************************************************************/
-
-            // dispatch(
-            //     openSnackbar({
-            //         open: true,
-            //         message: 'Submit Success',
-            //         variant: 'alert',
-            //         alert: {
-            //             color: 'success'
-            //         },
-            //         close: false
-            //     })
-            // );
         }
     });
 

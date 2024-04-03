@@ -64,15 +64,33 @@ const getUserByUsername = async (usernameCheck) => {
     // Find the desire user and its permissions
     let userDetails = users.users.find((user) => user.id === _id);
     const getUserPermission = permissions.permissions.find((permission) => permission.id === _id);
+    
+    let subscriptionsPermissionArray = [];
+    let moviesPermissionArray = [];
+    getUserPermission.permissionsUser.forEach((permission, index) => {
+        if (index <= 3) {
+            if (Object.values(permission)[0]) {
+                const permission_Letter = Object.keys(permission)[0][0];
+                subscriptionsPermissionArray.push(permission_Letter.toUpperCase())
+            }
+        } else {
+            if (Object.values(permission)[0]) {
+                const permission_Letter = Object.keys(permission)[0][0];
+                moviesPermissionArray.push(permission_Letter.toUpperCase())
+            }
+        }
+    })
 
     // Map the desire user with its username and permissions    
-    const obj_user = { 
-        ...userDetails, 
-        username: result_user.username,        
+    const obj_user = {
+        ...userDetails,
+        username: result_user.username,
         password: result_user.password,
+        SubscriptionsRoles: subscriptionsPermissionArray,
+        MoviesRoles: moviesPermissionArray,
         ...getUserPermission
     }
-    
+
     return { userLogin: obj_user };
 }
 

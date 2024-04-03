@@ -3,7 +3,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { Link, useLoaderData, useLocation, useParams } from 'react-router-dom';
 
 // material-ui
-import { Box, Grid, Stack, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Grid, Stack, Tab, Tabs } from '@mui/material';
 
 // internal imports
 import MovieSubscriptions from './MovieSubscriptions/index';
@@ -12,9 +12,11 @@ import MovieDescriptionCard from 'components/cards/MovieDescriptionCard';
 import MainCard from 'components/cards/MainCard';
 import Chip from 'components/extended/Chip';
 import { updateMovie, deleteMovie } from 'store/slices/movie';
-
-import { useDispatch, useSelector } from 'store/index';
+import { useDispatch, useSelector } from 'store';
+import { openSnackbar } from "store/slices/snackbar";
 import { gridSpacing } from 'utils/constant-theme';
+
+import useAuth from 'hooks/useAuth';
 
 function TabPanel({ children, value, index, ...other }) {
     return (
@@ -53,6 +55,9 @@ const MovieDetails = () => {
 
     const dispatch = useDispatch();
 
+    // userLogin
+    const { user: userLogin } = useAuth();
+
     // movie description tabs
     const [value, setValue] = useState(0);
 
@@ -64,9 +69,31 @@ const MovieDetails = () => {
         dispatch(updateMovie(id, movieEdit));
     };
 
-    const removeMovie = (id) => {
+    const removeMovie = (id, name) => {
         dispatch(deleteMovie(id));
+        dispatch(
+            openSnackbar({
+                open: true,
+                message: 'The movie ' + name + ' has deleted successfully !',
+                variant: 'alert',
+                alert: {
+                    color: 'error'
+                },
+                close: false
+            })
+        );
     };
+
+    // Checking if a userLogin has a certain permission [View or Update or Create or Delete] for Movies Model
+    let moviesCheck_Roles = (permission_action) => {
+        if (userLogin?.MoviesRoles.includes(permission_action)) {
+            console.log('True');
+            return true;
+        } else {
+            console.log('False');
+            return false;
+        }
+    }
 
     const { pathname } = useLocation();
 
@@ -94,6 +121,7 @@ const MovieDetails = () => {
                                             premiered={movie.premiered}
                                             rating={movie.rating}
                                             removeMovie={removeMovie}
+                                            moviesCheck_RolesCallback={moviesCheck_Roles}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -120,14 +148,14 @@ const MovieDetails = () => {
                                                 }
                                                 {...a11yProps(0)}
                                             />
-                                            <Tab component={Link} to="#" label="Update movie" {...a11yProps(1)} />
+                                            {moviesCheck_Roles('U') && <Tab component={Link} to="#" label="Update movie" {...a11yProps(1)} />}
                                         </Tabs>
                                         <TabPanel value={value} index={0}>
                                             <MovieSubscriptions movie={movie} />
                                         </TabPanel>
-                                        <TabPanel value={value} index={1}>
+                                        {moviesCheck_Roles('U') && <TabPanel value={value} index={1}>
                                             <MovieUpdate editMovie={editMovie} movie={movie} />
-                                        </TabPanel>
+                                        </TabPanel>}
                                     </Grid>
                                 </Grid>
                             )}

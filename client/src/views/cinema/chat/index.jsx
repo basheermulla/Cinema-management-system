@@ -121,10 +121,12 @@ const ChatMainPage = () => {
 
     useEffect(() => {
         setData(chatState.chats);
-        console.log(chatState.chats);
-        const converstationId = chatState.chats[0]?.converstationId;
-        setConverstationId(converstationId);
-
+        if (chatState.chats.length > 0){
+            const converstationId = Object.values(chatState.chats[0])[0][0]?.converstationId;
+            setConverstationId(converstationId);
+        } else {
+            setConverstationId('');
+        }
     }, [chatState.chats]);
 
     const alterUserDisplay = useCallback((user) => {

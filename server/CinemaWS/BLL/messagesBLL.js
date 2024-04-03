@@ -17,7 +17,7 @@ const getMessageById = (id) => {
 };
 
 // GET - Get Chats between two users - by [userLoginId, userId]
-const getChatsByBoth_UserLoginId_userId = (userLoginId, userId) => {
+const getChatsByBoth_UserLoginId_userId = async (userLoginId, userId) => {
     const query = {
         $or: [
             {
@@ -35,20 +35,57 @@ const getChatsByBoth_UserLoginId_userId = (userLoginId, userId) => {
         ]
     }
 
-    return Message.find(query).exec();
+    const res = Message.find(query).exec();
+    const data = await res;
+
+    const sortedData = data.sort(
+        (a, b) => Number(a.created_at) - Number(b.created_at),
+    );
+
+    if (data.length > 0) {
+        let currentDay = sortedData[0].created_at;
+
+        const stillCurrentDay = (dayOfMessage) => {
+            return dayOfMessage.getFullYear() === currentDay.getFullYear() &&
+                dayOfMessage.getMonth() === currentDay.getMonth() &&
+                dayOfMessage.getDate() === currentDay.getDate()
+        }
+
+        let dayMessageArray = [];
+        const fullMessageArray = [];
+
+        const createMessagesArray = (messages) => {
+            const newDay = {};
+            newDay[currentDay.toISOString().split('T')[0]] = messages;
+            fullMessageArray.push(newDay);
+        }
+
+        sortedData.forEach(message => {
+            if (!stillCurrentDay(message.created_at)) {
+                createMessagesArray(dayMessageArray);
+                currentDay = message.created_at;
+                dayMessageArray = [];
+            }
+
+            dayMessageArray.push(message);
+        });
+
+        createMessagesArray(dayMessageArray);
+
+        return fullMessageArray;
+    }
+
+    return data;
 };
 
 // POST - Create Message between two users
 const addMessage = async (obj) => {
     if (obj.converstationId === undefined) {
-        console.log(obj.sender, obj.recipient);
         const obj_conversation = {
             participants: [obj.sender, obj.recipient]
         }
-        console.log(obj_conversation);
         const conversation = await new Conversation(obj_conversation)
         await conversation.save();
-        console.log(conversation);
         const message = new Message({ ...obj, converstationId: conversation._id });
         await message.save();
         return message;

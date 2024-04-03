@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 
 // material-ui
@@ -17,7 +16,10 @@ import SecondaryAction from 'components/cards/CardSecondaryAction';
 import AddOrEditMember from './AddOrEditMember';
 import MemberEmpty from './MemberEmpty';
 import { loader, createSubscription, updateSubscription, deleteSubscription, createMember, updateMember, deleteMember } from 'store/slices/member';
+import { useDispatch, useSelector } from 'store';
+import { openSnackbar } from "store/slices/snackbar";
 import { gridSpacing } from 'utils/constant-theme';
+import useAuth from 'hooks/useAuth';
 
 // assets
 import { IconUserPlus, IconRefresh } from '@tabler/icons-react';
@@ -27,6 +29,9 @@ const SubscriptionsMain = () => {
 
     const dispatch = useDispatch();
     const navigete = useNavigate();
+
+    // userLogin
+    const { user: userLogin } = useAuth();
 
     // member include subscriptions data & movies
     const initialdata = useLoaderData();
@@ -61,7 +66,6 @@ const SubscriptionsMain = () => {
     };
 
     const handleCloseMemberDialog = () => {
-        console.log('Here we update member to null');
         setMember(null);
         setOpenMemberDialog(false);
     };
@@ -88,6 +92,17 @@ const SubscriptionsMain = () => {
             loadDataAfterAction();
             setMemberLoading(false);
         });
+        dispatch(
+            openSnackbar({
+                open: true,
+                message: 'The subscription has deleted successfully !',
+                variant: 'alert',
+                alert: {
+                    color: 'error'
+                },
+                close: false
+            })
+        );
     };
 
     const addMember = (memberNew) => {
@@ -106,20 +121,45 @@ const SubscriptionsMain = () => {
         });
     };
 
-    const removeMember = (id) => {
+    const removeMember = (id, name) => {
         setMemberLoading(true);
         dispatch(deleteMember(id)).then(() => {
             loadDataAfterAction();
             setMemberLoading(false);
         });
+        dispatch(
+            openSnackbar({
+                open: true,
+                message: 'Member of ' + name + ' deleted successfully !',
+                variant: 'alert',
+                alert: {
+                    color: 'error'
+                },
+                close: false
+            })
+        );
     };
 
     const loadDataAfterAction = async () => {
-        console.log('refresh');
         const initialdata = await loader();
         setSubscriptions(initialdata.members);
         setMovies(initialdata.movies);
     };
+
+    const handleRefresh = (action) => {
+        handleAction(action);
+        dispatch(
+            openSnackbar({
+                open: true,
+                message: 'Successful refresh !',
+                variant: 'alert',
+                alert: {
+                    color: 'success'
+                },
+                close: false
+            })
+        );
+    }
 
     const handleAction = (action) => {
         switch (action) {
@@ -133,6 +173,18 @@ const SubscriptionsMain = () => {
                 break;
         }
     }
+
+    // Owner user who have all the permissions [View, Update, Create, Delete] of both subscriptions and movies could add, delete and update a member
+    let isOwner = (permissionsUser) => {
+        let power = true;
+        permissionsUser?.forEach(permission => {
+            if (!Object.values(permission)[0]) {
+                power = false
+            }
+        })
+        return power;
+    }
+
 
     let memberResult = <></>;
     if (subscriptions && subscriptions.length > 0) {
@@ -148,6 +200,7 @@ const SubscriptionsMain = () => {
                     removeSubscription={removeSubscription}
                     removeMember={removeMember}
                     movies={movies}
+                    isOwnerCallback={isOwner}
                 />
             ))
         }
@@ -174,19 +227,19 @@ const SubscriptionsMain = () => {
             secondary={
                 < Stack direction="row" spacing={2} alignItems="center" >
                     {subscriptions && subscriptions.length > 0 ? <>
-                        <SecondaryAction
+                        {isOwner(userLogin?.permissionsUser) && <SecondaryAction
                             title="New Member"
                             icon={<IconUserPlus />}
                             color="primary"
                             action="addMember"
                             action_func={handleAction}
-                        />
+                        />}
                         <SecondaryAction
                             title="Refresh"
                             icon={<IconRefresh />}
                             color="success"
                             action="refresh"
-                            action_func={handleAction}
+                            action_func={handleRefresh}
                         />
                         <CSVExport data={subscriptionsToExport} filename="basic-table.csv" header={header} />
                     </>

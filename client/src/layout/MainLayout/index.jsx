@@ -99,14 +99,14 @@ const MainLayout = () => {
     // useEffect -> Emit userLeaveChat event               -
     //------------------------------------------------------
     useEffect(() => {
-        console.log('pathname = ', pathname);
-        console.log('selectedItem = ', selectedItem);
-        console.log('chatOpen = ', chatOpen);
+        // console.log('pathname = ', pathname);
+        // console.log('selectedItem = ', selectedItem);
+        // console.log('chatOpen = ', chatOpen);
         if (pathname === '/cinema/chat') {
-            console.log('Here we will dispatch open chat');
+            // console.log('Here we will dispatch open chat');
             dispatch(openChat(true));
         } else if (chatOpen) {
-            console.log('Leave chat now ');
+            // console.log('Leave chat now ');
             dispatch(openChat(false));
             socket?.emit('availableInSystem', { username: userLogin.username });
         }

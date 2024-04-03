@@ -63,7 +63,6 @@ const RecommendationMain = () => {
     }, [movies]);
 
     const handleAutocomplete = (new_member) => {
-        console.log(new_member);
         const checked_member = members.find((member) => member._id === new_member._id);
         setMember(checked_member);
         setLastSubscriptions(checked_member.relatedMovie.slice(0, 3));

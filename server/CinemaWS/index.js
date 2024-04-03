@@ -102,8 +102,8 @@ socketIO.on('connection', (socket) => {
                 users.push(data);
             }
 
-            console.log('users (newUser) = ');
-            console.log(users);
+            // console.log('users (newUser) = ');
+            // console.log(users);
             // Sends the list of users to the client
             socket.broadcast.emit('newUserResponse', users);
         });
@@ -117,8 +117,8 @@ socketIO.on('connection', (socket) => {
                 users[index].online_status = 'online';
             }
 
-            console.log('users (online) = ');
-            console.log(users);
+            // console.log('users (online) = ');
+            // console.log(users);
             socketIO.emit('onlineChatResponse', users);
         });
 
@@ -131,8 +131,8 @@ socketIO.on('connection', (socket) => {
                 users[index].online_status = 'offline';
             }
 
-            console.log('users (offline) = ');
-            console.log(users);
+            // console.log('users (offline) = ');
+            // console.log(users);
             socketIO.emit('offlineInSystemResponse', users);
         });
 
@@ -145,8 +145,8 @@ socketIO.on('connection', (socket) => {
                 users[index].online_status = 'available';
             }
 
-            console.log('users (available) = ');
-            console.log(users);
+            // console.log('users (available) = ');
+            // console.log(users);
             socketIO.emit('availableInSystemResponse', users);
         });
 
@@ -154,7 +154,7 @@ socketIO.on('connection', (socket) => {
         //------6️⃣✔️------------ Listens and sends the message to all the users on the server -----------------------------------
         //------------------------------------------------------------------------------------------------------------------------         
         socket.on('message', (data) => {
-            console.log(data);
+            // console.log(data);
             socketIO.emit('messageResponse', data);
         });
 
@@ -162,7 +162,7 @@ socketIO.on('connection', (socket) => {
         //------7️⃣✔️------------ Listens and sends the message to all the users on the server -----------------------------------
         //------------------------------------------------------------------------------------------------------------------------
         socket.on('typing', (data) => {
-            console.log(data);
+            // console.log(data);
             socket.broadcast.emit('typingResponse', data);
         });
 

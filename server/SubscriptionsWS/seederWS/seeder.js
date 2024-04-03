@@ -19,7 +19,7 @@ const getMembersWS = async (req, res) => {
         
         // Insert mapMembers into members collection
         const result = await membersBLL.addManyMembers(mapMembers);
-        console.log(result);
+        // console.log(result);
     } catch (error) {
         console.error(error);
     }
@@ -39,16 +39,17 @@ const getMoviesWS = async (req, res) => {
                 summary: movie.summary,
                 image: movie.image,
                 genres: movie.genres,
-                premiered: movie.premiered
+                premiered: movie.premiered,
+                rating: movie.rating.average
             }
         });
 
         // Limit adding data to mongoDB
-        const movies = mapMovies.filter((movie, index) => index < 3);
-        
+        const movies = mapMovies.filter((movie, index) => index > 8);
+
         // Insert mapMovies into movies collection
         const result = await moviesBLL.addManyMovies(movies);
-        console.log(result);
+        // console.log(result);
     } catch (error) {
         console.error(error);
     }

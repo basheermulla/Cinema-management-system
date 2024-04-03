@@ -12,6 +12,8 @@ import UserEmpty from './UserEmpty';
 import { gridSpacing } from 'utils/constant-theme';
 import { useDispatch, useSelector } from 'store';
 import { loader, createUser, updateUser, deleteUser } from 'store/slices/user';
+import { openSnackbar } from "store/slices/snackbar";
+import useAuth from 'hooks/useAuth';
 
 // assets
 import { IconSearch, IconRefresh } from '@tabler/icons-react';
@@ -26,7 +28,10 @@ const UsersManagementMain = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    // user data
+    // userLogin
+    const { user: userLogin } = useAuth();
+
+    // users data
     const initialUsers = useLoaderData();
     const [users, setUsers] = useState(initialUsers);
 
@@ -44,12 +49,24 @@ const UsersManagementMain = () => {
         setAnchorEl(null);
     };
 
-    const removeUser = (userId) => {
+    const removeUser = (userId, fullName) => {
         setUserLoading(true);
         dispatch(deleteUser(userId)).then(() => {
             loadDataAfterAction();
             setUserLoading(false);
         });
+        dispatch(
+            openSnackbar({
+                open: true,
+                message: 'User of ' + fullName + ' deleted successfully !',
+                variant: 'alert',
+                alert: {
+                    color: 'error'
+                },
+                close: false
+            })
+        );
+
     };
 
     const loadDataAfterAction = async () => {
@@ -57,10 +74,36 @@ const UsersManagementMain = () => {
         setUsers(initialdata);
     };
 
+    const handleRefresh = () => {
+        loadDataAfterAction();
+        dispatch(
+            openSnackbar({
+                open: true,
+                message: 'Successful refresh !',
+                variant: 'alert',
+                alert: {
+                    color: 'success'
+                },
+                close: false
+            })
+        );
+    }
+
+    // Owner user who have all the permissions [View, Update, Create, Delete] of both subscriptions and movies could add, delete and update a user
+    let isOwner = (permissionsUser) => {
+        let power = true;
+        permissionsUser?.forEach(permission => {
+            if (!Object.values(permission)[0]) {
+                power = false
+            }
+        })
+        return power;
+    }
+
     let userResult = <></>;
     if (users && users.length > 0) {
         {
-            userResult = (<UsersList users={users} removeUser={removeUser} userLoading={userLoading} />)
+            userResult = (<UsersList users={users} removeUser={removeUser} userLoading={userLoading} isOwnerCallback={isOwner} />)
         }
     } else {
         userResult = (
@@ -78,8 +121,8 @@ const UsersManagementMain = () => {
                         <Typography variant="h3">Users Management</Typography>
                     </Grid>
                     <Stack direction="row" spacing={1} alignItems="center" sx={{ mt: 1.5 }}>
-                        <Grid item>
-                            <Tooltip title="Add Product">
+                        {isOwner(userLogin?.permissionsUser) && <Grid item>
+                            <Tooltip title="Add User">
                                 <Fab
                                     color="primary"
                                     size="small"
@@ -89,14 +132,14 @@ const UsersManagementMain = () => {
                                     <AddIcon fontSize="small" />
                                 </Fab>
                             </Tooltip>
-                        </Grid>
+                        </Grid>}
                         <Grid item>
                             <Tooltip title="Refresh">
                                 <Fab
                                     variant="circular"
                                     color="secondary"
                                     size="small"
-                                    onClick={() => loadDataAfterAction()}
+                                    onClick={handleRefresh}
                                     sx={{ boxShadow: 'none', ml: 1, width: 32, height: 32, minHeight: 32 }}
                                 >
                                     <CachedIcon fontSize="small" />
@@ -121,7 +164,7 @@ const UsersManagementMain = () => {
             content={false}
         >
             {userResult}
-            
+
             <Grid item xs={12} sx={{ p: 3 }}>
                 <Grid container justifyContent="space-between" spacing={gridSpacing}>
                     <Grid item>

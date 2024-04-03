@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import { forwardRef, useEffect } from 'react';
-import { useDispatch } from 'store';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -21,6 +20,8 @@ import * as yup from 'yup';
 import MainCard from 'components/cards/MainCard';
 import AnimateButton from 'components/extended/AnimateButton';
 import { gridSpacing } from 'utils/constant-theme';
+import { useDispatch, useSelector } from 'store';
+import { openSnackbar } from "store/slices/snackbar";
 
 // assets
 import HighlightOffTwoToneIcon from '@mui/icons-material/HighlightOffTwoTone';
@@ -38,7 +39,6 @@ const AddSubscription = ({ open, member, subscription, handleCloseSubscribeDialo
     const theme = useTheme();
     const dispatch = useDispatch();
     const edit = subscription && subscription.subscriptionId;
-    console.log(subscription);
     const formik = useFormik({
         enableReinitialize: true,
         initialValues: {
@@ -52,34 +52,49 @@ const AddSubscription = ({ open, member, subscription, handleCloseSubscribeDialo
             if (edit) {
                 // Update future subscription for this member 
                 editSubscription({ id: values.memberId }, { subscriptionId: values.subscriptionId, movieId: values.movieId, date: values.date });
+                dispatch(
+                    openSnackbar({
+                        open: true,
+                        message: 'Subscription of ' + member.name + ' updated successfully 🙂',
+                        variant: 'alert',
+                        alert: {
+                            color: 'success'
+                        },
+                        close: false
+                    })
+                );
             } else if (member.relatedMovie[0].date !== undefined) {
                 // Add another subscription for this member
                 addSubscription('put', { id: values.memberId }, { movieId: values.movieId, date: values.date });
+                dispatch(
+                    openSnackbar({
+                        open: true,
+                        message: 'Subscription for ' + member.name + ' generated successfully 🙂',
+                        variant: 'alert',
+                        alert: {
+                            color: 'success'
+                        },
+                        close: false
+                    })
+                );
             } else {
                 // Make the first subscription for this member 
                 addSubscription('post', { id: values.memberId }, { subscriptionMovies: [{ movieId: values.movieId, date: values.date }] });
+                dispatch(
+                    openSnackbar({
+                        open: true,
+                        message: 'Subscription for ' + member.name + ' generated successfully 🙂',
+                        variant: 'alert',
+                        alert: {
+                            color: 'success'
+                        },
+                        close: false
+                    })
+                );
             }
 
             resetForm();
             handleCloseSubscribeDialog();
-
-            /************************************************************************************************
-            *                                                                                              *
-            *      todo -----> dispatch(openSnackbar({message: 'Submit Success'})                          *
-            *                                                                                              *
-            *//********************************************************************************************/
-
-            // dispatch(
-            //     openSnackbar({
-            //         open: true,
-            //         message: 'Submit Success',
-            //         variant: 'alert',
-            //         alert: {
-            //             color: 'success'
-            //         },
-            //         close: false
-            //     })
-            // );
         }
     });
 

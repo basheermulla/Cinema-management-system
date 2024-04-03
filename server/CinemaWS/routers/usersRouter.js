@@ -37,7 +37,6 @@ router.get('/:id', verifyToken, async (req, res) => {
 router.get(`/chats/:id`, verifyToken, async (req, res) => {
     try {
         const { id } = req.params;
-        console.log(id);
         const users = await usersBLL.getAllUsersAndMessagesByUserId(id);
         res.send(users);
     } catch (error) {

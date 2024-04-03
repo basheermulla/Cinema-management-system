@@ -13,6 +13,7 @@ import "slick-carousel/slick/slick-theme.css";
 // project imports
 import MovieCard from 'components/cards/MovieCard';
 import { getRelatedMovies } from 'store/slices/movie';
+import useAuth from 'hooks/useAuth';
 
 // assets
 import { FaFastForward, FaFastBackward } from 'react-icons/fa'
@@ -43,10 +44,12 @@ const RelatedMovies = ({ id, isLoading, handleClickOpenSubscribeDialog }) => {
 
     const [loader, setLoader] = useState(true);
 
+    // userLogin
+    const { user: userLogin } = useAuth();
+
     useEffect(() => {
         (async () => {
             await getRelatedMovies(id).then((response) => {
-                console.log(response?.length);
                 setRelated(response);
                 setLoader(false);
             });
@@ -86,6 +89,15 @@ const RelatedMovies = ({ id, isLoading, handleClickOpenSubscribeDialog }) => {
         slidesToShow: itemsToShow
     };
 
+    // Checking if a userLogin has a certain permission [View or Update or Create or Delete] for Subscriptions Model
+    let subscriptionCheck_Roles = (permission_action) => {
+        if (userLogin?.SubscriptionsRoles.includes(permission_action)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     let movieResult = <></>;
     if (related && related.length > 0 && !loader) {
         movieResult = related.map((movie, index) => (
@@ -101,6 +113,7 @@ const RelatedMovies = ({ id, isLoading, handleClickOpenSubscribeDialog }) => {
                     premiered={movie.premiered}
                     rating={movie.rating}
                     handleClickOpenSubscribeDialog={handleClickOpenSubscribeDialog}
+                    subscriptionCheck_RolesCallback={subscriptionCheck_Roles}
                 />
             </Box>
         ));
