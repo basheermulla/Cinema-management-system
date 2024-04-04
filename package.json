@@ -1,0 +1,19 @@
+{
+  "name": "cinema-management-system",
+  "version": "1.0.0",
+  "description": "Web application for movies and subscription management",
+  "main": "index.js",
+  "scripts": {
+    "subscriptionsWS": "cd server\\subscriptionsWS && npm start",
+    "cinemaWS": "cd server\\cinemaWS && npm start",
+    "client": "cd client && npm start",
+    "dev": "concurrently \"npm run subscriptionsWS\" \"npm run cinemaWS\" \"npm run client\" && exit 1",
+    "start": "concurrently \"npm run subscriptionsWS\" \"npm run cinemaWS\" \"npm run client\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
