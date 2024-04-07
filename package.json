@@ -4,10 +4,12 @@
   "description": "Web application for movies and subscription management",
   "main": "index.js",
   "scripts": {
+    "devSubscriptionsWS": "cd server\\subscriptionsWS && npm run dev",
+    "devCinemaWS": "cd server\\cinemaWS && npm run dev",
     "subscriptionsWS": "cd server\\subscriptionsWS && npm start",
     "cinemaWS": "cd server\\cinemaWS && npm start",
     "client": "cd client && npm start",
-    "dev": "concurrently \"npm run subscriptionsWS\" \"npm run cinemaWS\" \"npm run client\" && exit 1",
+    "dev": "concurrently \"npm run devSubscriptionsWS\" \"npm run devCinemaWS\" \"npm run client\" && exit 1",
     "start": "concurrently \"npm run subscriptionsWS\" \"npm run cinemaWS\" \"npm run client\" && exit 1"
   },
   "keywords": [],

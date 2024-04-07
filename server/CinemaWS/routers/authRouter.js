@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const authBLL = require('../BLL/authBLL');
+require("dotenv").config();
 
 const router = express.Router();
 
@@ -40,7 +41,14 @@ router.post('/register', async (req, res) => {
 
 // POST - login
 router.post('/login', async (req, res) => {
+
     try {
+        const { API_PORT } = process.env;
+        console.log('======================================================');
+        console.log('API_PORT = ', API_PORT);
+        console.log('req.protocol://req.get(host) = ', `${req.protocol}://${req.get('host')}`);
+        console.log('======================================================');
+
         // Extract body data regarding the user login
         const { username, password } = req.body;
 
