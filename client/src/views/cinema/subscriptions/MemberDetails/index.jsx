@@ -58,7 +58,7 @@ const MemberDetails = () => {
   const member = useLoaderData();
 
   useEffect(() => {
-    console.log(member);
+    // console.log(member);
   }, [member]);
 
   const [value, setValue] = useState(0);

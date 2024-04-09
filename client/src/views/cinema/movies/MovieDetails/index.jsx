@@ -87,10 +87,10 @@ const MovieDetails = () => {
     // Checking if a userLogin has a certain permission [View or Update or Create or Delete] for Movies Model
     let moviesCheck_Roles = (permission_action) => {
         if (userLogin?.MoviesRoles.includes(permission_action)) {
-            console.log('True');
+            // console.log('True');
             return true;
         } else {
-            console.log('False');
+            // console.log('False');
             return false;
         }
     }

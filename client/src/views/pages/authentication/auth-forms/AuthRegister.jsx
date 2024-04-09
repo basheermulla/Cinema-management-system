@@ -29,7 +29,7 @@ const AuthRegister = ({ ...others }) => {
     const navigate = useNavigate();
     const scriptedRef = useScriptRef();
     const dispatch = useDispatch();
-    console.log(scriptedRef);
+    // console.log(scriptedRef);
 
     const [showPassword, setShowPassword] = useState(false);
     const [checked, setChecked] = useState(true);
@@ -48,9 +48,9 @@ const AuthRegister = ({ ...others }) => {
     };
 
     const changePassword = (value) => {
-        console.log(value);
+        // console.log(value);
         const temp = strengthIndicatorNumFunc(value);
-        console.log(temp);
+        // console.log(temp);
         setStrength(temp);
         setLevel(strengthColor(temp));
     };

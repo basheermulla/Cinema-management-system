@@ -92,7 +92,7 @@ function MemberRowCollapsible({ ID, member, handleClickOpenMemberDialog, addSubs
         setDialogRole('subscription');
     }
     const handleDialog = () => {
-        console.log(helperDeleteSubscription);
+        // console.log(helperDeleteSubscription);
         dialogRole === 'member'
             ? removeMember(member._id, member.name)
             : helperDeleteSubscription.relatedMovie_length === 1
@@ -106,10 +106,10 @@ function MemberRowCollapsible({ ID, member, handleClickOpenMemberDialog, addSubs
     // Checking if a userLogin has a certain permission [View or Update or Create or Delete] for Subscriptions Model
     let subscriptionCheck_Roles = (permission_action) => {
         if (userLogin?.SubscriptionsRoles.includes(permission_action)) {
-            console.log('True');
+            // console.log('True');
             return true;
         } else {
-            console.log('False');
+            // console.log('False');
             return false;
         }
     }

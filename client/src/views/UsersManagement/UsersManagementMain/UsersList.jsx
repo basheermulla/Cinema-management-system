@@ -34,7 +34,7 @@ const UsersList = ({ users, removeUser, userLoading, isOwnerCallback }) => {
     const { user: userLogin } = useAuth();
 
     const handleDelete = (userId, fullName) => {
-        console.log(userId, fullName);
+        // console.log(userId, fullName);
         setUsertoDelete({ userId, fullName });
         setOpenDialog(true);
     }
