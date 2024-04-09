@@ -26,7 +26,7 @@ const MovieSubscriptions = ({ movie }) => {
     };
 
     useEffect(() => {
-        console.log(movie);
+        // console.log(movie);
     }, [])
 
 

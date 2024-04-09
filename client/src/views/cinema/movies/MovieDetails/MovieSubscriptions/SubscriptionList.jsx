@@ -26,8 +26,8 @@ const SubscriptionList = ({ movie }) => {
 
     useEffect(() => {
         setData(movie?.subscriptionWatched);
-        console.log(data);
-        console.log(movie);
+        // console.log(data);
+        // console.log(movie);
     }, []);
 
     return (

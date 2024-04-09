@@ -49,7 +49,7 @@ const AddOrEditMember = ({ open, member, handleCloseMemberDialog, addMember, edi
         validationSchema,
         onSubmit: (values, { resetForm }) => {
             if (edit) {
-                console.log('values = ', values);
+                // console.log('values = ', values);
                 editMember(member._id, values);
                 dispatch(
                     openSnackbar({
@@ -63,7 +63,7 @@ const AddOrEditMember = ({ open, member, handleCloseMemberDialog, addMember, edi
                     })
                 );
             } else {
-                console.log('values = ', values);
+                // console.log('values = ', values);
                 addMember(values);
                 dispatch(
                     openSnackbar({

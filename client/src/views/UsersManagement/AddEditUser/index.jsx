@@ -1,32 +1,23 @@
 import { useEffect, useState } from 'react';
-import { useLoaderData, useNavigate, useParams, useLocation } from 'react-router-dom';
-
+import { useNavigate, useParams } from 'react-router-dom';
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import {
-    Button, Dialog, FormControl, FormControlLabel, FormHelperText, InputLabel, Select, MenuItem, IconButton, Grid, Radio, RadioGroup, Stack, Switch,
-    TextField, Zoom, DialogContent, Typography, Checkbox, FormGroup
-} from '@mui/material';
-
+import { Button, FormControlLabel, FormHelperText, IconButton, Grid, Stack, TextField, Typography, Checkbox } from '@mui/material';
 // third-party
 import { useFormik, getIn } from 'formik';
 import * as yup from 'yup';
-
 // internal imports
 import MainCard from 'components/cards/MainCard';
-import SubCard from 'components/cards/SubCard';
 import AnimateButton from 'components/extended/AnimateButton';
 import { gridSpacing } from 'utils/constant-theme';
 import { getDesireUserById, createUser, updateUser } from 'store/slices/user';
-import { useDispatch, useSelector } from 'store';
+import { useDispatch } from 'store';
 import { openSnackbar } from "store/slices/snackbar";
-
 // assets
 import HighlightOffTwoToneIcon from '@mui/icons-material/HighlightOffTwoTone';
 
 const validationSchema = yup.object({
     username: yup.string().email('Username must be in email format').max(255).required('Username is required'),
-
     user: yup.object({
         firstName: yup.string().max(255).required('First Name is required'),
         lastName: yup.string().max(255).required('Last Name required'),
@@ -34,7 +25,6 @@ const validationSchema = yup.object({
         sessionTimeOut: yup.number().required("Session time out is required in the unit of minutes"),
         published: yup.date().nullable().required('Published date is required'),
     }),
-
     permissionsUser: yup.object({
         view_Subscriptions: yup.object().when(['create_Subscriptions', 'update_Subscriptions', 'delete_Subscriptions'], {
             is: (create_Subscriptions, update_Subscriptions, delete_Subscriptions) => {
@@ -69,27 +59,20 @@ const validationSchema = yup.object({
 
 const AddEditUser = () => {
     const theme = useTheme();
-
     const { id } = useParams();
-
     const [userEdit, setUserEdit] = useState(null);
-
     useEffect(() => {
-        console.log(id);
         if (id) {
             (async () => {
                 await getDesireUserById(id).then((response) => {
-                    console.log(response);
                     setUserEdit(response);
                 });
             })();
         }
     }, [id]);
-
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const edit = userEdit && userEdit._id;
-
     const formik = useFormik({
         enableReinitialize: true,
         initialValues: {
@@ -117,15 +100,13 @@ const AddEditUser = () => {
             // Generate array of permissions that required for create/update user
             const data = values.permissionsUser
             const permissionsUser = { permissionsUser: Object.keys(data).map((key) => { return { [key]: data[key] } }) };
-
             if (edit) {
                 // Update existing user
-                const obj_user = { 
-                    username: values.username, 
-                    user: { id: userEdit._id, ...values.user, published: new Date(values.user.published) }, 
+                const obj_user = {
+                    username: values.username,
+                    user: { id: userEdit._id, ...values.user, published: new Date(values.user.published) },
                     permissionsUser: { id: userEdit._id, ...permissionsUser }
                 }
-                console.log(obj_user)
                 dispatch(updateUser({ _id: userEdit._id }, obj_user));
                 dispatch(
                     openSnackbar({
@@ -140,12 +121,11 @@ const AddEditUser = () => {
                 );
             } else {
                 // Generate new user
-                const obj_user = { 
-                    username: values.username, 
-                    user: { ...values.user, published: new Date(values.user.published) }, 
-                    permissionsUser 
+                const obj_user = {
+                    username: values.username,
+                    user: { ...values.user, published: new Date(values.user.published) },
+                    permissionsUser
                 }
-                console.log(obj_user)
                 dispatch(createUser(obj_user));
                 dispatch(
                     openSnackbar({
@@ -159,7 +139,6 @@ const AddEditUser = () => {
                     })
                 );
             }
-
             navigate('/management/users')
             resetForm();
         }
@@ -176,7 +155,6 @@ const AddEditUser = () => {
             sx={{ border: 0 }}
         >
             <form onSubmit={formik.handleSubmit}>
-                {console.log(formik.values)}
                 <Grid container spacing={gridSpacing}>
                     <Grid item xs={12}>
                         <TextField
