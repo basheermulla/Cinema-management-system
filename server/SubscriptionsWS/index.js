@@ -18,6 +18,7 @@ const seederWS = require('./seederWS/seeder');
 const { API_PORT } = process.env;
 const port = process.env.PORT || API_PORT;
 const { MONGO_URL } = process.env;
+const { HOSTNAME } = process.env;
 
 /*=======================================================================================================
 /*====================================//* Connect Database *//*==========================================
@@ -60,7 +61,7 @@ app.use('/subscriptions', subscriptionsRouter);
 /*=======================================================================================================
 /*====================================//* server listening *//*==========================================
 /*=====================================================================================================*/
-app.listen(port, () => {
+app.listen(port, HOSTNAME, () => {
     console.log(`-----------------------------------------------------------`)
     console.log(`- Subscription server is running at http://localhost:${port} -`)
     console.log(`-----------------------------------------------------------`)
