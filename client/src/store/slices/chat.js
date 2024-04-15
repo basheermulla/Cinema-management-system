@@ -5,7 +5,7 @@ import { createSlice, current } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { dispatch } from '../index';
 
-const APP_MODE = import.meta.env.APP_MODE;
+const VITE_APP_MODE = import.meta.env.VITE_APP_MODE;
 const VITE_APP_ORIGIN_DEV = import.meta.env.VITE_APP_ORIGIN_DEV;
 const VITE_APP_ORIGIN_PRODUCTION = import.meta.env.VITE_APP_ORIGIN_PRODUCTION;
 
@@ -85,7 +85,7 @@ export function getUsersWithChatsData(id) {
         try {
             let token = window.localStorage.getItem('accessToken');
             // console.log('<=== Users getUsersWithChatsData ===> ', id);
-            const response = await axios.get(`${APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/users/chats/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
+            const response = await axios.get(`${VITE_APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/users/chats/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
             dispatch(slice.actions.getUsersMoreInfoSuccess(response.data));
         } catch (error) {
             dispatch(slice.actions.hasError(error));
@@ -108,7 +108,7 @@ export function getUserChats(userLoginId, userId) {
                 //=====================================================================================================================
                 // Get all chats between two users [userLoginId, userId] and set the chats array in the  ===>  cinema server/messages =
                 //=====================================================================================================================
-                const response = await axios.get(`${APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/messages/${userLoginId}/${userId}`, { headers: { "Authorization": `Bearer ${token}` } });
+                const response = await axios.get(`${VITE_APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/messages/${userLoginId}/${userId}`, { headers: { "Authorization": `Bearer ${token}` } });
                 const data = response.data;
 
                 //======================================================================================================
@@ -130,7 +130,7 @@ export function getUserChats(userLoginId, userId) {
                     // 1) chat.sender === userId.                                                                    =
                     // 2) chat.recipient === userLoginId.                                                            =
                     //================================================================================================
-                    const response = await axios.put(`${APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/messages/${userLoginId}/${userId}`, null, { headers: { "Authorization": `Bearer ${token}` } });
+                    const response = await axios.put(`${VITE_APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/messages/${userLoginId}/${userId}`, null, { headers: { "Authorization": `Bearer ${token}` } });
 
                     //=========================================================================================
                     // update boolean values of isReadByRecipient                ===>    chat slice reducer   =
@@ -165,7 +165,7 @@ export function setReadChatByRecipient(obj_updateIsReadMessage, incomingMessageI
             //================================================================================================
             const userLoginId = obj_updateIsReadMessage.recipient;
             const userId = obj_updateIsReadMessage.sender;
-            const response = await axios.put(`${APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/messages/${userLoginId}/${userId}`, null, { headers: { "Authorization": `Bearer ${token}` } });
+            const response = await axios.put(`${VITE_APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/messages/${userLoginId}/${userId}`, null, { headers: { "Authorization": `Bearer ${token}` } });
 
             //=========================================================================================
             //  Insert to the (use the message's socket as the id)    ===>    chat slice reducer      =
@@ -191,7 +191,7 @@ export function insertChat(newMessage) {
             //====================================================================================================================
             //      insert to the                       ===>                          mongo DB /messages                         =
             //====================================================================================================================
-            const response = await axios.post(`${APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/messages`, newMessage, { headers: { "Authorization": `Bearer ${token}` } });
+            const response = await axios.post(`${VITE_APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/messages`, newMessage, { headers: { "Authorization": `Bearer ${token}` } });
             console.log(response);
             //=========================================================================================
             // Get message _id from the data base  ===> then insert to the ===>   chat slice reducer  =

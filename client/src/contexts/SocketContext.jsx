@@ -4,7 +4,7 @@ import { createContext, useEffect, useState, useCallback, useRef } from 'react';
 import { io } from "socket.io-client";
 import { SOCKET_URL_DEV, SOCKET_URL_PROD } from "utils/config";
 
-const APP_MODE = import.meta.env.APP_MODE;
+const VITE_APP_MODE = import.meta.env.VITE_APP_MODE;
 
 const SocketContext = createContext(null);
 
@@ -16,7 +16,7 @@ export const SocketProvider = ({ children }) => {
     const { user } = useAuth();
     // Here's a basic socket init.
     useEffect(() => {
-        const newSocket = io(APP_MODE === "production" ? SOCKET_URL_PROD : SOCKET_URL_DEV, { transports: ['websocket'] }, { withCredentials: true });
+        const newSocket = io(VITE_APP_MODE === "production" ? SOCKET_URL_PROD : SOCKET_URL_DEV, { transports: ['websocket'] }, { withCredentials: true });
         setSocket(newSocket);
 
         return () => {
