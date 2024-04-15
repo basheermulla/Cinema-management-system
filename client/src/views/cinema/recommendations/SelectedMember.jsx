@@ -1,25 +1,14 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 // material-ui
-import { useTheme } from '@mui/material/styles';
 import { Avatar, Grid, Typography, Autocomplete, TextField } from '@mui/material';
 
 // internal imports
 import SubCard from 'components/cards/SubCard';
 import SkeletonMemberSelectRecommended from 'components/cards/Skeleton/MemberSelectRecommended';
-import useConfig from 'hooks/useConfig';
-import { gridSpacing } from 'utils/constant-theme';
 
 const SelectedMember = ({ isLoading, member, optionsFilms, handleAutocomplete }) => {
-    const theme = useTheme();
-
-    const { borderRadius } = useConfig();
-
-    useEffect(() => {
-
-    }, []);
 
     return (
         <>

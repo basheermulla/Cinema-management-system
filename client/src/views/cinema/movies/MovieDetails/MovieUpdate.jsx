@@ -1,11 +1,10 @@
 import PropTypes from 'prop-types'
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // material-ui
 import {
-    Avatar, Button, CardMedia, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Radio, RadioGroup,
-    Select, Stack, TextField, Typography, FormHelperText, Checkbox, Autocomplete, Chip, Box
+    Box, Button,  FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Radio, RadioGroup,
+    Select, Stack, TextField, Typography, FormHelperText, Autocomplete, Chip, 
 } from '@mui/material';
 import Close from '@mui/icons-material/Close';
 import { createFilterOptions } from '@mui/material/Autocomplete';

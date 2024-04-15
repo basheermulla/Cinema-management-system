@@ -8,7 +8,7 @@ import { DASHBOARD_PATH } from 'utils/config';
 import Logo from 'components/Logo';
 
 const LogoSection = () => (
-    <Link component={RouterLink} to={DASHBOARD_PATH} aria-label="berry logo">
+    <Link component={RouterLink} to={DASHBOARD_PATH} aria-label="cinema logo">
         <Logo />
     </Link>
 );

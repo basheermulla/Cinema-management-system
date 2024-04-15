@@ -2,8 +2,9 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 
 // material-ui
-import { useTheme } from '@mui/material/styles';
 import { Box, Drawer, Grid, IconButton, InputAdornment, Menu, MenuItem, OutlinedInput, Typography, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+
 
 // third-party
 import PerfectScrollbar from 'react-perfect-scrollbar';

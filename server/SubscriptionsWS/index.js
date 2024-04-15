@@ -17,8 +17,6 @@ const seederWS = require('./seederWS/seeder');
 /*=====================================================================================================*/
 const { API_PORT } = process.env;
 const port = process.env.PORT || API_PORT;
-const { MONGO_URL } = process.env;
-const { HOSTNAME } = process.env;
 
 /*=======================================================================================================
 /*====================================//* Connect Database *//*==========================================
@@ -31,7 +29,7 @@ connectDB();
 
 // Cross-Origin Resource Sharing (CORS) is a mechanism 
 // that gives permission for one origin (domain) to access another origin
-app.use(cors({ withCredentials: false }));
+app.use(cors());
 
 // built in middleware function in Express starting from v4.16.0. 
 // It parses incoming JSON requests and puts the parsed data in req.body
@@ -61,7 +59,7 @@ app.use('/subscriptions', subscriptionsRouter);
 /*=======================================================================================================
 /*====================================//* server listening *//*==========================================
 /*=====================================================================================================*/
-app.listen(port, HOSTNAME, () => {
+app.listen(port, () => {
     console.log(`-----------------------------------------------------------`)
     console.log(`- Subscription server is running at http://localhost:${port} -`)
     console.log(`-----------------------------------------------------------`)

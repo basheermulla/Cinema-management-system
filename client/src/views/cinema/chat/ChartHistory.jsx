@@ -10,6 +10,7 @@ import { gridSpacing } from 'utils/constant-theme';
 const ChartHistory = ({ data, theme, user }) => {
     return (
         <>
+            {console.log(data)}
             <Grid item xs={12}>
                 <Grid container spacing={1}>
                     {data && data.map((date, index) => (

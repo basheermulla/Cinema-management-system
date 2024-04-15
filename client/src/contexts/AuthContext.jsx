@@ -12,8 +12,9 @@ import accountReducer from 'store/accountReducer';
 // internal imports
 import Loader from 'components/Loader';
 
-const AUTHENTICATION_URL = import.meta.env.VITE_APP_AUTH_URL;
-
+const APP_MODE = import.meta.env.APP_MODE;
+const VITE_APP_ORIGIN_DEV = import.meta.env.VITE_APP_ORIGIN_DEV;
+const VITE_APP_ORIGIN_PRODUCTION = import.meta.env.VITE_APP_ORIGIN_PRODUCTION;
 // constant
 const initialState = {
     isLoggedIn: false,
@@ -47,7 +48,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     const login = async (username, password) => {
-        const response = await axios.post(`${AUTHENTICATION_URL}/login`, { username, password });
+        const response = await axios.post(`${APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/authentication/login`, { username, password });
         const { user, accessToken, message } = response.data;
         if (user) {
             localStorage.setItem('userLogin', JSON.stringify(user));
@@ -58,12 +59,13 @@ export const AuthProvider = ({ children }) => {
 
             // Show the alert dialog 5 minutes before the token expires
             setTimeout(() => {
-                setOpenDialog(true)
+                setOpenDialog(true);
             }, (user.sessionTimeOut * 60000) - 300000);
 
             // Token expired -> run logout
             setTimeout(() => {
-                dispatch({ type: LOGOUT });
+                setOpenDialog(false);
+                dispatch({ type: LOGOUT });                
                 logout();
             }, user.sessionTimeOut * 60000);
             dispatch({ type: LOGIN, payload: { isLoggedIn: true, loginTimeOut, user } });

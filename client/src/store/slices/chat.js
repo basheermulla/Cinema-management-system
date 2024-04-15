@@ -1,12 +1,13 @@
 // third-party
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, current } from '@reduxjs/toolkit';
 
 // internal imports
 import axios from 'axios';
 import { dispatch } from '../index';
 
-const USERS_URL = import.meta.env.VITE_APP_USERS_URL;
-const MESSAGES_URL = import.meta.env.VITE_APP_MESSAGES_URL;
+const APP_MODE = import.meta.env.APP_MODE;
+const VITE_APP_ORIGIN_DEV = import.meta.env.VITE_APP_ORIGIN_DEV;
+const VITE_APP_ORIGIN_PRODUCTION = import.meta.env.VITE_APP_ORIGIN_PRODUCTION;
 
 // ----------------------------------------------------------------------
 
@@ -48,7 +49,21 @@ const slice = createSlice({
 
         // INSERT NEW CHAT MESSAGE TO USER CHATS ARRAY
         insertChatToUserChatsSuccess(state, action) {
-            state.chats = [...state.chats, action.payload];
+            const currentChats = [...current(state.chats)];
+            const todayDate = new Date().toLocaleDateString("sv-SE");
+            if (Object.keys(currentChats[currentChats.length-1]).includes(todayDate)) {
+                console.log('Yes = ', todayDate);
+                const thisDayIndex = currentChats.length - 1;
+                const lastDayMessages = currentChats[thisDayIndex][todayDate];
+                const newLastDayMessages = [...lastDayMessages, action.payload];
+                const tmpCurrentchats = currentChats.filter((chats) => Object.keys(chats)[0] !== todayDate);
+                state.chats = [...tmpCurrentchats, { [todayDate]: newLastDayMessages }];
+            } else {
+                console.log('No = ', todayDate);
+                const newLastDayMessages = [action.payload];
+                state.chats = [...state.chats, { [todayDate]: newLastDayMessages }];
+
+            }
         }
     }
 });
@@ -70,7 +85,7 @@ export function getUsersWithChatsData(id) {
         try {
             let token = window.localStorage.getItem('accessToken');
             // console.log('<=== Users getUsersWithChatsData ===> ', id);
-            const response = await axios.get(`${USERS_URL}/chats/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
+            const response = await axios.get(`${APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/users/chats/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
             dispatch(slice.actions.getUsersMoreInfoSuccess(response.data));
         } catch (error) {
             dispatch(slice.actions.hasError(error));
@@ -93,7 +108,7 @@ export function getUserChats(userLoginId, userId) {
                 //=====================================================================================================================
                 // Get all chats between two users [userLoginId, userId] and set the chats array in the  ===>  cinema server/messages =
                 //=====================================================================================================================
-                const response = await axios.get(`${MESSAGES_URL}/${userLoginId}/${userId}`, { headers: { "Authorization": `Bearer ${token}` } });
+                const response = await axios.get(`${APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/messages/${userLoginId}/${userId}`, { headers: { "Authorization": `Bearer ${token}` } });
                 const data = response.data;
 
                 //======================================================================================================
@@ -115,7 +130,7 @@ export function getUserChats(userLoginId, userId) {
                     // 1) chat.sender === userId.                                                                    =
                     // 2) chat.recipient === userLoginId.                                                            =
                     //================================================================================================
-                    const response = await axios.put(`${MESSAGES_URL}/${userLoginId}/${userId}`, null, { headers: { "Authorization": `Bearer ${token}` } });
+                    const response = await axios.put(`${APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/messages/${userLoginId}/${userId}`, null, { headers: { "Authorization": `Bearer ${token}` } });
 
                     //=========================================================================================
                     // update boolean values of isReadByRecipient                ===>    chat slice reducer   =
@@ -150,7 +165,7 @@ export function setReadChatByRecipient(obj_updateIsReadMessage, incomingMessageI
             //================================================================================================
             const userLoginId = obj_updateIsReadMessage.recipient;
             const userId = obj_updateIsReadMessage.sender;
-            const response = await axios.put(`${MESSAGES_URL}/${userLoginId}/${userId}`, null, { headers: { "Authorization": `Bearer ${token}` } });
+            const response = await axios.put(`${APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/messages/${userLoginId}/${userId}`, null, { headers: { "Authorization": `Bearer ${token}` } });
 
             //=========================================================================================
             //  Insert to the (use the message's socket as the id)    ===>    chat slice reducer      =
@@ -176,11 +191,12 @@ export function insertChat(newMessage) {
             //====================================================================================================================
             //      insert to the                       ===>                          mongo DB /messages                         =
             //====================================================================================================================
-            const response = await axios.post(`${MESSAGES_URL}`, newMessage, { headers: { "Authorization": `Bearer ${token}` } });
-
+            const response = await axios.post(`${APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/messages`, newMessage, { headers: { "Authorization": `Bearer ${token}` } });
+            console.log(response);
             //=========================================================================================
             // Get message _id from the data base  ===> then insert to the ===>   chat slice reducer  =
             //=========================================================================================
+
             const obj = { _id: response.data._id, ...newMessage }
             dispatch(slice.actions.insertChatToUserChatsSuccess(obj));
         } catch (error) {

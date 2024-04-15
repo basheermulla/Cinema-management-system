@@ -21,11 +21,8 @@ const http = require('http').Server(app);
 /*=======================================================================================================
 /*================================//* Use Environment Variable *//*======================================
 /*=====================================================================================================*/
-const { API_PORT } = process.env;
+const { API_PORT, MONGO_URL, SECRET, NODE_ENV, ORIGIN_DEV, ORIGIN_PRODUCTION } = process.env;
 const port = process.env.PORT || API_PORT;
-const { MONGO_URL } = process.env;
-const { SECRET } = process.env;
-const { HOSTNAME } = process.env;
 
 /*=======================================================================================================
 /*====================================//* Connect Database *//*==========================================
@@ -42,7 +39,12 @@ const store = new MongoDBStore({
 
 // Cross-Origin Resource Sharing (CORS) is a mechanism 
 // that gives permission for one origin (domain) to access another origin
-app.use(cors({ withCredentials: false }));
+const corsOption = {
+    origin: [NODE_ENV === 'production' ? ORIGIN_PRODUCTION : `${ORIGIN_DEV}:${5173}`],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+}
+app.use(cors(corsOption));
 
 // built in middleware function in Express starting from v4.16.0. 
 // It parses incoming JSON requests and puts the parsed data in req.body
@@ -65,7 +67,7 @@ app.use(session({
 /*=======================================================================================================
 /*==========================//* Socket.io - Bi-Directional Communication *//*============================
 /*=====================================================================================================*/
-const whitelist = ['http://16.171.181.194:5173', 'http://16.171.181.194:3000'];
+const whitelist = [NODE_ENV === 'production' ? ORIGIN_PRODUCTION : `${ORIGIN_DEV}:${5173}`];
 
 const socketIO = require('socket.io')(http, {
     cors: {
@@ -75,14 +77,32 @@ const socketIO = require('socket.io')(http, {
     }
 });
 
+app.use(function(req, res, next) {
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Credentials", "true");
+        res.setHeader(
+                "Access-Control-Allow-Methods",
+                "GET,HEAD,OPTIONS,POST,PUT,DELETE"
+        );
+        res.setHeader(
+                "Access-Control-Allow-Headers",
+                "Origin,Cache-Control,Accept,X-Access-Token ,X-Requested-With, Content-Type, Access-Control-Request-Method"
+        );
+        if (req.method === "OPTIONS") {
+                return res.status(200).end();
+        }
+        next();
+});
+
 // Open socket.io to establish a connection with a React app
 let count = 0;
 let users = [];
 socketIO.on('connection', (socket) => {
     //========================================================================================================================================
-    //===========================================//*⚡✅⚡ On - connection ⚡✅⚡*//*=======================================================
+    //===========================================//*⚡✅⚡ On - connection ⚡✅⚡*//*====================================================*/
     //========================================================================================================================================
-    if (socket.handshake.headers.origin === 'http://16.171.181.194:5173' || socket.handshake.headers.origin === 'http://16.171.181.194:3000') {
+    console.log("socket = ", socket.handshake);
+    if (socket.handshake.headers.origin === (NODE_ENV === 'production' ? ORIGIN_PRODUCTION : `${ORIGIN_DEV}:${5173}`)) {
         console.log(
             `⚡: ${socket.id} user just connected!`
         );
@@ -168,7 +188,7 @@ socketIO.on('connection', (socket) => {
         });
 
         //========================================================================================================================================
-        //============================================//*🔥⛔🔥 On - disconnect 🔥⛔🔥*//*========================================================
+        //============================================//*🔥⛔🔥 On - disconnect 🔥⛔🔥*//*===================================================*/
         //========================================================================================================================================
         socket.on('disconnect', () => {
             //------------------------------------------------------------------------------------------------------------------------
@@ -209,9 +229,9 @@ app.use('/messages', messagesRouter);
 /*=======================================================================================================
 /*====================================//* server listening *//*==========================================
 /*=====================================================================================================*/
-http.listen(port, HOSTNAME, () => {
-    console.log(`-----------------------------------------------------------------`)
-    console.log(`- Subscription server is running at http://16.171.181.194: ${port} -`)
-    console.log(`-----------------------------------------------------------------`)
+http.listen(port, () => {
+    console.log(`-----------------------------------------------------------------`);
+    NODE_ENV === 'production' ? console.log(`- Cinema server is running at ${ORIGIN_PRODUCTION}:${port} -`) : console.log(`- Cinema server is running at ${ORIGIN_DEV}:${port} -`);
+    console.log(`-----------------------------------------------------------------`);
 });
 /* //3️⃣2️⃣4️⃣5️⃣6️⃣7️⃣8️⃣9️⃣🔟🔚⛔❌✅❎✔️ 🎬🔜🔛🔄⏯️▶️♾️🆘🆗*/

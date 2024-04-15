@@ -21,7 +21,7 @@ import { chartYearData } from './chart-data/total-subscriptions-bar-chart';
 const status = [
     {
         value: 'month',
-        label: 'This Month [ Optional extension in the future ]'
+        label: 'This Month [ Optional expansion in the future ]'
     },
     {
         value: 'year',

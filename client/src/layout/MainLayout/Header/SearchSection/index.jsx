@@ -160,7 +160,7 @@ const SearchSection = () => {
                     id="input-search-header"
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
-                    placeholder="Search - optional extension in the future"
+                    placeholder="Search - optional expansion in the future"
                     startAdornment={
                         <InputAdornment position="start">
                             <IconSearch stroke={1.5} size="16px" color={theme.palette.grey[500]} />

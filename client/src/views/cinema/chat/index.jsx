@@ -1,10 +1,14 @@
 import { useEffect, useState, useLayoutEffect, useRef, useCallback } from 'react'
+
 // material-ui
-import { useTheme, styled } from '@mui/material/styles';
 import { Box, ClickAwayListener, Divider, Grid, InputAdornment, IconButton, Popper, OutlinedInput, Typography, useMediaQuery, Stack, CardMedia } from '@mui/material';
+import { useTheme, styled } from '@mui/material/styles';
+
+
 // third-party
 import EmojiPicker, { SkinTones } from 'emoji-picker-react';
 import moment from 'moment';
+
 // internal imports
 import UserDetails from './UserDetails';
 import ChatDrawer from './ChatDrawer';
@@ -18,6 +22,7 @@ import { getUserChats, insertChat, setReadChatByRecipient } from 'store/slices/c
 import { appDrawerWidth as drawerWidth, gridSpacing } from 'utils/constant-theme';
 import useSocket from 'hooks/useSocket';
 import useAuth from 'hooks/useAuth';
+
 // assets
 import AttachmentTwoToneIcon from '@mui/icons-material/AttachmentTwoTone';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
@@ -26,6 +31,7 @@ import SendTwoToneIcon from '@mui/icons-material/SendTwoTone';
 import MoodTwoToneIcon from '@mui/icons-material/MoodTwoTone';
 import HighlightOffTwoToneIcon from '@mui/icons-material/HighlightOffTwoTone';
 import imageMail from 'assets/images/maintenance/mail-svgrepo-com.svg';
+
 // drawer content element
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
     flexGrow: 1,
@@ -48,6 +54,8 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({
     })
 }));
 
+//================================================================= ChatMainPage =====================================================//
+
 const ChatMainPage = () => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('lg'));
@@ -59,42 +67,51 @@ const ChatMainPage = () => {
             scrollRef.current.scrollIntoView();
         }
     });
+
     // set chat details page open when user is selected from sidebar
     const [emailDetails, setEmailDetails] = useState(false);
     const handleUserChange = () => {
         setEmailDetails((prev) => !prev);
     };
+
     // toggle sidebar
     const [openChatDrawer, setOpenChatDrawer] = useState(true);
     const handleDrawerOpen = () => {
         setOpenChatDrawer((prevState) => !prevState);
     };
+
     // close sidebar when widow size below 'md' breakpoint
     useEffect(() => {
         setOpenChatDrawer(!matchDownSM);
     }, [matchDownSM]);
+
     // userLogin
     const { user: userLogin } = useAuth();
+
     // user data
     const [user, setUser] = useState({});
     const [displayUserId, setDisplayUserId] = useState('');
+
     // This state will be empty ([]) when the conversation between both userLogin (sender) and user (recipient) has no messages
     const [data, setData] = useState([]);
+
     // If the data array state is empty [], then the "converstationId" state  will be "undefined"
     const [converstationId, setConverstationId] = useState('');
     const chatState = useSelector((state) => state.chat);
+
     useEffect(() => {
         setUser(chatState.user);
     }, [chatState.user]);
     useEffect(() => {
         setData(chatState.chats);
-        if (chatState.chats.length > 0){
+        if (chatState.chats.length > 0) {
             const converstationId = Object.values(chatState.chats[0])[0][0]?.converstationId;
             setConverstationId(converstationId);
         } else {
             setConverstationId('');
         }
     }, [chatState.chats]);
+
     const alterUserDisplay = useCallback((user) => {
         setDisplayUserId(user._id)
         setUser(user);
@@ -107,20 +124,25 @@ const ChatMainPage = () => {
         }
         handleOnSendMessage();
     };
+
     const onEmojiClick = (emojiObject) => {
         setMessage(message + emojiObject.emoji);
     };
+
     const [anchorElEmoji, setAnchorElEmoji] = useState();
     const handleOnEmojiButtonClick = (event) => {
         setAnchorElEmoji(anchorElEmoji ? null : event?.currentTarget);
     };
+
     const emojiOpen = Boolean(anchorElEmoji);
     const emojiId = emojiOpen ? 'simple-popper' : undefined;
     const handleCloseEmoji = () => {
         setAnchorElEmoji(null);
     };
 
-    //⚡✅ Socket ✅⚡
+    //=========================================================================================================================================
+    //==                                                       ⚡✅⚡ Socket ⚡✅⚡                                                       ==
+    //=========================================================================================================================================
     const [onlineUsers, setOnlineUsers] = useState([]);
     const [message, setMessage] = useState('');
     const [messageSocket, setMessageSocket] = useState({});
@@ -130,7 +152,9 @@ const ChatMainPage = () => {
     useEffect(() => {
         userRef.current = user;
     });
-    // useEffect -> Emit onlineChat event on the chat
+    //------------------------------------------------------
+    // useEffect -> Emit onlineChat event on the chat      -
+    //------------------------------------------------------
     useEffect(() => {
         socket?.emit('onlineChat', { username: userLogin.username });
     }, [socket]);
@@ -143,7 +167,10 @@ const ChatMainPage = () => {
             setUser(old_user)
         }
     }
-    // useEffect -> Subscribe to an newUserResponse event
+
+    //--------------------------------------------------------
+    // useEffect -> Subscribe to an newUserResponse event    -
+    //--------------------------------------------------------
     useEffect(() => {
         socket?.on('newUserResponse', (incomingUsersArray) => handleUsersOnEvents(incomingUsersArray));
 
@@ -151,7 +178,10 @@ const ChatMainPage = () => {
             socket?.off('newUserResponse', (incomingUsersArray) => handleUsersOnEvents(incomingUsersArray));
         }
     }, [socket]);
-    // useEffect -> Subscribe to an onlineChatResponse event
+
+    //--------------------------------------------------------
+    // useEffect -> Subscribe to an onlineChatResponse event -
+    //--------------------------------------------------------
     useEffect(() => {
         socket?.on('onlineChatResponse', (incomingUsersArray) => handleUsersOnEvents(incomingUsersArray));
 
@@ -159,7 +189,10 @@ const ChatMainPage = () => {
             socket?.off('onlineChatResponse', (incomingUsersArray) => handleUsersOnEvents(incomingUsersArray));
         }
     }, [socket]);
-    // useEffect -> Subscribe to an offlineInSystemResponse event
+
+    //--------------------------------------------------------
+    // useEffect -> Subscribe to an offlineInSystemResponse event -
+    //--------------------------------------------------------
     useEffect(() => {
         socket?.on('offlineInSystemResponse', (incomingUsersArray) => handleUsersOnEvents(incomingUsersArray));
 
@@ -167,7 +200,10 @@ const ChatMainPage = () => {
             socket?.off('offlineInSystemResponse', (incomingUsersArray) => handleUsersOnEvents(incomingUsersArray));
         }
     }, [socket]);
-    // useEffect -> Subscribe to an availableInSystem event
+
+    //--------------------------------------------------------
+    // useEffect -> Subscribe to an availableInSystem event  -
+    //--------------------------------------------------------
     useEffect(() => {
         socket?.on('availableInSystemResponse', (incomingUsersArray) => handleUsersOnEvents(incomingUsersArray));
 
@@ -175,7 +211,10 @@ const ChatMainPage = () => {
             socket?.off('availableInSystemResponse', (incomingUsersArray) => handleUsersOnEvents(incomingUsersArray));
         }
     }, [socket]);
-    // Function -> handle a new message  &  emit a message event
+
+    //------------------------------------------------------------
+    // Function -> handle a new message  &  emit a message event   -
+    //------------------------------------------------------------
     const handleOnSendMessage = () => {
         const date = new Date();
         setMessage('');
@@ -192,7 +231,10 @@ const ChatMainPage = () => {
 
         dispatch(insertChat(newMessage));
     };
-    // Function -> handle a new messageResponse event
+
+    //---------------------------------------------------
+    // Function -> handle a new messageResponse event     -
+    //---------------------------------------------------
     const handleMessageResponse = (incomingMessage) => {
         //---------------------------------------------------------------------------------------------------------------------------------
         // Definition   -> When a messageResponse event is triggered by a particular user                                                 -
@@ -206,7 +248,10 @@ const ChatMainPage = () => {
             setMessageSocket(incomingMessage);
         }
     }
-    // useEffect -> Subscribe to a messageResponse event
+
+    //------------------------------------------------------
+    // useEffect -> Subscribe to a messageResponse event  -
+    //------------------------------------------------------
     useEffect(() => {
         socket?.on('messageResponse', (incomingMessage) => handleMessageResponse(incomingMessage));
 
@@ -214,7 +259,10 @@ const ChatMainPage = () => {
             socket?.off('messageResponse', (incomingMessage) => handleMessageResponse(incomingMessage));
         }
     }, [socket, user]);
-    // Function -> handle a start typing  &  emit a typing event
+
+    //------------------------------------------------------------
+    // Function -> handle a start typing  &  emit a typing event   -
+    //------------------------------------------------------------
     let sender_timer;
     const handleTyping = () => {
         if (sender_timer === undefined) {
@@ -231,7 +279,10 @@ const ChatMainPage = () => {
         }
 
     }
-    // useEffect -> Subscribe to a typingResponse event
+
+    //------------------------------------------------------
+    // useEffect -> Subscribe to a typingResponse event   -
+    //------------------------------------------------------
     useEffect(() => {
         socket?.on('typingResponse', (typingUser) => handleTypingResponse(typingUser));
 
@@ -239,7 +290,10 @@ const ChatMainPage = () => {
             socket?.off('typingResponse', (typingUser) => handleTypingResponse(typingUser));
         }
     }, [socket, user]);
-    // Function -> handle a typingResponse event
+
+    //------------------------------------------------------
+    // Function -> handle a typingResponse event          -
+    //------------------------------------------------------
     let reciver_timer;
     const handleTypingResponse = (typingUser) => {
         //------------------------------------------------------------------------------------------------
@@ -255,8 +309,12 @@ const ChatMainPage = () => {
             }, 3000);
         }
     }
+
+    //=========================================================================================================================================
+    //==                                               ✔️▶️🎬 Loading Page 🎬▶️✔️                                                         ==
+    //=========================================================================================================================================
     if (loading) return <Loader />;
-    // useEffect -> Subscribe to a typing Response event
+
     let userChatHistoryResult = <></>;
     if (user && user._id) {
         userChatHistoryResult = (
