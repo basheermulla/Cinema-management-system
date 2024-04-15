@@ -2,8 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 import { dispatch } from '../index';
 import axios from "axios";
 
-const MEMBERS_URL = import.meta.env.VITE_APP_MEMBERS_URL;
-const SUBSCRIPTIONS_URL = import.meta.env.VITE_APP_SUBSCRIPTIONS_URL;
+const APP_MODE = import.meta.env.APP_MODE;
+const VITE_APP_ORIGIN_DEV = import.meta.env.VITE_APP_ORIGIN_DEV;
+const VITE_APP_ORIGIN_PRODUCTION = import.meta.env.VITE_APP_ORIGIN_PRODUCTION;
 
 const initialState = {
     error: null,
@@ -38,7 +39,7 @@ export default slice.reducer
 export async function loader() {
     try {
         let token = window.localStorage.getItem('accessToken');
-        const { data } = await axios.get(`${MEMBERS_URL}/subscriptionsUnwind`, { headers: { "Authorization": `Bearer ${token}` } });
+        const { data } = await axios.get(`${APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/members/subscriptionsUnwind`, { headers: { "Authorization": `Bearer ${token}` } });
         dispatch(slice.actions.getMembersSubscriptionsSuccess(data.members));
         return data;
     } catch (error) {
@@ -51,7 +52,7 @@ export async function memberLoader({ params }) {
     try {
         let token = window.localStorage.getItem('accessToken');
         const id = params.id;
-        const response = await axios.get(`${MEMBERS_URL}/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
+        const response = await axios.get(`${APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/members/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
         return response.data;
     } catch (error) {
         dispatch(slice.actions.hasError(error));
@@ -66,9 +67,9 @@ export function createSubscription(method, memberId, subscription) {
             // console.log('Here we create subscription = ', memberId);
             // console.log('Here we create subscription = ', subscription);
             if (method === 'post') {
-                const response = await axios.post(`${SUBSCRIPTIONS_URL}`, { memberId: memberId, ...subscription }, { headers: { "Authorization": `Bearer ${token}` } });
+                const response = await axios.post(`${APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/subscription`, { memberId: memberId, ...subscription }, { headers: { "Authorization": `Bearer ${token}` } });
             } else {
-                const response = await axios.put(`${SUBSCRIPTIONS_URL}/${memberId}`, subscription, { headers: { "Authorization": `Bearer ${token}` } });
+                const response = await axios.put(`${APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/subscription/${memberId}`, subscription, { headers: { "Authorization": `Bearer ${token}` } });
             }
 
         } catch (error) {
@@ -83,7 +84,7 @@ export function updateSubscription(memberId, subscription) {
             let token = window.localStorage.getItem('accessToken');
             // console.log('Here we update subscription = ', memberId);
             // console.log('Here we update subscription = ', subscription);
-            const response = await axios.put(`${SUBSCRIPTIONS_URL}/${memberId}`, subscription, { headers: { "Authorization": `Bearer ${token}` } });
+            const response = await axios.put(`${APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/subscription/${memberId}`, subscription, { headers: { "Authorization": `Bearer ${token}` } });
         } catch (error) {
             dispatch(slice.actions.hasError(error));
         }
@@ -99,11 +100,11 @@ export function deleteSubscription(memberId, subscriptionId, action) {
             // console.log(obj_delete);
             if (action === 'deleteOneMovie') {
                 //  Remove only this [subscriptionId] desired member's subscription from the subscriptionMovies array in the member's subscription document
-                const response = await axios.put(`${SUBSCRIPTIONS_URL}/${memberId}`, obj_delete, { headers: { "Authorization": `Bearer ${token}` } });
+                const response = await axios.put(`${APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/subscription/${memberId}`, obj_delete, { headers: { "Authorization": `Bearer ${token}` } });
             } else {
                 // Delete the member's entire subscription document - this case can be when the member has only one future subscription and wants to cancel it
                 // console.log('Pay attention - You may delete the member`s entire subscription document = ', subscriptionId);
-                const response = await axios.delete(`${SUBSCRIPTIONS_URL}/${memberId}`, { headers: { "Authorization": `Bearer ${token}` } });
+                const response = await axios.delete(`${APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/subscription/${memberId}`, { headers: { "Authorization": `Bearer ${token}` } });
             }
         } catch (error) {
             dispatch(slice.actions.hasError(error));
@@ -116,7 +117,7 @@ export function createMember(member) {
         try {
             let token = window.localStorage.getItem('accessToken');
             // console.log('Here we create member = ', member);
-            const response = await axios.post(`${MEMBERS_URL}`, member, { headers: { "Authorization": `Bearer ${token}` } });
+            const response = await axios.post(`${APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/members`, member, { headers: { "Authorization": `Bearer ${token}` } });
         } catch (error) {
             dispatch(slice.actions.hasError(error));
         }
@@ -128,7 +129,7 @@ export function updateMember(id, member) {
         try {
             let token = window.localStorage.getItem('accessToken');
             // console.log('Here we update member = ', id, ' |----------| ', member);
-            const response = await axios.put(`${MEMBERS_URL}/${id}`, member, { headers: { "Authorization": `Bearer ${token}` } });
+            const response = await axios.put(`${APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/members/${id}`, member, { headers: { "Authorization": `Bearer ${token}` } });
         } catch (error) {
             dispatch(slice.actions.hasError(error));
         }
@@ -140,7 +141,7 @@ export function deleteMember(id) {
         try {
             let token = window.localStorage.getItem('accessToken');
             // console.log('Pay attention - You may delete the member = ', id);
-            const response = await axios.delete(`${MEMBERS_URL}/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
+            const response = await axios.delete(`${APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/members/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
         } catch (error) {
             dispatch(slice.actions.hasError(error));
         }
@@ -152,7 +153,7 @@ export function getMembers() {
         try {
             let token = window.localStorage.getItem('accessToken');
             // console.log('aggregate');
-            const response = await axios.get(MEMBERS_URL, { headers: { "Authorization": `Bearer ${token}` } });
+            const response = await axios.get(`${APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/members`, { headers: { "Authorization": `Bearer ${token}` } });
             dispatch(slice.actions.getMembersSuccess(response.data));
         } catch (error) {
             dispatch(slice.actions.hasError(error));

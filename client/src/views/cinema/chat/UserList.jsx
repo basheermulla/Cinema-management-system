@@ -94,6 +94,7 @@ const UserList = ({ alterUserDisplay, messageSocket, onlineUsers, setTypingStatu
                                 <Grid container alignItems="center" spacing={1} component="span">
                                     <Grid item xs zeroMinWidth component="span">
                                         <Typography
+                                            //optional expansion in the future
                                             variant="caption"
                                             component="span"
                                             sx={{
@@ -103,7 +104,7 @@ const UserList = ({ alterUserDisplay, messageSocket, onlineUsers, setTypingStatu
                                                 display: 'block'
                                             }}
                                         >
-                                            {'user.status'}
+                                            {''}
                                         </Typography>
                                     </Grid>
                                     <Grid item component="span">

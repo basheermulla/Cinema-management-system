@@ -1,6 +1,6 @@
 // material-ui
-import { useTheme } from '@mui/material/styles';
 import { Box, CardMedia, Grid, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 // internal imports
 import { gridSpacing } from 'utils/constant-theme';

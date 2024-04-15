@@ -4,13 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 
 // material-ui
+import { Grid } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { Autocomplete, Avatar, Box, Button, CardActions, CardContent, CardMedia, Divider, Grid, InputAdornment, TextField, Typography } from '@mui/material';
 
 // internal imports
 import MainCard from 'components/cards/MainCard';
-import SubCard from 'components/cards/SubCard';
-import SkeletonRecommendedPlaceholder from 'components/cards/Skeleton/RecommendedPlaceholder';
 import SelectedMember from './SelectedMember';
 import MembersDetails from './MembersDetails';
 import LastMembersSubscriptions from './LastMembersSubscriptions';

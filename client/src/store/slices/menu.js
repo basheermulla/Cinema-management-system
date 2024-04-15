@@ -1,9 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// project imports
-import { dispatch } from '../index';
-import axios from 'axios';
-
 // initial state
 const initialState = {
     selectedItem: ['control-panel'],

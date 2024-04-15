@@ -4,7 +4,9 @@ export const DASHBOARD_PATH = '/dashboard/control-panel';
 
 export const HORIZONTAL_MAX_ITEM = 7;
 
-export const SOCKET_URL = 'http://localhost:8082';
+export const SOCKET_URL_DEV = 'http://localhost:8082';
+
+export const SOCKET_URL_PROD = 'http://16.171.140.126';
 
 const config = {
     layout: LAYOUT_CONST.VERTICAL_LAYOUT, // vertical, horizontal

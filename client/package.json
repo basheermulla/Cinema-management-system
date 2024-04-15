@@ -11,10 +11,10 @@
     "start": "vite"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.3",
-    "@emotion/styled": "^11.11.0",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.15.3",
-    "@mui/material": "^5.15.3",
+    "@mui/material": "^5.15.15",
     "@mui/x-date-pickers": "^6.18.6",
     "@reduxjs/toolkit": "^2.0.1",
     "@tabler/icons-react": "^2.45.0",

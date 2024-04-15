@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
 // material-ui
-import { useTheme } from '@mui/material/styles';
-import { Avatar, Button, CardActions, CardContent, CardMedia, Divider, Grid, Menu, MenuItem, Typography, LinearProgress, Autocomplete, TextField } from '@mui/material';
+import { CardMedia, Grid, Typography } from '@mui/material';
 
 // internal imports
 import SubCard from 'components/cards/SubCard';
@@ -11,11 +10,7 @@ import MemberLastSubscriptionsRecommended from 'components/cards/Skeleton/Member
 import useConfig from 'hooks/useConfig';
 import { gridSpacing } from 'utils/constant-theme';
 
-// assets
-import { IconMail, IconBuildingCommunity } from '@tabler/icons-react';
-
 const LastMembersSubscriptions = ({ isLoading, lastSubscriptions }) => {
-    const theme = useTheme();
 
     const { borderRadius } = useConfig();
 

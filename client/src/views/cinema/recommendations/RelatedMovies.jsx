@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState, ReactElement } from 'react';
+import { useEffect, useState } from 'react';
 
 // material-ui
+import { Box, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { Box, Button, Container, Grid, TableContainer, useMediaQuery } from '@mui/material';
 
 // third-party
 import Slider from 'react-slick';
