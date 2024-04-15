@@ -12,7 +12,7 @@ import accountReducer from 'store/accountReducer';
 // internal imports
 import Loader from 'components/Loader';
 
-const APP_MODE = import.meta.env.APP_MODE;
+const VITE_APP_MODE = import.meta.env.VITE_APP_MODE;
 const VITE_APP_ORIGIN_DEV = import.meta.env.VITE_APP_ORIGIN_DEV;
 const VITE_APP_ORIGIN_PRODUCTION = import.meta.env.VITE_APP_ORIGIN_PRODUCTION;
 // constant
@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     const login = async (username, password) => {
-        const response = await axios.post(`${APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/authentication/login`, { username, password });
+        const response = await axios.post(`${VITE_APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/authentication/login`, { username, password });
         const { user, accessToken, message } = response.data;
         if (user) {
             localStorage.setItem('userLogin', JSON.stringify(user));
@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const register = async (username, password) => {
-        const response = await axios.post(`${AUTHENTICATION_URL}/register`, { username, password });
+        const response = await axios.post(`${VITE_APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/register`, { username, password });
         const { message, error } = response.data;
 
         if (message === 'User registered successfully') {
