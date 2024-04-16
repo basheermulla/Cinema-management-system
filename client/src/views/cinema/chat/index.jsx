@@ -31,6 +31,7 @@ import SendTwoToneIcon from '@mui/icons-material/SendTwoTone';
 import MoodTwoToneIcon from '@mui/icons-material/MoodTwoTone';
 import HighlightOffTwoToneIcon from '@mui/icons-material/HighlightOffTwoTone';
 import imageMail from 'assets/images/maintenance/mail-svgrepo-com.svg';
+import chat_icon from 'assets/images/maintenance/chat_icon.svg';
 
 // drawer content element
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
@@ -331,7 +332,7 @@ const ChatMainPage = () => {
             <Stack alignItems="center" spacing={gridSpacing}>
                 <CardMedia
                     component="img"
-                    image={theme.palette.mode === 'dark' ? imageMail : imageMail}
+                    image={theme.palette.mode === 'dark' ? chat_icon : chat_icon}
                     title="Slider5 image"
                     sx={{ maxWidth: 350 }}
                 />
@@ -424,9 +425,9 @@ const ChatMainPage = () => {
                                     <Grid item xs={12}>
                                         <Grid container spacing={1} alignItems="center">
                                             <Grid item>
-                                                <IconButton size="large" aria-label="attachment file">
+                                                {/* <IconButton size="large" aria-label="attachment file">
                                                     <AttachmentTwoToneIcon />
-                                                </IconButton>
+                                                </IconButton> */}
                                                 <IconButton
                                                     ref={anchorElEmoji}
                                                     aria-describedby={emojiId}

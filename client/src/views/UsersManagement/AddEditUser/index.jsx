@@ -209,7 +209,7 @@ const AddEditUser = () => {
                             fullWidth
                             id="image"
                             name="user.image"
-                            label="Image"
+                            label="Image: Insert ===> { https://source.unsplash.com/collection/9948714? } and concat { an integer number }"
                             value={formik.values['user'].image}
                             onChange={formik.handleChange}
                             error={Boolean(

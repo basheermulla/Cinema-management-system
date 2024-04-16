@@ -145,7 +145,7 @@ const AddOrEditMember = ({ open, member, handleCloseMemberDialog, addMember, edi
                                     fullWidth
                                     id="image"
                                     name="image"
-                                    label="Image"
+                                    label="Image: Insert ===> { https://source.unsplash.com/collection/9948714? } and concat { an integer number }"
                                     value={formik.values.image}
                                     onChange={formik.handleChange}
                                     error={formik.touched.image && Boolean(formik.errors.image)}

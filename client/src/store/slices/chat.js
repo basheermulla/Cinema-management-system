@@ -51,18 +51,18 @@ const slice = createSlice({
         insertChatToUserChatsSuccess(state, action) {
             const currentChats = [...current(state.chats)];
             const todayDate = new Date().toLocaleDateString("sv-SE");
-            if (Object.keys(currentChats[currentChats.length-1]).includes(todayDate)) {
-                console.log('Yes = ', todayDate);
+            if (currentChats.length === 0) {
+                const newLastDayMessages = [action.payload];
+                state.chats = [...state.chats, { [todayDate]: newLastDayMessages }];
+            } else if (Object.keys(currentChats[currentChats.length-1]).includes(todayDate)) {
                 const thisDayIndex = currentChats.length - 1;
                 const lastDayMessages = currentChats[thisDayIndex][todayDate];
                 const newLastDayMessages = [...lastDayMessages, action.payload];
                 const tmpCurrentchats = currentChats.filter((chats) => Object.keys(chats)[0] !== todayDate);
                 state.chats = [...tmpCurrentchats, { [todayDate]: newLastDayMessages }];
             } else {
-                console.log('No = ', todayDate);
                 const newLastDayMessages = [action.payload];
                 state.chats = [...state.chats, { [todayDate]: newLastDayMessages }];
-
             }
         }
     }
@@ -192,7 +192,6 @@ export function insertChat(newMessage) {
             //      insert to the                       ===>                          mongo DB /messages                         =
             //====================================================================================================================
             const response = await axios.post(`${VITE_APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/messages`, newMessage, { headers: { "Authorization": `Bearer ${token}` } });
-            console.log(response);
             //=========================================================================================
             // Get message _id from the data base  ===> then insert to the ===>   chat slice reducer  =
             //=========================================================================================

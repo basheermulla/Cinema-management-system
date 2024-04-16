@@ -146,7 +146,7 @@ const UsersManagementMain = () => {
                                 </Fab>
                             </Tooltip>
                         </Grid>
-                        <Grid item>
+                        {/* <Grid item>
                             <OutlinedInput
                                 id="input-search-list-style1"
                                 placeholder="Search"
@@ -157,7 +157,7 @@ const UsersManagementMain = () => {
                                 }
                                 size="small"
                             />
-                        </Grid>
+                        </Grid> */}
                     </Stack>
                 </Grid >
             }
@@ -165,7 +165,7 @@ const UsersManagementMain = () => {
         >
             {userResult}
 
-            <Grid item xs={12} sx={{ p: 3 }}>
+            {/* <Grid item xs={12} sx={{ p: 3 }}>
                 <Grid container justifyContent="space-between" spacing={gridSpacing}>
                     <Grid item>
                         <Pagination count={10} color="primary" />
@@ -204,7 +204,7 @@ const UsersManagementMain = () => {
                         )}
                     </Grid>
                 </Grid>
-            </Grid>
+            </Grid> */}
         </MainCard >
     );
 };

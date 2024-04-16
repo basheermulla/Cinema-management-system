@@ -95,7 +95,7 @@ const MobileSearch = ({ value, setValue, popupState }) => {
                     </Box>
                 </InputAdornment>
             }
-            aria-describedby="search-helper-text"
+            aria-describedby="search-helper-text-header"
             inputProps={{ 'aria-label': 'weight' }}
         />
     )
@@ -157,7 +157,7 @@ const SearchSection = () => {
             </Box>
             <Box sx={{ display: { xs: 'none', md: 'block' } }}>
                 <OutlineInputStyle
-                    id="input-search-header"
+                    id="input-search-header2"
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
                     placeholder="Search - optional expansion in the future"
