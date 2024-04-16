@@ -146,7 +146,7 @@ const AddMovie = ({ open, handleCloseDialog, addMovie }) => {
                                     fullWidth
                                     id="image-medium"
                                     name="image.medium"
-                                    label="Medium Image"
+                                    label="Medium Image: For example Insert ===> { https://static.tvmaze.com/uploads/images/medium_portrait/81/202627.jpg }"
                                     value={formik.values['image'].medium}
                                     onChange={formik.handleChange}
                                     error={Boolean(
@@ -166,7 +166,7 @@ const AddMovie = ({ open, handleCloseDialog, addMovie }) => {
                                             fullWidth
                                             id="image-original"
                                             name="image.original"
-                                            label="Original Image"
+                                            label="Original Image: For example Insert ===> { https://static.tvmaze.com/uploads/images/original_untouched/81/202627.jpg }"
                                             value={formik.values['image'].original}
                                             onChange={formik.handleChange}
                                             error={Boolean(

@@ -138,7 +138,7 @@ const ChatDrawer = ({ handleDrawerOpen, openChatDrawer, alterUserDisplay, messag
                                     </Grid>
                                 </Grid>
                             </Grid>
-                            <Grid item xs={12}>
+                            {/* <Grid item xs={12}>
                                 <OutlinedInput
                                     fullWidth
                                     id="input-search-header"
@@ -149,7 +149,7 @@ const ChatDrawer = ({ handleDrawerOpen, openChatDrawer, alterUserDisplay, messag
                                         </InputAdornment>
                                     }
                                 />
-                            </Grid>
+                            </Grid> */}
                         </Grid>
                     </Box>
                     <PerfectScrollbar

@@ -80,7 +80,7 @@ const getChatsByBoth_UserLoginId_userId = async (userLoginId, userId) => {
 
 // POST - Create Message between two users
 const addMessage = async (obj) => {
-    if (obj.converstationId === undefined) {
+    if (obj.converstationId === undefined || obj.converstationId === '') {
         const obj_conversation = {
             participants: [obj.sender, obj.recipient]
         }

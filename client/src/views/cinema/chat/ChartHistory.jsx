@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 
 // material-ui
 import { Card, CardContent, Grid, Typography } from '@mui/material';
@@ -10,7 +10,6 @@ import { gridSpacing } from 'utils/constant-theme';
 const ChartHistory = ({ data, theme, user }) => {
     return (
         <>
-            {console.log(data)}
             <Grid item xs={12}>
                 <Grid container spacing={1}>
                     {data && data.map((date, index) => (

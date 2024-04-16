@@ -35,7 +35,7 @@ const MovieSubscriptions = ({ movie }) => {
 
             <SubscriptionList movie={movie} />
             
-            <Grid item xs={12} sx={{ p: 3 }}>
+            {/* <Grid item xs={12} sx={{ p: 3 }}>
                 <Grid container justifyContent="space-between" spacing={gridSpacing}>
                     <Grid item>
                         <Pagination count={10} color="primary" />
@@ -74,7 +74,7 @@ const MovieSubscriptions = ({ movie }) => {
                         )}
                     </Grid>
                 </Grid>
-            </Grid>
+            </Grid> */}
         </MainCard>
     )
 }

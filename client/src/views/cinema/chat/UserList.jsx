@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState, Fragment } from 'react';
+import { useEffect, useState, Fragment, memo } from 'react';
 
 // material-ui
 import { Chip, Divider, Grid, List, ListItemButton, ListItemAvatar, ListItemText, Typography } from '@mui/material';
@@ -18,7 +18,9 @@ const UserList = ({ alterUserDisplay, messageSocket, onlineUsers, setTypingStatu
     const { usersMoreInfo } = useSelector((state) => state.chat);
 
     useEffect(() => {
-        dispatch(getUsersWithChatsData(userLogin?.id));
+        if (userLogin?.id !== undefined) {
+            dispatch(getUsersWithChatsData(userLogin?.id));
+        }
     }, [userLogin?.id]);
 
     useEffect(() => {
@@ -27,7 +29,7 @@ const UserList = ({ alterUserDisplay, messageSocket, onlineUsers, setTypingStatu
             return { ...user, online_status: onlineUser ? onlineUser?.online_status : 'offline' }
         });
         setData(updateData);
-    }, [onlineUsers]);
+    }, [onlineUsers, usersMoreInfo]);
 
     // View the new messageSocket sent by the socket.io server
     useEffect(() => {
