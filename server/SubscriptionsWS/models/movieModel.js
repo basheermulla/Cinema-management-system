@@ -17,6 +17,9 @@ const moviesSchema = new Schema({
     { versionKey: false }
 );
 
+// Create a compound index on the 'type' and 'language' and 'genres' and 'premiered' and 'rating' fields
+moviesSchema.index({ type: 1, language: 1, premiered: 1, rating: 1 });
+
 const Movie = mongoose.model('movie', moviesSchema, 'movies');
 
 module.exports = Movie;

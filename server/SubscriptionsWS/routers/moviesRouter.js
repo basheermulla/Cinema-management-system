@@ -44,9 +44,10 @@ router.get('/related-movies/:id', async (req, res) => {
 });
 
 // Get All Movies
-router.get('/', async (req, res) => {
+router.get('/:limit', async (req, res) => {
     try {
-        const movies = await moviesBLL.getAllMovies();
+        const { limit } = req.params;
+        const movies = await moviesBLL.getAllMovies(limit);
         res.send(movies);
     } catch (error) {
         console.error(error);

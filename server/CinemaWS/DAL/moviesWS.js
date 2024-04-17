@@ -18,7 +18,7 @@ const getAllPopularMoviesWS = () => axios.get(`${MOVIES_WS_URL}/mostPopular`);
 const getRelatedMoviesWS = (id) => axios.get(`${MOVIES_WS_URL}/related-movies/${id}`);
 
 // GET - Get All Movies - Read
-const getAllMoviesWS = () => axios.get(`${MOVIES_WS_URL}`);
+const getAllMoviesWS = (limit) => axios.get(`${MOVIES_WS_URL}/${limit}`);
 
 // GET - Get Movie By Id With Subscription - Read
 const getMovieByIdWithSubscriptionsWS = (id) => axios.get(`${MOVIES_WS_URL}/movie-subscriptions/${id}`);

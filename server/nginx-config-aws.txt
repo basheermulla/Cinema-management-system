@@ -1,0 +1,41 @@
+/etc/nginx/sites-available/application.conf
+
+server {
+    listen [::]:80;
+    listen 80;
+
+    server_name _;
+
+    root /var/www/cinema/client/;
+    index index.html;
+
+    location / {
+            try_files $uri /index.html;
+    }
+
+    location /api/ {
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header Host $host;
+
+            proxy_pass http://localhost:8082/;
+
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_cache_bypass $http_upgrade;
+    }
+    # Requests for socket.io are passed on to Node on port 8082
+    location ~* \.io {
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header Host $http_host;
+            proxy_set_header X-NginX-Proxy false;
+
+            proxy_pass http://localhost:8082;
+            proxy_redirect off;
+
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+    }
+}

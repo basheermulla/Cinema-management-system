@@ -42,7 +42,7 @@ export async function loader() {
     try {
         let token = window.localStorage.getItem('accessToken');
         // console.log('<=== Movies Loader ===>');
-        const response = await axios.get(`${VITE_APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/movies`, { headers: { "Authorization": `Bearer ${token}` } });
+        const response = await axios.get(`${VITE_APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/movies/240`, { headers: { "Authorization": `Bearer ${token}` } });
         dispatch(slice.actions.getMoviesSuccess(response.data));
         return response.data;
     } catch (error) {

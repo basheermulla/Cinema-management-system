@@ -89,6 +89,68 @@ const MoviesMain = () => {
     const initialMovies = useLoaderData();
     const [movies, setMovies] = useState(initialMovies);
 
+    const [page, setPage] = useState(1); // State to keep track of current page
+
+    // Function to fetch more data
+    const fetchData = async () => {
+        setMovieLoading(true);
+        try {
+            //   const response = await axios.get(`your-api-url?page=${page}`);
+            //   setData(prevData => [...prevData, ...response.data]); // Append new data to existing data
+            setPage(prevPage => prevPage + 1); // Increment page number for next fetch
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+        setMovieLoading(false);
+    };
+
+    // Function to handle scrolling down
+    const handleScrollDown = () => {
+        console.log("handleScrollDown");
+        console.log("window.innerHeight = ", window.innerHeight);
+        console.log("document.documentElement.scrollTop = ", document.documentElement.scrollTop);
+
+        console.log(1000 / document.documentElement.scrollTop);
+
+
+        // console.log("document.documentElement.offsetHeight = ", document.documentElement.offsetHeight);
+
+        // if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
+        //     fetchData() // Fetch more data when scrolled to the bottom
+        // }
+    };
+
+    // Function to handle scrolling up
+    const handleScrollUp = () => {
+        console.log("handleScrollUp");
+        // console.log("document.documentElement.scrollTop = ", document.documentElement.scrollTop);
+        // console.log("page = ", page);
+
+        // if (document.documentElement.scrollTop === 0) {
+        //     // If scrolled to the top
+        //     // Fetch previous page data if available
+        //     if (page > 1) {
+        //         setPage(prevPage => prevPage - 1); // Decrement page number
+        //         fetchData() // Fetch previous page data
+        //     }
+        // }
+    };
+
+
+    // Function to handle scrolling
+    const handleScroll = () => {
+        handleScrollDown();
+        handleScrollUp();
+    };
+
+    // Add scroll event listener when component mounts
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []); // Empty dependency array ensures that the effect runs only once
+
     // members data
     const initialMembers = useSelector((state) => state.members);
     const [members, setMembers] = useState(initialMembers.subscriptions.map((member) => ({ _id: member._id, name: member.name })));
@@ -194,10 +256,11 @@ const MoviesMain = () => {
     };
 
     const filterData = async () => {
-        await filterMovies(filter).then((response) => {
-            setMovies(response);
-            setMovieLoading(false);
-        });
+        // console.log('await filterMovies === >');
+        // await filterMovies(filter).then((response) => {
+        //     setMovies(response);
+        //     setMovieLoading(false);
+        // });
     };
 
     useEffect(() => {
