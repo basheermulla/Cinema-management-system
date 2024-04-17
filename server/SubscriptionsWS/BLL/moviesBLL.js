@@ -395,8 +395,10 @@ const getRelatedMovies = async (memberId) => {
 };
 
 // GET - Get All Movies - Read
-const getAllMovies = async () => {
-    return Movie.find();
+const getAllMovies = async (limit) => {
+    const movies = await Movie.find().limit(limit);
+    console.log(movies);
+    return movies;
 };
 
 // GET - Get Movie By Id With Subscription - Read

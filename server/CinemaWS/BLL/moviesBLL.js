@@ -24,8 +24,8 @@ const getRelatedMovies = async (id) => {
 }
 
 // GET - Get All Movies
-const getAllMovies = async () => {
-    let { data: movies } = await MoviesWS.getAllMoviesWS();
+const getAllMovies = async (limit) => {
+    let { data: movies } = await MoviesWS.getAllMoviesWS(limit);
     return movies;
 }
 

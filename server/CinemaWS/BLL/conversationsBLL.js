@@ -17,6 +17,7 @@ const getConversationById = (id) => {
 
 // POST - Create Conversation between two users
 const addConversation = async (obj) => {
+    console.log('cBLL[addConversation] = ', obj);
     const conversation = new Conversation(obj);
     await conversation.save();
     return 'Created';
