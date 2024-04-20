@@ -25,6 +25,7 @@ router.get('/yearlyData/:year', async (req, res) => {
     try {
         const { year } = req.params;
         const yearlySubscriptionsData = await subscriptionsBLL.getYearlySubscriptions(year);
+        console.log(yearlySubscriptionsData);
         res.send(yearlySubscriptionsData);
     } catch (error) {
         console.error(error);
@@ -69,10 +70,10 @@ router.post('/', async (req, res) => {
 
 // PUT - Update a Subscription
 //That's mean:
-         // 1. Create another subscription of a member who has already subscribed before
-         // Or
-         // 2. Update future subscription
-         // 3. Delete future subscription
+// 1. Create another subscription of a member who has already subscribed before
+// Or
+// 2. Update future subscription
+// 3. Delete future subscription
 router.put('/:id', async (req, res) => {
     try {
         const { id } = req.params;

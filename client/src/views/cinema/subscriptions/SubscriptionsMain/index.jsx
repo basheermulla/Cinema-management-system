@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from 'store';
 import { openSnackbar } from "store/slices/snackbar";
 import { gridSpacing } from 'utils/constant-theme';
 import useAuth from 'hooks/useAuth';
+import Loader from 'components/Loader';
 
 // assets
 import { IconUserPlus, IconRefresh } from '@tabler/icons-react';
@@ -213,6 +214,11 @@ const SubscriptionsMain = () => {
             </TableRow>
         );
     }
+
+    //=========================================================================================================================================
+    //==                                               ✔️▶️🎬 Loading Page 🎬▶️✔️                                                         ==
+    //=========================================================================================================================================
+    if (memberLoading) return <Loader />;
 
     return (
         <MainCard

@@ -55,7 +55,7 @@ const MainRoutes = {
             loader: dashboardLoader
         },
         {
-            path: '/cinema/movies',
+            path: `/cinema/movies/:perPage`,
             element: <CinemaMoviesMain />,
             loader: moviesLoader
         },

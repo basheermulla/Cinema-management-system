@@ -79,24 +79,26 @@ const TotalSubscriptionBarChart = ({ isLoading, yearlySubscriptionsData }) => {
         };
 
         // do not load chart when loading
-        if (!isLoading) {
+        if (!isLoading && total > 0) {
             ApexCharts.exec(`bar-chart`, 'updateOptions', newChartData);
         }
-    }, [navType, primary200, primaryDark, secondaryMain, secondaryLight, primary, darkLight, grey200, isLoading, grey500]);
+    }, [navType, primary200, primaryDark, secondaryMain, secondaryLight, primary, darkLight, grey200, isLoading, grey500, total]);
 
     // Setting data that we recived from mongoDB in the series chart data - by year as a default configeration
     useEffect(() => {
         const data = yearlySubscriptionsData?.map((month) => month.total);
         const total_data = data?.reduce((a, b) => a + b, 0);
         setTotal(total_data);
+    }, []);
 
+    useEffect(() => {
+        // Update the series data when component mounts or newData changes
         const series_Subscription_Data = chartYearData.series[0].data.map((value, index) => {
-            const isMonthData = yearlySubscriptionsData?.find((mon) => (index + 1) === mon.month);
+            const isMonthData = yearlySubscriptionsData?.find((doc) => (index + 1) === doc.month);
             return isMonthData ? isMonthData.total : 0;
         });
-
         chartYearData.series[0].data = series_Subscription_Data
-    }, []);
+    }, [total]);
 
     const handleChartShowData = (event) => {
         // Optional extension in the future

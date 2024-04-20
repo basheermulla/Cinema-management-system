@@ -338,7 +338,7 @@ const ChatMainPage = () => {
                 />
                 <Stack spacing={1}>
                     <Typography variant="h1" color="inherit" component="div">
-                        Welcome to the chat messenger
+                        Welcome to the corporate chat
                     </Typography>
                     <Typography variant="body2" align="center">Here you could chat with our company's users</Typography>
                 </Stack>

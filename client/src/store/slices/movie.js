@@ -36,14 +36,21 @@ const slice = createSlice({
 // Reducer
 export default slice.reducer;
 
-
 // ⬇️ this is the <movies && movie loader> and error boundary for movie model
-export async function loader() {
+export async function loader({ params }, page = 1) {
     try {
         let token = window.localStorage.getItem('accessToken');
-        // console.log('<=== Movies Loader ===>');
-        const response = await axios.get(`${VITE_APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/movies/240`, { headers: { "Authorization": `Bearer ${token}` } });
+        console.log('<=== Movies Loader ===>', params);
+        const displayWidth = window.innerWidth;
+        let perPage = params.perPage;
+        if (displayWidth < 1200 && displayWidth >= 900) {
+            while (perPage % 3 !== 0) { perPage++ }
+        } else {
+            while (perPage % 4 !== 0) { perPage++ }
+        }
+        const response = await axios.get(`${VITE_APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/movies/getMoviesPerPage/${page}/${perPage}`, { headers: { "Authorization": `Bearer ${token}` } });
         dispatch(slice.actions.getMoviesSuccess(response.data));
+        // console.log(response.data);
         return response.data;
     } catch (error) {
         dispatch(slice.actions.hasError(error));
@@ -56,20 +63,46 @@ export async function movieLoader({ params }) {
         let token = window.localStorage.getItem('accessToken');
         const id = params.id;
         // console.log('<=== M o v i e Loader ===> ', params);
-        const response = await axios.get(`${VITE_APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/movies/movie-subscriptions/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
+        const response = await axios.get(`${VITE_APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/movies/getMovieById/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
         return response.data;
     } catch (error) {
         dispatch(slice.actions.hasError(error));
     }
 }
 
-
 // ⬇️ this is the <CRUD && filter && related functions> for movie model
-
-export async function filterMovies(filter) {
+export async function getPerPageMovies(page, per) {
     try {
         let token = window.localStorage.getItem('accessToken');
-        const response = await axios.post(`${VITE_APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/movies/filter`,filter , { headers: { "Authorization": `Bearer ${token}` } });
+        const displayWidth = window.innerWidth;
+        let perPage = per;
+        if (displayWidth < 1200 && displayWidth >= 900) {
+            while (perPage % 3 !== 0) { perPage++ }
+        } else {
+            while (perPage % 4 !== 0) { perPage++ }
+        }
+        console.log('<=== Movies getPerPageMovies ===>', page, perPage);
+        const response = await axios.get(`${VITE_APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/movies/getMoviesPerPage/${page}/${perPage}`, { headers: { "Authorization": `Bearer ${token}` } });
+        dispatch(slice.actions.getMoviesSuccess(response.data));
+        return response.data.movies;
+    } catch (error) {
+        dispatch(slice.actions.hasError(error));
+    }
+}
+
+export async function filterMovies(filter, page, per) {
+    try {
+        let token = window.localStorage.getItem('accessToken');
+        const displayWidth = window.innerWidth;
+        let perPage = per;
+        if (displayWidth < 1200 && displayWidth >= 900) {
+            while (perPage % 3 !== 0) { perPage++ }
+        } else {
+            while (perPage % 4 !== 0) { perPage++ }
+        }
+        const data_filter = {...filter, page, perPage};
+        console.log('data_filter = ', data_filter);
+        const response = await axios.post(`${VITE_APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/movies/filter`, data_filter, { headers: { "Authorization": `Bearer ${token}` } });
         return response.data;
     } catch (error) {
         dispatch(slice.actions.hasError(error));
@@ -80,7 +113,7 @@ export async function getRelatedMovies(id) {
     try {
         let token = window.localStorage.getItem('accessToken');
         // console.log('<=== M o v i e getRelatedMovies ===> ', id);
-        if (id) {            
+        if (id) {
             const response = await axios.get(`${VITE_APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/movies/related-movies/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
             return response.data;
         }

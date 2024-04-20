@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'store';
 import { loader, createUser, updateUser, deleteUser } from 'store/slices/user';
 import { openSnackbar } from "store/slices/snackbar";
 import useAuth from 'hooks/useAuth';
+import Loader from 'components/Loader';
 
 // assets
 import { IconSearch, IconRefresh } from '@tabler/icons-react';
@@ -112,6 +113,11 @@ const UsersManagementMain = () => {
             </TableContainer>
         );
     }
+
+    //=========================================================================================================================================
+    //==                                               ✔️▶️🎬 Loading Page 🎬▶️✔️                                                         ==
+    //=========================================================================================================================================
+    if (userLoading) return <Loader />;
 
     return (
         <MainCard

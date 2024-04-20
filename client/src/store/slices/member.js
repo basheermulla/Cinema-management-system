@@ -149,15 +149,15 @@ export function deleteMember(id) {
     };
 }
 
-export function getMembers() {
-    return async () => {
-        try {
-            let token = window.localStorage.getItem('accessToken');
-            // console.log('aggregate');
-            const response = await axios.get(`${VITE_APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/members`, { headers: { "Authorization": `Bearer ${token}` } });
-            dispatch(slice.actions.getMembersSuccess(response.data));
-        } catch (error) {
-            dispatch(slice.actions.hasError(error));
-        }
-    };
+export async function getMembers() {
+    try {
+        let token = window.localStorage.getItem('accessToken');
+        console.log('getMembers ==========> getMembers ============>');
+        const response = await axios.get(`${VITE_APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/members`, { headers: { "Authorization": `Bearer ${token}` } });
+        // dispatch(slice.actions.getMembersSuccess(response.data));
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        dispatch(slice.actions.hasError(error));
+    }
 }

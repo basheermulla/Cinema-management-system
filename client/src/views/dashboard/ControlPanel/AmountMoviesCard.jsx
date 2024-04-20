@@ -63,7 +63,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
     }
 }));
 
-const AmountMoviesCard = ({ isLoading, movies }) => {
+const AmountMoviesCard = ({ isLoading, amountOfMovies }) => {
     const theme = useTheme();
 
     const [anchorEl, setAnchorEl] = useState(null);
@@ -106,7 +106,7 @@ const AmountMoviesCard = ({ isLoading, movies }) => {
                                 <Grid container alignItems="center">
                                     <Grid item>
                                         <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>
-                                            {movies?.length}
+                                            {amountOfMovies}
                                         </Typography>
                                     </Grid>
                                     <Grid item>
@@ -144,7 +144,7 @@ const AmountMoviesCard = ({ isLoading, movies }) => {
 
 AmountMoviesCard.propTypes = {
     isLoading: PropTypes.bool,
-    movies: PropTypes.array
+    amountOfMovies: PropTypes.number
 };
 
 export default AmountMoviesCard;

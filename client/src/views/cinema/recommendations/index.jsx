@@ -17,6 +17,7 @@ import AddSubscriptionByMember from '../movies/MoviesMain/AddSubscriptionByMembe
 import { createSubscription } from 'store/slices/member';
 import { gridSpacing } from 'utils/constant-theme';
 import useConfig from 'hooks/useConfig';
+import Loader from 'components/Loader';
 
 // assets
 import Avatar1 from 'assets/images/users/avatar-1.png';
@@ -103,6 +104,11 @@ const RecommendationMain = () => {
             handleClickOpenSubscribeDialog={handleClickOpenSubscribeDialog}
         />
     ), [member?._id]);
+
+    //=========================================================================================================================================
+    //==                                               ✔️▶️🎬 Loading Page 🎬▶️✔️                                                         ==
+    //=========================================================================================================================================
+    if (isLoading) return <Loader />;
 
     return (
         <>

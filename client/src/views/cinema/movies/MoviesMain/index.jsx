@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback, useMemo } from 'react';
-import { useLoaderData, useParams } from 'react-router-dom';
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
+import { useLoaderData } from 'react-router-dom';
 
 // material-ui
 import {
@@ -17,27 +17,24 @@ import SortOptions from './SortOptions';
 import MovieEmpty from './MovieEmpty';
 import MovieFilter from './MovieFilter';
 import MovieFilterView from './MovieFilterView';
-
 import MovieCard from 'components/cards/MovieCard';
 import SkeletonMoviePlaceholder from 'components/cards/Skeleton/MoviePlaceholder';
-
 import useConfig from 'hooks/useConfig';
 import { useDispatch, useSelector } from 'store/index';
 import { appDrawerWidth, gridSpacing } from 'utils/constant-theme';
-import { filterMovies, createMovie } from 'store/slices/movie';
-import { createSubscription } from 'store/slices/member';
-
+import { filterMovies, createMovie, getPerPageMovies } from 'store/slices/movie';
+import { createSubscription, getMembers } from 'store/slices/member';
 import AddMovie from './AddMovie';
 import AddSubscriptionByMember from './AddSubscriptionByMember';
-
 import useAuth from 'hooks/useAuth';
+import CircularIndeterminate from "components/CircularIndeterminate";
+import Loader from 'components/Loader';
 
 // assets
 import SearchIcon from '@mui/icons-material/Search';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import member from 'store/slices/member';
 
 // movie list container
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
@@ -85,57 +82,60 @@ const MoviesMain = () => {
     // userLogin
     const { user: userLogin } = useAuth();
 
+    //=========================================================================================================================================
+    //==                                    ✔️▶️🎬 pagination with scroll up and down 🎬▶️✔️                                              ==
+    //=========================================================================================================================================
+
+    const [page, setPage] = useState(1); // State to keep track of the current page
+    const [perPage, setPerPage] = useState(Math.round(window.innerHeight / 100) - (Math.round(window.innerHeight / 100) % 10)); // Number of movies per page
+
     // movies data
     const initialMovies = useLoaderData();
-    const [movies, setMovies] = useState(initialMovies);
+    const [movies, setMovies] = useState(initialMovies.movies);
+    const [countPages, setCountPages] = useState(initialMovies.totalPages);
+    const [pageLoading, setPageLoading] = useState(false);
 
-    const [page, setPage] = useState(1); // State to keep track of current page
+    // Set a perPage when window.innerHeight changed
+    useEffect(() => {
+        setPerPage(Math.round(window.innerHeight / 100) - (Math.round(window.innerHeight / 100) % 10));
+    }, [window.innerHeight]);
 
-    // Function to fetch more data
-    const fetchData = async () => {
-        setMovieLoading(true);
-        try {
-            //   const response = await axios.get(`your-api-url?page=${page}`);
-            //   setData(prevData => [...prevData, ...response.data]); // Append new data to existing data
-            setPage(prevPage => prevPage + 1); // Increment page number for next fetch
-        } catch (error) {
-            console.error('Error fetching data:', error);
+    useEffect(() => {
+        // Function to fetch more data
+        const fetchData = async () => {
+
+            try {
+                const response = await getPerPageMovies(page, perPage);
+                setMovies(prevData => [...prevData, ...response]); // Append new data to existing data
+                setPageLoading(false);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        if (page <= countPages && page > 1) {
+            fetchData();
+        } else {
+            setPageLoading(false);
         }
-        setMovieLoading(false);
-    };
+    }, [page]);
 
     // Function to handle scrolling down
     const handleScrollDown = () => {
-        console.log("handleScrollDown");
-        console.log("window.innerHeight = ", window.innerHeight);
-        console.log("document.documentElement.scrollTop = ", document.documentElement.scrollTop);
-
-        console.log(1000 / document.documentElement.scrollTop);
-
-
-        // console.log("document.documentElement.offsetHeight = ", document.documentElement.offsetHeight);
-
-        // if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
-        //     fetchData() // Fetch more data when scrolled to the bottom
-        // }
+        // console.log("if condition = ", document.documentElement.offsetHeight - (window.innerHeight + document.documentElement.scrollTop));
+        if (document.documentElement.offsetHeight - (window.innerHeight + document.documentElement.scrollTop) <= 1 && areEqual(filter, initialState) && areEqual(filterSearchAndSort, initialSearchAndSort)) {
+            setPageLoading(true);
+            setPage(prevPage => prevPage + 1); // Increment page number
+            console.log("page-in-Increment = ", page);
+        }
     };
 
     // Function to handle scrolling up
     const handleScrollUp = () => {
-        console.log("handleScrollUp");
-        // console.log("document.documentElement.scrollTop = ", document.documentElement.scrollTop);
-        // console.log("page = ", page);
-
-        // if (document.documentElement.scrollTop === 0) {
-        //     // If scrolled to the top
-        //     // Fetch previous page data if available
-        //     if (page > 1) {
-        //         setPage(prevPage => prevPage - 1); // Decrement page number
-        //         fetchData() // Fetch previous page data
-        //     }
-        // }
+        if (document.documentElement.scrollTop === 0) {
+            console.log("page-out = ", page);
+        }
     };
-
 
     // Function to handle scrolling
     const handleScroll = () => {
@@ -143,35 +143,49 @@ const MoviesMain = () => {
         handleScrollUp();
     };
 
+    // ===== ▶️🎬 Define the initialState filter and initialSearchAndSort filter and filters' useState before an eventListener to able to use it =====🎬▶️
+    // filter
+    const initialState = {                                                                                                                              //==
+        type: [],                                                                                                                                       //==
+        genres: ['all'],                                                                                                                                //==
+        language: [],                                                                                                                                   //==
+        premiered: '',                                                                                                                                  //==
+        rating: 0                                                                                                                                       //==
+    };                                                                                                                                                  //==
+
+    // filter
+    const initialSearchAndSort = {                                                                                                                      //==
+        search: '',                                                                                                                                     //==
+        sort: 'in order',                                                                                                                               //==
+    };                                                                                                                                                  //==
+
+    const [filter, setFilter] = useState(initialState);                                                                                                 //==
+    const [filterSearchAndSort, setFilterSearchAndSort] = useState(initialSearchAndSort);                                                               //==
+    //------------------------------------------------------------------------------------------------------------------------------------------------------
     // Add scroll event listener when component mounts
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
-    }, []); // Empty dependency array ensures that the effect runs only once
+    }, [page, filter, filterSearchAndSort]); // Empty dependency array ensures that the effect runs only once
 
-    // members data
-    const initialMembers = useSelector((state) => state.members);
-    const [members, setMembers] = useState(initialMembers.subscriptions.map((member) => ({ _id: member._id, name: member.name })));
+    function areEqual(obj1, obj2) {
+        const str1 = JSON.stringify(obj1, sortKeys);
+        const str2 = JSON.stringify(obj2, sortKeys);
+        return str1 === str2;
+    }
 
-    // filter
-    const initialState = {
-        type: [],
-        genres: ['all'],
-        language: [],
-        premiered: '',
-        rating: 0
-    };
+    function sortKeys(key, value) {
+        if (Array.isArray(value)) {
+            return value.sort();
+        }
+        return value;
+    }
 
-    // filter
-    const initialSearchAndSort = {
-        search: '',
-        sort: 'low',
-    };
-
-    const [filter, setFilter] = useState(initialState);
-    const [filterSearchAndSort, setFilterSearchAndSort] = useState(initialSearchAndSort);
+    //=========================================================================================================================================
+    //==                                                  ▶️🎬 Start filter 🎬▶️                                                           ==
+    //=========================================================================================================================================
 
     // search filter
     const handleSearch = async (event) => { ////////////////////////////////*************************** Search */
@@ -211,29 +225,37 @@ const MoviesMain = () => {
             case 'type':
                 if (filter.type.some((item) => item === params)) {
                     setFilter({ ...filter, type: filter.type.filter((item) => item !== params) });
+                    setMovieLoading(false);
                 } else {
                     setFilter({ ...filter, type: [...filter.type, params] });
+                    setMovieLoading(false);
                 }
                 break;
             case 'genres':
                 if (filter.genres.some((item) => item === params)) {
                     setFilter({ ...filter, genres: filter.genres.filter((item) => item !== params) });
+                    setMovieLoading(false);
                 } else if (filter.genres.some((item) => item === 'all') || params === 'all') {
                     setFilter({ ...filter, genres: [params] });
+                    setMovieLoading(false);
                 } else {
                     setFilter({ ...filter, genres: [...filter.genres, params] });
+                    setMovieLoading(false);
                 }
 
                 break;
             case 'language':
                 if (filter.language.some((item) => item === params)) {
                     setFilter({ ...filter, language: filter.language.filter((item) => item !== params) });
+                    setMovieLoading(false);
                 } else {
                     setFilter({ ...filter, language: [...filter.language, params] });
+                    setMovieLoading(false);
                 }
                 break;
             case 'premiered':
                 setFilter({ ...filter, premiered: params });
+                setMovieLoading(false);
                 break;
             case 'search':
                 setFilterSearchAndSort({ ...filterSearchAndSort, search: params });
@@ -245,10 +267,12 @@ const MoviesMain = () => {
                 break;
             case 'rating':
                 setFilter({ ...filter, rating });
+                setMovieLoading(false);
                 break;
             case 'reset':
                 setFilter(initialState);
-                setFilterSearchAndSort(initialSearchAndSort)
+                setFilterSearchAndSort(initialSearchAndSort);
+                setMovieLoading(false);
                 break;
             default:
             // no options
@@ -256,16 +280,40 @@ const MoviesMain = () => {
     };
 
     const filterData = async () => {
-        // console.log('await filterMovies === >');
-        // await filterMovies(filter).then((response) => {
-        //     setMovies(response);
-        //     setMovieLoading(false);
-        // });
+        await filterMovies(filter, page, perPage).then((response) => {
+            setMovies(response);
+            console.log('response filter = ', response);
+            setMovieLoading(false);
+        });
     };
 
     useEffect(() => {
         filterData();
     }, [filter]);
+
+    //=========================================================================================================================================
+    //==                                                  ▶️🎬 members data 🎬▶️                                                           ==
+    //=========================================================================================================================================
+    const [members, setMembers] = useState([]);
+
+    useEffect(() => {
+        // Function to get members data
+        const getMembersdata = async () => {
+            try {
+                const response = await getMembers();
+                console.log(response);
+                setMembers(response);
+            } catch (error) {
+                console.error('Error fetching members:', error);
+            }
+        };
+
+        if (movies && movies.length > 0) {
+            getMembersdata()
+        }
+        console.log(members);
+    }, []);
+    //------------------------------------------------------------------------------------------------------------------------------------------
 
     useEffect(() => {
         setOpen(!matchDownLG);
@@ -319,35 +367,64 @@ const MoviesMain = () => {
 
     let movieResult = <></>;
     if (movies && movies.length > 0) {
-        movieResult = [...movies].filter((item) => item.name.toLowerCase().includes(filterSearchAndSort.search.toLowerCase())).sort((movie_A, movie_B) => {
-            switch (filterSearchAndSort.sort) {
-                case "low":
-                    return movie_A.name.localeCompare(movie_B.name);
-                case "high":
-                    return movie_B.name.localeCompare(movie_A.name);
-                case "rating":
-                    return (+movie_B.rating) - (+movie_A.rating);
-                case "premiered":
-                    return -(movie_A.premiered.localeCompare(movie_B.premiered));
-                default:
-                    break;
-            }
-        }).map((movie, index) => (
-            <Grid key={index} item xs={12} sm={6} md={4} lg={3}>
-                <MovieCard
-                    id={movie._id}
-                    name={movie.name}
-                    genres={movie.genres}
-                    image={movie.image}
-                    type={movie.type}
-                    language={movie.language}
-                    premiered={movie.premiered}
-                    rating={movie.rating}
-                    handleClickOpenSubscribeDialog={handleClickOpenSubscribeDialog}
-                    subscriptionCheck_RolesCallback={subscriptionCheck_Roles}
-                />
-            </Grid>
-        ));
+        const showMovies = [...movies];
+        movieResult = showMovies
+
+            .filter((item) => item.name.toLowerCase().includes(filterSearchAndSort.search.toLowerCase()))
+            .sort((movie_A, movie_B) => {
+                switch (filterSearchAndSort.sort) {
+                    case "in order":
+                        return 0;
+                    case "low":
+                        return movie_A.name.localeCompare(movie_B.name);
+                    case "high":
+                        return movie_B.name.localeCompare(movie_A.name);
+                    case "rating":
+                        return (+movie_B.rating) - (+movie_A.rating);
+                    case "premiered":
+                        return -(movie_A.premiered.localeCompare(movie_B.premiered));
+                    default:
+                        break;
+                }
+            })
+            .map((movie, index) => {
+
+                if (showMovies.length === index + 1) {
+                    return (
+                        <Grid key={index} item xs={12} sm={6} md={4} lg={3}>
+                            <MovieCard
+                                id={movie._id}
+                                name={movie.name}
+                                genres={movie.genres}
+                                image={movie.image}
+                                type={movie.type}
+                                language={movie.language}
+                                premiered={movie.premiered}
+                                rating={movie.rating}
+                                handleClickOpenSubscribeDialog={handleClickOpenSubscribeDialog}
+                                subscriptionCheck_RolesCallback={subscriptionCheck_Roles}
+                            />
+                        </Grid>
+                    );
+                } else {
+                    return (
+                        <Grid key={index} item xs={12} sm={6} md={4} lg={3}>
+                            <MovieCard
+                                id={movie._id}
+                                name={movie.name}
+                                genres={movie.genres}
+                                image={movie.image}
+                                type={movie.type}
+                                language={movie.language}
+                                premiered={movie.premiered}
+                                rating={movie.rating}
+                                handleClickOpenSubscribeDialog={handleClickOpenSubscribeDialog}
+                                subscriptionCheck_RolesCallback={subscriptionCheck_Roles}
+                            />
+                        </Grid>
+                    );
+                }
+            });
     } else {
         movieResult = (
             <Grid item xs={12} sx={{ mt: 3 }}>
@@ -370,13 +447,18 @@ const MoviesMain = () => {
         setOpenAddDialog(false);
     };
 
+    //=========================================================================================================================================
+    //==                                               ✔️▶️🎬 Loading Page 🎬▶️✔️                                                         ==
+    //=========================================================================================================================================
+    if (movieLoading) return <Loader />;
+
     return (
         <Grid container spacing={2}>
             <Grid item xs={12}>
                 <Grid container alignItems="center" justifyContent="space-between" spacing={matchDownMD ? 0.5 : 2}>
                     <Grid item>
                         <Stack direction="row" alignItems="center" spacing={1}>
-                            <Typography variant="h3">Movies</Typography>
+                            <Typography variant="h3"> Movies </Typography>
                             <IconButton size="large" aria-label="go to subscription">
                                 <ArrowForwardIosIcon sx={{ width: '0.875rem', height: '0.875rem', fontWeight: 500, color: 'grey.500' }} />
                             </IconButton>
@@ -515,13 +597,19 @@ const MoviesMain = () => {
                         ModalProps={{ keepMounted: true }}
                         onClose={handleDrawerOpen}
                     >
-                        {open && (
+                        {open && !movieLoading && (
                             <PerfectScrollbar component="div">
                                 <MovieFilter filter={filter} handelFilter={handelFilter} />
                             </PerfectScrollbar>
                         )}
                     </Drawer>
                 </Box>
+            </Grid>
+            <Grid item xs={12} alignItems="center" justifyContent="space-between">
+                {pageLoading && (
+                    <Stack direction="row" alignItems="center" justifyContent="center" sx={{ display: { xs: 'none', sm: 'flex' } }}>
+                        <CircularIndeterminate />
+                    </Stack>)}
             </Grid>
             <AddMovie open={openAddDialog} handleCloseDialog={handleCloseDialog} addMovie={addMovie} />
             <AddSubscriptionByMember
