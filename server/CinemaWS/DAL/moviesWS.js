@@ -17,11 +17,14 @@ const getAllPopularMoviesWS = () => axios.get(`${MOVIES_WS_URL}/mostPopular`);
 // GET - Get Related Movies by User Id - Read
 const getRelatedMoviesWS = (id) => axios.get(`${MOVIES_WS_URL}/related-movies/${id}`);
 
-// GET - Get All Movies - Read
-const getAllMoviesWS = (limit) => axios.get(`${MOVIES_WS_URL}/${limit}`);
+// Get All Movies per number of a current page and amount movies per page
+const getMoviesPerPageWS = (page, perPage) => axios.get(`${MOVIES_WS_URL}/getMoviesPerPage/${page}/${perPage}`);
+
+// GET - Get countDocuments of Movies colliction - Read
+const getCountPagesMoviesWS = (perPage) => axios.get(`${MOVIES_WS_URL}/${perPage}`);
 
 // GET - Get Movie By Id With Subscription - Read
-const getMovieByIdWithSubscriptionsWS = (id) => axios.get(`${MOVIES_WS_URL}/movie-subscriptions/${id}`);
+const getMovieByIdWithSubscriptionsWS = (id) => axios.get(`${MOVIES_WS_URL}/getMovieById/${id}`);
 
 // GET - Get Movie By Id - Read
 const getMovieByIdWS = (id) => axios.get(`${MOVIES_WS_URL}/${id}`);
@@ -42,7 +45,8 @@ module.exports = {
     getAllMoviesAggregationWS,
     getAllPopularMoviesWS,
     getRelatedMoviesWS,
-    getAllMoviesWS,
+    getMoviesPerPageWS,
+    getCountPagesMoviesWS,
     getMovieByIdWithSubscriptionsWS,
     getMovieByIdWS,
     addMovieWS,

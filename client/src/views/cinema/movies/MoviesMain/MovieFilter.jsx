@@ -264,7 +264,7 @@ const Premiered = ({ premiered, handelFilter }) => {
                         <Grid container spacing={0.25}>
                             <Grid item xs={6}>
                                 <FormControlLabel
-                                    value={new Date().getFullYear() - 5}
+                                    value={"Last 5 years"}
                                     control={<Radio />}
                                     label="Last 5 years"
                                     sx={{
@@ -275,7 +275,7 @@ const Premiered = ({ premiered, handelFilter }) => {
                             </Grid>
                             <Grid item xs={6}>
                                 <FormControlLabel
-                                    value={new Date().getFullYear() - 10}
+                                    value={"Last 10 years"}
                                     control={<Radio />}
                                     label="Last 10 years"
                                     sx={{
@@ -286,7 +286,7 @@ const Premiered = ({ premiered, handelFilter }) => {
                             </Grid>
                             <Grid item xs={6}>
                                 <FormControlLabel
-                                    value={new Date().getFullYear() - 15}
+                                    value={"Last 15 years"}
                                     control={<Radio />}
                                     label="Last 15 years"
                                     sx={{
@@ -297,7 +297,7 @@ const Premiered = ({ premiered, handelFilter }) => {
                             </Grid>
                             <Grid item xs={6}>
                                 <FormControlLabel
-                                    value={new Date().getFullYear() - 20}
+                                    value={"Last 20 years"}
                                     control={<Radio />}
                                     label="Last 20 years"
                                     sx={{
@@ -308,7 +308,7 @@ const Premiered = ({ premiered, handelFilter }) => {
                             </Grid>
                             <Grid item xs={6}>
                                 <FormControlLabel
-                                    value={new Date().getFullYear() - 30}
+                                    value={"Last 30 years"}
                                     control={<Radio />}
                                     label="Last 30 years"
                                     sx={{
@@ -330,7 +330,7 @@ const Premiered = ({ premiered, handelFilter }) => {
                             </Grid>
                             <Grid item xs={12}>
                                 <FormControlLabel
-                                    value={""}
+                                    value={"Reset time periods"}
                                     control={<Radio />}
                                     label="Reset time periods"
                                     sx={{

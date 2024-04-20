@@ -23,13 +23,19 @@ const getRelatedMovies = async (id) => {
     return movies;
 }
 
-// GET - Get All Movies
-const getAllMovies = async (limit) => {
-    let { data: movies } = await MoviesWS.getAllMoviesWS(limit);
+// Get All Movies per number of a current page and amount movies per page
+const getMoviesPerPage = async (page, perPage) => {
+    let { data: movies } = await MoviesWS.getMoviesPerPageWS(page, perPage);
     return movies;
 }
 
-// GET - Get Movie By Id With Subscription - Read
+// GET - Get countDocuments of Movies colliction - Read
+const getCountPagesMovies = async (perPage) => {
+    let { data: countPages } = await MoviesWS.getCountPagesMoviesWS(perPage);
+    return countPages;
+}
+
+// GET - Get Movie By Id With Subscription - Read   
 const getMovieByIdWithSubscriptions = async (id) => {
     let { data: movie } = await MoviesWS.getMovieByIdWithSubscriptionsWS(id);
     return movie;
@@ -69,7 +75,8 @@ module.exports = {
     getAllMoviesAggregation,
     getAllPopularMovies,
     getRelatedMovies,
-    getAllMovies,
+    getMoviesPerPage,
+    getCountPagesMovies,
     getMovieByIdWithSubscriptions,
     getMovieById,
     addMovie,

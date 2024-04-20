@@ -44,20 +44,34 @@ router.get('/related-movies/:id', verifyToken, async (req, res) => {
     }
 });
 
-// Get All Movies
-router.get('/:limit', verifyToken, async (req, res) => {
+// Get All Movies per number of a current page and amount movies per page
+router.get('/getMoviesPerPage/:page/:perPage', verifyToken, async (req, res) => {
     try {
-        const { limit } = req.params;
-        const movies = await moviesBLL.getAllMovies(limit);
+        console.log("params = ", req.params); 
+        const { page, perPage } = req.params;
+        const movies = await moviesBLL.getMoviesPerPage(page, perPage);
+        console.log("movies length = ", movies.length); 
         res.send(movies);
     } catch (error) {
-        console.error(error);
+        console.error(error); 
+        res.status(500).send(error);
+    }
+});
+
+// GET - Get countDocuments of Movies colliction - Read
+router.get('/:perPage', verifyToken, async (req, res) => {
+    try {
+        const { perPage } = req.params;
+        const countPages = await moviesBLL.getCountPagesMovies(perPage);
+        res.send(countPages);
+    } catch (error) {
+        console.error(error); 
         res.status(500).send(error);
     }
 });
 
 // GET - Get Movie By Id With Subscription - Read
-router.get('/movie-subscriptions/:id', verifyToken, async (req, res) => {
+router.get('/getMovieById/:id', verifyToken, async (req, res) => {
     try {
         const { id } = req.params;
         const movie = await moviesBLL.getMovieByIdWithSubscriptions(id);

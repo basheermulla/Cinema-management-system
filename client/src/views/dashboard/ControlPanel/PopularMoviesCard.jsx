@@ -15,18 +15,10 @@ import { gridSpacing } from 'utils/constant-theme';
 import BestMovie from 'assets/images/cinema/best_movies_6.png';
 import { IconBrandYoutube } from '@tabler/icons-react';
 
-const PopularMoviesCard = ({ isLoading, popular_movies }) => {
+const PopularMoviesCard = ({ isLoading, popular_movies, amountOfSubscription }) => {
     const theme = useTheme();
 
     const { borderRadius } = useConfig();
-    const [date, setDate] = useState(new Date())
-
-    const [totalViews, setTotalViews] = useState(0)
-
-    useEffect(() => {
-        const total_popular_subscriptions = popular_movies?.reduce((accumulator, object) => accumulator + object.total_subscriptions, 0);
-        setTotalViews(total_popular_subscriptions);
-    }, []);
 
     return (
         <>
@@ -52,7 +44,7 @@ const PopularMoviesCard = ({ isLoading, popular_movies }) => {
                                 />
                             </Grid>
                             {
-                                popular_movies?.slice(0, 4).map((movie) => (
+                                popular_movies?.map((movie) => (
                                     <Grid item xs={12} key={movie._id} sx={{ pt: '12px !important' }}>
                                         <Grid container alignItems="center" justifyContent="space-between">
                                             <Grid item>
@@ -70,8 +62,8 @@ const PopularMoviesCard = ({ isLoading, popular_movies }) => {
                                                             {movie.name}
                                                         </Typography>
                                                         <Typography variant="subtitle1" sx={{ color: theme.palette.orange.dark }}>
-                                                            <LinearProgress variant="determinate" value={movie.total_subscriptions/totalViews * 200} color="primary" aria-label="Popular movies percentage" />
-                                                            {movie.total_subscriptions}
+                                                            <LinearProgress variant="determinate" value={movie.total_subscriptions/23 * 200} color="primary" aria-label="Popular movies percentage" />
+                                                            {movie.total_subscriptions} views
                                                         </Typography>
                                                     </Grid>
                                                 </Grid>
@@ -105,7 +97,8 @@ const PopularMoviesCard = ({ isLoading, popular_movies }) => {
 
 PopularMoviesCard.propTypes = {
     isLoading: PropTypes.bool,
-    popular_movies: PropTypes.array
+    popular_movies: PropTypes.array,
+    amountOfSubscription: PropTypes.number
 };
 
 export default PopularMoviesCard;

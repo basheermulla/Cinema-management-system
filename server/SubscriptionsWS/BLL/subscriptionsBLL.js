@@ -1,5 +1,6 @@
 const Subscription = require('../models/subscriptionModel.js');
 const Movie = require('../models/movieModel.js');
+const Member = require('../models/memberModel.js');
 
 /*=======================================================================================================
 /*================================//* Subscriptions Collection MongoDB *//*====================================
@@ -91,7 +92,7 @@ const getAllSubscriptionsAggregation = async () => {
 //
 // GET - Get This Yearly Subscriptions - Read
 const getYearlySubscriptions = async (year) => {
-    return Subscription.aggregate(
+    const yearlyData = await Subscription.aggregate(
         [
             { $unwind: "$subscriptionMovies" },
             { $project: { memberId: 0 } },
@@ -109,11 +110,8 @@ const getYearlySubscriptions = async (year) => {
             {
                 $group: {
                     _id: {
-                        // month: { $month: { $toDate: "$date" } },
-                        // year: { $year: { $toDate: "$date" } },
                         month: { $month: { "date": { $toDate: "$date" }, "timezone": "Asia/Jerusalem" } },
                         year: { $year: { "date": { $toDate: "$date" }, "timezone": "Asia/Jerusalem" } },
-
                     },
                     total: { $sum: 1 }
                 },
@@ -134,6 +132,29 @@ const getYearlySubscriptions = async (year) => {
             { $sort: { month: 1 } },
         ]
     ).exec();
+
+    let data = {};
+    data.yearlyData = yearlyData;
+    try {
+        const documents = await Subscription.find({});
+        let totalSubscriptions = 0;
+        documents.forEach(doc => {
+            // Count sub-arrays in the "subscriptionMovies" field
+            totalSubscriptions += doc.subscriptionMovies.length;
+        });
+        data.countSubscription = totalSubscriptions;
+    } catch (err) {
+        console.error(err);
+    }
+
+    try {
+        const count = await Member.countDocuments({});
+        data.countMember = count;
+    } catch (err) {
+        console.error(err);
+    }
+
+    return data;
 };
 
 // GET - Get All Subscriptions - Read

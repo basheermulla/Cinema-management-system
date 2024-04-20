@@ -1,5 +1,9 @@
 const SortOptions = [
     {
+        value: 'in order',
+        label: 'Name: In Order'
+    },
+    {
         value: 'high',
         label: 'Name: High To Low'
     },

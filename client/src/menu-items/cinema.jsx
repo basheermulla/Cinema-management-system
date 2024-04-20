@@ -46,7 +46,7 @@ const application = {
             title: <FormattedMessage id="movies" />,
             type: 'item',
             icon: icons.IconMovie,
-            url: '/cinema/movies',
+            url: `/cinema/movies/${Math.round(window.innerHeight / 100) - (Math.round(window.innerHeight / 100) % 10)}`
         },
         {
             id: 'subscriptions',

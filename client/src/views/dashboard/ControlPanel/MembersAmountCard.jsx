@@ -38,7 +38,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
     }
 }));
 
-const MembersAmountCard = ({ isLoading, members }) => {
+const MembersAmountCard = ({ isLoading, amountOfMembers }) => {
     const theme = useTheme();
 
     return (
@@ -70,7 +70,7 @@ const MembersAmountCard = ({ isLoading, members }) => {
                                         mt: 0.45,
                                         mb: 0.45
                                     }}
-                                    primary={<Typography variant="h4">{members?.length}</Typography>}
+                                    primary={<Typography variant="h4">{amountOfMembers}</Typography>}
                                     secondary={
                                         <Typography
                                             variant="subtitle2"
@@ -94,7 +94,7 @@ const MembersAmountCard = ({ isLoading, members }) => {
 
 MembersAmountCard.propTypes = {
     isLoading: PropTypes.bool,
-    members: PropTypes.array
+    amountOfMembers: PropTypes.number
 };
 
 export default MembersAmountCard;

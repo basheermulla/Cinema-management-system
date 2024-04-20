@@ -62,15 +62,8 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
     }
 }));
 
-const TotalOrderLineChartCard = ({ isLoading, popular_movies }) => {
+const TotalOrderLineChartCard = ({ isLoading, amountOfSubscription }) => {
     const theme = useTheme();
-
-    const [totalViews, setTotalViews] = useState(0);
-
-    useEffect(() => {
-        const total_popular_subscriptions = popular_movies?.reduce((accumulator, object) => accumulator + object.total_subscriptions, 0);
-        setTotalViews(total_popular_subscriptions)
-    }, []);
 
     return (
         <>
@@ -103,7 +96,7 @@ const TotalOrderLineChartCard = ({ isLoading, popular_movies }) => {
                                 <Grid container alignItems="center">
                                     <Grid item>
                                         <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>
-                                            {totalViews}
+                                            {amountOfSubscription}
                                         </Typography>
                                     </Grid>
                                     <Grid item>
@@ -144,7 +137,7 @@ const TotalOrderLineChartCard = ({ isLoading, popular_movies }) => {
 
 TotalOrderLineChartCard.propTypes = {
     isLoading: PropTypes.bool,
-    popular_movies: PropTypes.array
+    amountOfSubscription: PropTypes.number
 };
 
 export default TotalOrderLineChartCard;
