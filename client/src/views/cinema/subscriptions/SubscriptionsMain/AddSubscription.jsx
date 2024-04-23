@@ -161,7 +161,7 @@ const AddSubscription = ({ open, member, subscription, handleCloseSubscribeDialo
                                         value={parseISO(formik.values.date, "yyyy-M-dd'T'HH:mm:ss.SSSX", new Date())}
                                         onChange={value => formik.setFieldValue("date", value)}
                                         slotProps={{ textField: { variant: 'outlined' } }}
-
+                                        minDate={new Date()} // Prevents selection of previous dates
                                     />
                                 </LocalizationProvider>
                             </Grid>
@@ -171,7 +171,7 @@ const AddSubscription = ({ open, member, subscription, handleCloseSubscribeDialo
                                         Cancel
                                     </Button>
                                     <AnimateButton>
-                                        <Button variant="contained" type="submit">
+                                        <Button variant="contained" type="submit" disabled={formik.isSubmitting}>
                                             Subscribe
                                         </Button>
                                     </AnimateButton>

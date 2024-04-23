@@ -87,6 +87,7 @@ const AddSubscriptionByMember = ({ open, movieId, handleCloseSubscribeDialog, ad
                     }
                     sx={{ border: 0 }}
                 >
+                    {console.log(formik.values)}
                     <form onSubmit={formik.handleSubmit}>
                         <Grid container spacing={gridSpacing}>
                             <Grid item xs={12} md={6}>
@@ -131,7 +132,7 @@ const AddSubscriptionByMember = ({ open, movieId, handleCloseSubscribeDialog, ad
                                         value={parseISO(formik.values.date, "yyyy-M-dd'T'HH:mm:ss.SSSX", new Date())}
                                         onChange={value => formik.setFieldValue("date", value)}
                                         slotProps={{ textField: { variant: 'outlined' } }}
-
+                                        minDate={new Date()} // Prevents selection of previous dates
                                     />
                                 </LocalizationProvider>
                             </Grid>
@@ -141,7 +142,7 @@ const AddSubscriptionByMember = ({ open, movieId, handleCloseSubscribeDialog, ad
                                         Cancel
                                     </Button>
                                     <AnimateButton>
-                                        <Button variant="contained" type="submit">
+                                        <Button variant="contained" type="submit" disabled={formik.isSubmitting}>
                                             Subscribe
                                         </Button>
                                     </AnimateButton>

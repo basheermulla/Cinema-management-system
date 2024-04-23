@@ -1,11 +1,9 @@
 
 import { useState, useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useLoaderData, useNavigate } from 'react-router-dom';
+import { useLoaderData } from 'react-router-dom';
 
 // material-ui
 import { Grid } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 
 // internal imports
 import MainCard from 'components/cards/MainCard';
@@ -15,13 +13,10 @@ import LastMembersSubscriptions from './LastMembersSubscriptions';
 import RelatedMovies from './RelatedMovies';
 import AddSubscriptionByMember from '../movies/MoviesMain/AddSubscriptionByMember';
 import { createSubscription } from 'store/slices/member';
+import { getAllMovies } from "store/slices/movie";
 import { gridSpacing } from 'utils/constant-theme';
 import useConfig from 'hooks/useConfig';
 import Loader from 'components/Loader';
-
-// assets
-import Avatar1 from 'assets/images/users/avatar-1.png';
-import { IconMail, IconBuildingCommunity } from '@tabler/icons-react';
 
 const activeSX = {
     width: 16,
@@ -42,13 +37,29 @@ function createData(members) {
 }
 
 const RecommendationMain = () => {
-    const theme = useTheme();
-    const { borderRadius } = useConfig();
-
     // member include subscriptions data & movies
     const initialdata = useLoaderData();
-    const [members, setMembers] = useState(initialdata.members);
-    const [movies, setMovies] = useState(initialdata.movies);
+    const [members, setMembers] = useState(initialdata);
+
+    //=========================================================================================================================================
+    //==                                                  ▶️🎬 movies data 🎬▶️                                                           ==
+    //=========================================================================================================================================
+    const [movies, setMovies] = useState([]);
+
+    useEffect(() => {
+        // Function to get movies data
+        const getMoviesData = async () => {
+            try {
+                const response = await getAllMovies();
+                setMovies(response);
+            } catch (error) {
+                console.error('Error fetching members:', error);
+            }
+        };
+
+        getMoviesData()
+    }, []);
+    //------------------------------------------------------------------------------------------------------------------------------------------
 
     const [member, setMember] = useState({});
     const [lastSubscriptions, setLastSubscriptions] = useState([]);
@@ -56,8 +67,9 @@ const RecommendationMain = () => {
 
     useEffect(() => {
         if (movies) {
-            setMember(members[0]);
-            setLastSubscriptions(members[0].relatedMovie.slice(0, 3));
+            const default_member = members.find((member) => member.relatedMovie.length > 1);
+            setMember(default_member);
+            setLastSubscriptions(default_member.relatedMovie.slice(0, 3));
         }
     }, [movies]);
 
@@ -66,6 +78,7 @@ const RecommendationMain = () => {
         setMember(checked_member);
         setLastSubscriptions(checked_member.relatedMovie.slice(0, 3));
     }
+
     useEffect(() => {
         const data = createData(members);
         setOptionsFilms(data);

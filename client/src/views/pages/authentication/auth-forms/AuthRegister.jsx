@@ -4,10 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import {
-    Box, Button, Checkbox, FormControl, FormControlLabel, FormHelperText, Grid, IconButton,
-    InputAdornment, InputLabel, OutlinedInput, TextField, Typography, useMediaQuery
-} from '@mui/material';
+import { Box, Button, Checkbox, FormControl, FormControlLabel, FormHelperText, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, Typography, useMediaQuery } from '@mui/material';
 
 // third party
 import * as Yup from 'yup';
@@ -35,6 +32,7 @@ const AuthRegister = ({ ...others }) => {
     const [checked, setChecked] = useState(true);
     const [strength, setStrength] = useState(0);
     const [level, setLevel] = useState();
+    const [isSubmittingState, setIsSubmittingState] = useState(false);
 
     const { register } = useAuth();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
@@ -82,6 +80,7 @@ const AuthRegister = ({ ...others }) => {
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
                         await register(values.username, values.password);
+                        setIsSubmittingState(true);
                         if (scriptedRef.current) {
                             setStatus({ success: true });
                             setSubmitting(false);
@@ -180,7 +179,7 @@ const AuthRegister = ({ ...others }) => {
                                 </FormControl>
                             )}
 
-                            <Grid container alignItems="center" justifyContent="space-between">
+                            {/* <Grid container alignItems="center" justifyContent="space-between">
                                 <Grid item>
                                     <FormControlLabel
                                         control={
@@ -201,7 +200,7 @@ const AuthRegister = ({ ...others }) => {
                                         }
                                     />
                                 </Grid>
-                            </Grid>
+                            </Grid> */}
                             {errors.submit && (
                                 <Box sx={{ mt: 3 }}>
                                     <FormHelperText error>{errors.submit}</FormHelperText>
@@ -212,7 +211,7 @@ const AuthRegister = ({ ...others }) => {
                                 <AnimateButton>
                                     <Button
                                         disableElevation
-                                        disabled={isSubmitting}
+                                        disabled={isSubmittingState || isSubmitting}
                                         fullWidth
                                         size="large"
                                         type="submit"

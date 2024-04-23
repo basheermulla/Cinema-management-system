@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 // material-ui
 import {
-    Box, Button,  FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Radio, RadioGroup,
-    Select, Stack, TextField, Typography, FormHelperText, Autocomplete, Chip, 
+    Box, Button, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Radio, RadioGroup,
+    Select, Stack, TextField, Typography, FormHelperText, Autocomplete, Chip,
 } from '@mui/material';
 import Close from '@mui/icons-material/Close';
 import { createFilterOptions } from '@mui/material/Autocomplete';
@@ -390,7 +390,9 @@ const MovieUpdate = ({ movie, editMovie }) => {
                             <Grid item xs={12}>
                                 <Stack direction="row">
                                     <AnimateButton>
-                                        <Button type="submit" variant="contained">Update Movie</Button>
+                                        <Button type="submit" variant="contained" disabled={formik.isSubmitting}>
+                                            Update Movie
+                                        </Button>
                                     </AnimateButton>
                                 </Stack>
                             </Grid>

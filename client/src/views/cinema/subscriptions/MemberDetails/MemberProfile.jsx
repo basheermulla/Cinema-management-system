@@ -138,7 +138,7 @@ const MemberProfile = ({ member, editMember }) => {
                                         Cancel
                                     </Button>
                                     <AnimateButton>
-                                        <Button variant="contained" type="submit">
+                                        <Button variant="contained" type="submit" disabled={formik.isSubmitting}>
                                             Submit
                                         </Button>
                                     </AnimateButton>

@@ -404,7 +404,7 @@ const AddMovie = ({ open, handleCloseDialog, addMovie }) => {
                                         Cancel
                                     </Button>
                                     <AnimateButton>
-                                        <Button variant="contained" type="submit">
+                                        <Button variant="contained" type="submit" disabled={formik.isSubmitting}>
                                             Add
                                         </Button>
                                     </AnimateButton>

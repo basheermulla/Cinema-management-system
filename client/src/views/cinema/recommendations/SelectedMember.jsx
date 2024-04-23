@@ -10,6 +10,15 @@ import SkeletonMemberSelectRecommended from 'components/cards/Skeleton/MemberSel
 
 const SelectedMember = ({ isLoading, member, optionsFilms, handleAutocomplete }) => {
 
+    // Default value
+    const defaultValue = { label: member.name, _id: member._id };
+
+    // Function to get the label for an option
+    const getOptionLabel = (option) => option.label;
+
+    // Custom equality check function
+    const isOptionEqualToValue = (option, value) => option._id === value._id;
+
     return (
         <>
             {isLoading ? (
@@ -47,10 +56,12 @@ const SelectedMember = ({ isLoading, member, optionsFilms, handleAutocomplete })
                                     onChange={(e, value) => {
                                         handleAutocomplete(value)
                                     }}
-                                    defaultChecked={{ label: member.name, _id: member._id }}
+                                    value={defaultValue}
                                     options={optionsFilms}
-                                    getOptionLabel={(option) => option.label}
+                                    getOptionLabel={getOptionLabel}
+                                    isOptionEqualToValue={isOptionEqualToValue} // Customize equality check
                                     renderInput={(params) => <TextField {...params} label="" />}
+
                                 />)}
                         </Grid>
                     </Grid>

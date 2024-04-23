@@ -158,7 +158,7 @@ const AddOrEditMember = ({ open, member, handleCloseMemberDialog, addMember, edi
                                         Cancel
                                     </Button>
                                     <AnimateButton>
-                                        <Button variant="contained" type="submit">
+                                        <Button variant="contained" type="submit" disabled={formik.isSubmitting}>
                                             Submit
                                         </Button>
                                     </AnimateButton>

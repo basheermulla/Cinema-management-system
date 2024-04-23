@@ -114,6 +114,7 @@ const ChatMainPage = () => {
     }, [chatState.chats]);
 
     const alterUserDisplay = useCallback((user) => {
+        setData([]);
         setDisplayUserId(user._id)
         setUser(user);
         dispatch(getUserChats(userLogin.id, user._id));
@@ -358,7 +359,7 @@ const ChatMainPage = () => {
             />
             <Main theme={theme} open={openChatDrawer}>
                 <Grid container spacing={gridSpacing}>
-                    <Grid item xs zeroMinWidth sx={{ display: emailDetails ? { xs: 'none', sm: 'flex' } : user._id ? 'flex' : 'blank' }}>
+                    <Grid item xs zeroMinWidth sx={{ display: emailDetails ? { xs: 'none', sm: 'flex' } : user._id ? 'blank' : 'blank' }}>
                         <MainCard
                             sx={{
                                 bgcolor: theme.palette.mode === 'dark' ? 'dark.main' : 'grey.50'

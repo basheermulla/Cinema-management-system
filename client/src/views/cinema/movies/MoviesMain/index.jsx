@@ -122,18 +122,16 @@ const MoviesMain = () => {
 
     // Function to handle scrolling down
     const handleScrollDown = () => {
-        // console.log("if condition = ", document.documentElement.offsetHeight - (window.innerHeight + document.documentElement.scrollTop));
         if (document.documentElement.offsetHeight - (window.innerHeight + document.documentElement.scrollTop) <= 1 && areEqual(filter, initialState) && areEqual(filterSearchAndSort, initialSearchAndSort)) {
             setPageLoading(true);
             setPage(prevPage => prevPage + 1); // Increment page number
-            console.log("page-in-Increment = ", page);
         }
     };
 
     // Function to handle scrolling up
     const handleScrollUp = () => {
         if (document.documentElement.scrollTop === 0) {
-            console.log("page-out = ", page);
+            // console.log("page-out = ", page);
         }
     };
 
@@ -282,7 +280,6 @@ const MoviesMain = () => {
     const filterData = async () => {
         await filterMovies(filter, page, perPage).then((response) => {
             setMovies(response);
-            console.log('response filter = ', response);
             setMovieLoading(false);
         });
     };
@@ -301,7 +298,6 @@ const MoviesMain = () => {
         const getMembersdata = async () => {
             try {
                 const response = await getMembers();
-                console.log(response);
                 setMembers(response);
             } catch (error) {
                 console.error('Error fetching members:', error);
@@ -311,7 +307,6 @@ const MoviesMain = () => {
         if (movies && movies.length > 0) {
             getMembersdata()
         }
-        console.log(members);
     }, []);
     //------------------------------------------------------------------------------------------------------------------------------------------
 

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 
 // material-ui
-import { Box, useMediaQuery } from '@mui/material';
+import { Box, CardMedia, Stack, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 // third-party
@@ -14,9 +14,12 @@ import "slick-carousel/slick/slick-theme.css";
 import MovieCard from 'components/cards/MovieCard';
 import { getRelatedMovies } from 'store/slices/movie';
 import useAuth from 'hooks/useAuth';
+import { gridSpacing } from 'utils/constant-theme';
+import Loader from 'components/Loader';
 
 // assets
 import { FaFastForward, FaFastBackward } from 'react-icons/fa'
+import no_recommended_icon from 'assets/images/e-commerce/no-recommended-movies.svg';
 
 function SampleNextArrow(props) {
     const { className, style, onClick } = props;
@@ -44,6 +47,8 @@ const RelatedMovies = ({ id, isLoading, handleClickOpenSubscribeDialog }) => {
 
     const [loader, setLoader] = useState(true);
 
+
+
     // userLogin
     const { user: userLogin } = useAuth();
 
@@ -62,19 +67,19 @@ const RelatedMovies = ({ id, isLoading, handleClickOpenSubscribeDialog }) => {
             return;
         }
         if (matchDownMD) {
-            setItemsToShow(2);
+            setItemsToShow(1);
             return;
         }
         if (matchDownLG) {
-            setItemsToShow(3);
+            setItemsToShow(2);
             return;
         }
         if (matchDownXL) {
-            setItemsToShow(4);
+            setItemsToShow(3);
             return;
         }
         if (matchUpXL) {
-            setItemsToShow(5);
+            setItemsToShow(3);
         }
     }, [matchDownSM, matchDownMD, matchDownLG, matchDownXL, matchUpXL, itemsToShow]);
 
@@ -99,6 +104,7 @@ const RelatedMovies = ({ id, isLoading, handleClickOpenSubscribeDialog }) => {
     }
 
     let movieResult = <></>;
+    let alertNoRelatedMovies = <></>;
     if (related && related.length > 0 && !loader) {
         movieResult = related.map((movie, index) => (
             <Box key={index} sx={{ p: 1.5 }}>
@@ -116,12 +122,40 @@ const RelatedMovies = ({ id, isLoading, handleClickOpenSubscribeDialog }) => {
                     subscriptionCheck_RolesCallback={subscriptionCheck_Roles}
                 />
             </Box>
+
         ));
     }
+    else {
+
+        alertNoRelatedMovies = (
+            <Box sx={{ p: 1.5 }}>
+                {/* <Typography>No related movies</Typography> */}
+                <Stack alignItems="center" spacing={gridSpacing}>
+                    <CardMedia
+                        component="img"
+                        image={theme.palette.mode === 'dark' ? no_recommended_icon : no_recommended_icon}
+                        title="Slider5 image"
+                        sx={{ maxWidth: 350 }}
+                    />
+                    <Stack spacing={1}>
+                        <Typography variant="h3" color="inherit" component="div" align="center">
+                            Oops! Something went wrong.....
+                        </Typography>
+                        <Typography variant="h3" color="inherit" align="center">This member has no recommended movies</Typography>
+                    </Stack>
+                </Stack>
+            </Box>)
+    }
+
+    //=========================================================================================================================================
+    //==                                               ✔️▶️🎬 Loading Page 🎬▶️✔️                                                         ==
+    //=========================================================================================================================================
+    if (loader) return <Loader />;
 
     return (
         <>
             {related && related.length > 0 && <Slider {...settings}>{movieResult}</Slider>}
+            {related.length === 0 && !loader && <>{alertNoRelatedMovies}</>}
         </>
     );
 };

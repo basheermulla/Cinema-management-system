@@ -27,6 +27,7 @@ const MovieDescriptionCard = ({ id, name, genres, image, type, language, summary
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [isClicked, setIsClicked] = useState(false);
 
     // userLogin
     const { user: userLogin } = useAuth();
@@ -42,10 +43,10 @@ const MovieDescriptionCard = ({ id, name, genres, image, type, language, summary
     const handleDelete = () => {
         setOpenDialog(true);
     }
-    
+
     // Dialog state
     const [openDialog, setOpenDialog] = useState(false);
-    
+
     const handleDialog = () => {
         setOpenDialog(false);
         removeMovie(id, name);
@@ -161,7 +162,11 @@ const MovieDescriptionCard = ({ id, name, genres, image, type, language, summary
                                             type="button"
                                             variant="contained"
                                             color="primary"
-                                            onClick={() => navigate(-1)}
+                                            onClick={() => {
+                                                setIsClicked(true);
+                                                navigate(-1)
+                                            }}
+                                            disabled={isClicked}
                                         >
                                             Back
                                         </Button>
