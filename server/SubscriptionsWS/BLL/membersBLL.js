@@ -105,7 +105,7 @@ const getAllMembersAggregation = async () => {
 
 // GET - Get All Members with Unwind Subscriptions & get all movies - Read
 const getAllMembersSubscriptionsUnwind = async () => {
-    const members = Member.aggregate(
+    return Member.aggregate(
         [
             {
                 $lookup:
@@ -192,16 +192,6 @@ const getAllMembersSubscriptionsUnwind = async () => {
             }
         ]
     ).exec();
-
-    // Get all movies from DB
-    const all_Moves = await Movie.find()
-    const all_Members = await members;
-
-    const collect_obj_return = {
-        members: all_Members,
-        movies: all_Moves
-    }
-    return collect_obj_return;
 };
 
 // GET - Get All Members - Read

@@ -80,15 +80,11 @@ const getChatsByBoth_UserLoginId_userId = async (userLoginId, userId) => {
 
 // POST - Create Message between two users
 const addMessage = async (obj) => {
-    console.log('mBLL[addMessage] = ', obj);
-    console.log('mBLL[addMessage] = ', obj.converstationId);
     if (obj.converstationId === undefined || obj.converstationId === '') {
         const obj_conversation = {
             participants: [obj.sender, obj.recipient]
         }
         const conversation = new Conversation(obj_conversation)
-
-        console.log('mBLL[addMessage][if (converstationId === undefined || "")] = ', conversation);
         
         await conversation.save();
         const message = new Message({ ...obj, converstationId: conversation._id });

@@ -244,8 +244,6 @@ const getAllPopularMovies = async () => {
         console.error(err);
     }
 
-    console.log(data);
-
     return data;
 };
 
@@ -404,10 +402,15 @@ const getRelatedMovies = async (memberId) => {
     const recommendations = recommend.cFilter(matrix, memberId_index);
 
     const movies = recommendations.map((index) => (movies_indexes[index]))
-
-    const respons = await Movie.find({ _id: { $in: movies } });
+    const ids = movies.filter((movies, index) => index < 5);
+    const respons = await Movie.find({ _id: { $in: ids } });
 
     return respons;
+};
+
+// GET - Get All Movies - Read
+const getAllMovies = async () => {
+    return Movie.find();
 };
 
 // Get All Movies per number of a current page and amount movies per page
@@ -581,8 +584,6 @@ const filterMovies = async (filter) => {
     const rating_movie = filter.rating;
     const page = filter.page
     const perPage = filter.perPage
-    console.log(filter);
-
 
     const query = {
         $or: []
@@ -635,7 +636,6 @@ const filterMovies = async (filter) => {
     }
 
     const startIndex = 0; // Calculate the starting index for the page
-    console.log(query);
     let result = [];
     // Return the filtered movies
     if (!_.isEqual(query, { $or: [] })) {
@@ -697,6 +697,7 @@ module.exports = {
     getAllMoviesAggregation,
     getAllPopularMovies,
     getRelatedMovies,
+    getAllMovies,
     getMoviesPerPage,
     getCountPagesMovies,
     getMovieByIdWithSubscriptions,

@@ -23,8 +23,8 @@ router.get('/aggregate', async (req, res) => {
 // Get All Members with the widthly data by use MongoDB aggregation pipeline & get all movies - Read
 router.get('/subscriptionsUnwind', async (req, res) => {
     try {
-        const collect_obj_return = await membersBLL.getAllMembersSubscriptionsUnwind(); // collect_obj_return = { members: all_Members, movies: all_Moves }
-        res.send(collect_obj_return);
+        const members = await membersBLL.getAllMembersSubscriptionsUnwind();
+        res.send(members);
     } catch (error) {
         console.error(error);
         res.status(500).send(error);
