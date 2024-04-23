@@ -40,7 +40,7 @@ export default slice.reducer;
 export async function loader({ params }, page = 1) {
     try {
         let token = window.localStorage.getItem('accessToken');
-        console.log('<=== Movies Loader ===>', params);
+        // console.log('<=== Movies Loader ===>', params);
         const displayWidth = window.innerWidth;
         let perPage = params.perPage;
         if (displayWidth < 1200 && displayWidth >= 900) {
@@ -50,7 +50,6 @@ export async function loader({ params }, page = 1) {
         }
         const response = await axios.get(`${VITE_APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/movies/getMoviesPerPage/${page}/${perPage}`, { headers: { "Authorization": `Bearer ${token}` } });
         dispatch(slice.actions.getMoviesSuccess(response.data));
-        // console.log(response.data);
         return response.data;
     } catch (error) {
         dispatch(slice.actions.hasError(error));
@@ -81,7 +80,7 @@ export async function getPerPageMovies(page, per) {
         } else {
             while (perPage % 4 !== 0) { perPage++ }
         }
-        console.log('<=== Movies getPerPageMovies ===>', page, perPage);
+        // console.log('<=== Movies getPerPageMovies ===>', page, perPage);
         const response = await axios.get(`${VITE_APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/movies/getMoviesPerPage/${page}/${perPage}`, { headers: { "Authorization": `Bearer ${token}` } });
         dispatch(slice.actions.getMoviesSuccess(response.data));
         return response.data.movies;
@@ -101,7 +100,6 @@ export async function filterMovies(filter, page, per) {
             while (perPage % 4 !== 0) { perPage++ }
         }
         const data_filter = {...filter, page, perPage};
-        console.log('data_filter = ', data_filter);
         const response = await axios.post(`${VITE_APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/movies/filter`, data_filter, { headers: { "Authorization": `Bearer ${token}` } });
         return response.data;
     } catch (error) {
@@ -155,4 +153,15 @@ export function deleteMovie(id) {
             dispatch(slice.actions.hasError(error));
         }
     };
+}
+
+export async function getAllMovies() {
+    try {
+        let token = window.localStorage.getItem('accessToken');
+        // console.log('getMembers ==========> getAllMovies ============>');
+        const response = await axios.get(`${VITE_APP_MODE === "production" ? VITE_APP_ORIGIN_PRODUCTION : VITE_APP_ORIGIN_DEV}/movies`, { headers: { "Authorization": `Bearer ${token}` } });
+        return response.data;
+    } catch (error) {
+        dispatch(slice.actions.hasError(error));
+    }
 }

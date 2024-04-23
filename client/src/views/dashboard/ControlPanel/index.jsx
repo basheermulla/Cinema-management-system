@@ -35,10 +35,8 @@ const ControlPanel = () => {
         const feachData = async () => {
             try {
                 const response = await getMoviesDataForDashboard();
-                console.log(response);
                 setPopular_movies(response.popular_movies);
                 setAmountOfMovies(response.countMovie)
-                console.log(response);
             } catch (error) {
                 console.error('Error fetching members:', error);
             }

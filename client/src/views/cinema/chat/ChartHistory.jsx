@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { memo, useEffect } from 'react';
 
 // material-ui
-import { Card, CardContent, Grid, Typography } from '@mui/material';
+import { Card, CardContent, Chip, Grid, Typography } from '@mui/material';
 
 // project imports
 import { gridSpacing } from 'utils/constant-theme';
@@ -25,9 +25,16 @@ const ChartHistory = ({ data, theme, user }) => {
                                     <CardContent sx={{ p: 0.5, pb: '2px !important', width: 'fit-content', ml: 'auto' }}>
                                         <Grid container spacing={1}>
                                             <Grid item xs={12}>
-                                                <Typography variant="body2" color={theme.palette.mode === 'dark' ? 'dark.900' : ''}>
-                                                    {Object.keys(date)}
-                                                </Typography>
+                                                <Chip label={Object.keys(date)} size="small"
+                                                    sx={{
+                                                        background:
+                                                            theme.palette.mode === 'dark'
+                                                                ? theme.palette.dark.main
+                                                                : theme.palette.primary.light,
+                                                        color: theme.palette.secondary.dark,
+                                                        fontWeight: 'bold'
+                                                    }}
+                                                />
                                             </Grid>
                                         </Grid>
                                     </CardContent>

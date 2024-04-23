@@ -44,13 +44,22 @@ router.get('/related-movies/:id', verifyToken, async (req, res) => {
     }
 });
 
+// Get All Movies
+router.get('/', verifyToken, async (req, res) => {
+    try {
+        const movies = await moviesBLL.getAllMovies();
+        res.send(movies);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+});
+
 // Get All Movies per number of a current page and amount movies per page
 router.get('/getMoviesPerPage/:page/:perPage', verifyToken, async (req, res) => {
     try {
-        console.log("params = ", req.params); 
         const { page, perPage } = req.params;
         const movies = await moviesBLL.getMoviesPerPage(page, perPage);
-        console.log("movies length = ", movies.length); 
         res.send(movies);
     } catch (error) {
         console.error(error); 

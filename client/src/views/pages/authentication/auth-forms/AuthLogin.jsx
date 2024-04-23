@@ -27,6 +27,7 @@ const AuthLogin = ({ loginProp, ...others }) => {
     const { login } = useAuth();
     const scriptedRef = useScriptRef();
     const [checked, setChecked] = useState(true);
+    const [isSubmittingState, setIsSubmittingState] = useState(false);
 
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => {
@@ -50,7 +51,8 @@ const AuthLogin = ({ loginProp, ...others }) => {
             })}
             onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                 try {
-                    const response = await login(values.username, values.password);
+                    await login(values.username, values.password);
+                    setIsSubmittingState(true);
                     if (scriptedRef.current) {
                         setStatus({ success: true });
                         setSubmitting(false);
@@ -119,7 +121,7 @@ const AuthLogin = ({ loginProp, ...others }) => {
                             )}
                         </FormControl>
 
-                        <Grid container alignItems="center" justifyContent="space-between">
+                        {/* <Grid container alignItems="center" justifyContent="space-between">
                             <Grid item>
                                 <FormControlLabel
                                     control={
@@ -133,7 +135,7 @@ const AuthLogin = ({ loginProp, ...others }) => {
                                     label="Keep me logged in"
                                 />
                             </Grid>
-                        </Grid>
+                        </Grid> */}
 
                         {errors.submit && (
                             <Box sx={{ mt: 3 }}>
@@ -142,7 +144,7 @@ const AuthLogin = ({ loginProp, ...others }) => {
                         )}
                         <Box sx={{ mt: 2 }}>
                             <AnimateButton>
-                                <Button color="secondary" disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained">
+                                <Button color="secondary" disabled={isSubmittingState || isSubmitting} fullWidth size="large" type="submit" variant="contained" cursor='not-allowed'>
                                     Sign In
                                 </Button>
                             </AnimateButton>

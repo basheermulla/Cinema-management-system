@@ -29,7 +29,6 @@ router.get('/aggregate', verifyToken, async (req, res) => {
 router.get('/subscriptionsUnwind', verifyToken, async (req, res) => {
     try {
         const members = await membersBLL.getAllMembersSubscriptionsUnwind();
-
         res.send(members);
     } catch (error) {
         console.error(error);

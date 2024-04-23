@@ -17,6 +17,9 @@ const getAllPopularMoviesWS = () => axios.get(`${MOVIES_WS_URL}/mostPopular`);
 // GET - Get Related Movies by User Id - Read
 const getRelatedMoviesWS = (id) => axios.get(`${MOVIES_WS_URL}/related-movies/${id}`);
 
+// GET - Get All Movies - Read
+const getAllMoviesWS = () => axios.get(`${MOVIES_WS_URL}`);
+
 // Get All Movies per number of a current page and amount movies per page
 const getMoviesPerPageWS = (page, perPage) => axios.get(`${MOVIES_WS_URL}/getMoviesPerPage/${page}/${perPage}`);
 
@@ -45,6 +48,7 @@ module.exports = {
     getAllMoviesAggregationWS,
     getAllPopularMoviesWS,
     getRelatedMoviesWS,
+    getAllMoviesWS,
     getMoviesPerPageWS,
     getCountPagesMoviesWS,
     getMovieByIdWithSubscriptionsWS,

@@ -27,7 +27,6 @@ router.get('/yearlyData/:year', verifyToken, async (req, res) => {
     try {
         const { year } = req.params;
         const yearlySubscriptionsData = await subscriptionsBLL.getYearlySubscriptions(year);
-        console.log('router Cinema = ', await yearlySubscriptionsData);
         res.send(yearlySubscriptionsData);
     } catch (error) {
         console.error(error);

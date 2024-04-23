@@ -1,14 +1,11 @@
-import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
-import { useLoaderData, useNavigate } from 'react-router-dom';
+import { useLoaderData } from 'react-router-dom';
 
 // material-ui
-import { useTheme } from '@mui/material/styles';
-import { Box, Collapse, Grid, IconButton, Skeleton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Grid, Skeleton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 
 // internal imports
 import MainCard from 'components/cards/MainCard';
-import SubCard from 'components/cards/SubCard';
 import { CSVExport } from '../MemberExports';
 import { header } from '../HeaderOptions';
 import MemberRowCollapsible from './MemberRowCollapsible';
@@ -16,7 +13,8 @@ import SecondaryAction from 'components/cards/CardSecondaryAction';
 import AddOrEditMember from './AddOrEditMember';
 import MemberEmpty from './MemberEmpty';
 import { loader, createSubscription, updateSubscription, deleteSubscription, createMember, updateMember, deleteMember } from 'store/slices/member';
-import { useDispatch, useSelector } from 'store';
+import { getAllMovies } from "store/slices/movie";
+import { useDispatch } from 'store';
 import { openSnackbar } from "store/slices/snackbar";
 import { gridSpacing } from 'utils/constant-theme';
 import useAuth from 'hooks/useAuth';
@@ -26,18 +24,35 @@ import Loader from 'components/Loader';
 import { IconUserPlus, IconRefresh } from '@tabler/icons-react';
 
 const SubscriptionsMain = () => {
-    const theme = useTheme();
 
     const dispatch = useDispatch();
-    const navigete = useNavigate();
 
     // userLogin
     const { user: userLogin } = useAuth();
 
     // member include subscriptions data & movies
     const initialdata = useLoaderData();
-    const [subscriptions, setSubscriptions] = useState(initialdata.members);
-    const [movies, setMovies] = useState(initialdata.movies);
+    const [subscriptions, setSubscriptions] = useState(initialdata);
+
+    //=========================================================================================================================================
+    //==                                                  ▶️🎬 movies data 🎬▶️                                                           ==
+    //=========================================================================================================================================
+    const [movies, setMovies] = useState([]);
+
+    useEffect(() => {
+        // Function to get movies data
+        const getMoviesData = async () => {
+            try {
+                const response = await getAllMovies();
+                setMovies(response);
+            } catch (error) {
+                console.error('Error fetching members:', error);
+            }
+        };
+
+        getMoviesData()
+    }, []);
+    //------------------------------------------------------------------------------------------------------------------------------------------
 
     const [memberLoading, setMemberLoading] = useState(true);
 
@@ -142,9 +157,11 @@ const SubscriptionsMain = () => {
     };
 
     const loadDataAfterAction = async () => {
-        const initialdata = await loader();
-        setSubscriptions(initialdata.members);
-        setMovies(initialdata.movies);
+        const membersData = await loader();
+        const moviesData = await getAllMovies();
+
+        setSubscriptions(membersData);
+        setMovies(moviesData);
     };
 
     const handleRefresh = (action) => {
@@ -185,7 +202,6 @@ const SubscriptionsMain = () => {
         })
         return power;
     }
-
 
     let memberResult = <></>;
     if (subscriptions && subscriptions.length > 0) {
