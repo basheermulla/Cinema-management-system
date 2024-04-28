@@ -70,9 +70,12 @@ npm install
 ```sh
 cd client
 ```
+<div style="background-color: rgb(50, 50, 50);">
 ```sh
 npm install
 ```
+  </div>
+
 ## ✨ Configuration
 > Configuration, before running the project, make sure to set up the environment variables configurations:
 1.	Configure a MONGO_URL on the .env file into both SubscriptionsWS and CinemaWS server:
