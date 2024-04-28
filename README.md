@@ -72,7 +72,7 @@ cd client
 ```
 ``python
 npm install
-```
+``
 ## ✨ Configuration
 > Configuration, before running the project, make sure to set up the environment variables configurations:
 1.	Configure a MONGO_URL on the .env file into both SubscriptionsWS and CinemaWS server:
