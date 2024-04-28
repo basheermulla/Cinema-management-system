@@ -16,6 +16,7 @@ import { createSubscription } from 'store/slices/member';
 import { getAllMovies } from "store/slices/movie";
 import { gridSpacing } from 'utils/constant-theme';
 import useConfig from 'hooks/useConfig';
+import { useDispatch, useSelector } from 'store/index';
 import Loader from 'components/Loader';
 
 const activeSX = {
@@ -37,6 +38,9 @@ function createData(members) {
 }
 
 const RecommendationMain = () => {
+
+    const dispatch = useDispatch();
+    
     // member include subscriptions data & movies
     const initialdata = useLoaderData();
     const [members, setMembers] = useState(initialdata);
@@ -85,10 +89,6 @@ const RecommendationMain = () => {
     }, [movies]);
 
     const addSubscriptionByMember = (method, memberId, obj_SubscriptionMovie) => {
-        console.log(method);
-        console.log(memberId.id);
-        console.log(obj_SubscriptionMovie);
-
         dispatch(createSubscription(method, memberId.id, obj_SubscriptionMovie));
     };
 
