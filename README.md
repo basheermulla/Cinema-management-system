@@ -5,7 +5,7 @@
   <img src="https://img.shields.io/badge/node-%3E%3Dv20.12.0-blue.svg" />
 </p>
 
-## ✨ Project's Title
+## ✨ Project's Title 
 ### Cinema Management
 > Management of members' cinema subscription
 
