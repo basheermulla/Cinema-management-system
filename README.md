@@ -78,12 +78,12 @@ npm install
 <code> npm install </code>
 </pre>
 ```
-<p>
+```bash
 <div style="background-color: black; color: white; padding: 10px;">
 <p>This is an example HTML code block with a black background.</p>
 <p>You can put any HTML content here.</p>
 </div>
-</p>
+```
 ## ✨ Configuration
 > Configuration, before running the project, make sure to set up the environment variables configurations:
 1.	Configure a MONGO_URL on the .env file into both SubscriptionsWS and CinemaWS server:
