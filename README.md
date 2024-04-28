@@ -3,11 +3,18 @@
   <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
   <img src="https://img.shields.io/badge/npm-%3E%3D10.5.0-blue.svg" />
   <img src="https://img.shields.io/badge/node-%3E%3Dv20.12.0-blue.svg" />
+  <a href="https://github.com/basheermulla/Cinema-management-system/blob/main/LICENSE" target="_blank">
+    <img alt="License: MIT" src="https://img.shields.io/github/license/2/Cinema Management" />
+  </a>
+
 </p>
 
-## ✨ Project's Title 
+## ✨ Project's Title
 ### Cinema Management
 > Management of members' cinema subscription
+
+## ✨ System architecture
+<img alt="Version" src="https://github.com/basheermulla/Cinema-management-system/blob/main/client/src/assets/images/SystemArchitecture.drawio.svg" />
 
 ## ✨ Project Description
 ### About my application
@@ -66,7 +73,11 @@ cd client
 ```sh
 npm install
 ```
-
+```html
+<pre style="background-color: black; color: white; padding: 10px;">
+<code> npm install </code>
+</pre>
+```
 ## ✨ Configuration
 > Configuration, before running the project, make sure to set up the environment variables configurations:
 1.	Configure a MONGO_URL on the .env file into both SubscriptionsWS and CinemaWS server:
@@ -98,15 +109,18 @@ cd Cinema-management-system
 npm run start
 ```
 
-## Author
+## ✨ Author
 * Basheer mulla
 * LinkedIn: [@https:\/\/www.linkedin.com\/in\/basheer-mulla-678069ba\/](https://linkedin.com/in/https:\/\/www.linkedin.com\/in\/basheer-mulla-678069ba\/)
 
 ## 🤝 Contributing
 Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/basheermulla/Cinema-management-system/issues)
 
-## Show your support
+## ✨ Show your support
 > Give a ⭐️ if this project helped you!
+
+## 📜 License
+This project is licensed under the MIT License - see the LICENSE file for details [LICENSE](https://github.com/basheermulla/Cinema-management-system/blob/main/LICENSE.txt)
 
 ***
 _This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
