@@ -71,7 +71,7 @@ npm install
 cd client
 ```
 ```html
-<body style="background-color:#33475b">
+<body bgcolor="#800000">
 npm install
 ````
 ## ✨ Configuration
