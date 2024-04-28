@@ -3,7 +3,7 @@
   <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
   <img src="https://img.shields.io/badge/npm-%3E%3D10.5.0-blue.svg" />
   <img src="https://img.shields.io/badge/node-%3E%3Dv20.12.0-blue.svg" />
-  <a href="https://github.com/basheermulla/Cinema-management-system/blob/main/LICENSE" target="_blank">
+  <a href="https://github.com/basheermulla/Cinema-management-system/blob/main/LICENSE.txt" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/github/license/2/Cinema Management" />
   </a>
 
