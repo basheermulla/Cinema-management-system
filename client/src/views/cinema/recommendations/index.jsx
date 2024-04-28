@@ -85,6 +85,10 @@ const RecommendationMain = () => {
     }, [movies]);
 
     const addSubscriptionByMember = (method, memberId, obj_SubscriptionMovie) => {
+        console.log(method);
+        console.log(memberId.id);
+        console.log(obj_SubscriptionMovie);
+
         dispatch(createSubscription(method, memberId.id, obj_SubscriptionMovie));
     };
 
