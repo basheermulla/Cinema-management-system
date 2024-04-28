@@ -70,7 +70,7 @@ npm install
 ```sh
 cd client
 ```
-````python
+```diff
 npm install
 ````
 ## ✨ Configuration
