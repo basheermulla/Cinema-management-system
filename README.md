@@ -16,8 +16,8 @@
 ## ✨ System architecture
 <img alt="Version" src="https://github.com/basheermulla/Cinema-management-system/blob/main/client/src/assets/images/SystemArchitecture.drawio.png" />
 
-### My Favorite Movie
-![The Shawshank Redemption](https://www.youtube.com/watch?v=zWh3CShX_do)
+## ✨ Demo
+[![Demo CountPages alpha](https://share.gifyoutube.com/KzB6Gb.gif)](https://www.youtube.com/watch?v=ek1j272iAmc)
 
 ## ✨ Project Description
 ### About my application
