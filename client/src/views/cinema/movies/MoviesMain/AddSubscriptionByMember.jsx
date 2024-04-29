@@ -88,7 +88,6 @@ const AddSubscriptionByMember = ({ open, movieId, handleCloseSubscribeDialog, ad
                     }
                     sx={{ border: 0 }}
                 >
-                    {console.log(formik.values)}
                     <form onSubmit={formik.handleSubmit}>
                         <Grid container spacing={gridSpacing}>
                             <Grid item xs={12} md={6}>

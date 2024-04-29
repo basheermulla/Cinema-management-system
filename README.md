@@ -1,10 +1,10 @@
-<h1 align="center">Welcome to Cinema Management 👋</h1>
+<h1 align="center">Welcome to Cinema Management 👋❤️</h1>
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
   <img src="https://img.shields.io/badge/npm-%3E%3D10.5.0-blue.svg" />
   <img src="https://img.shields.io/badge/node-%3E%3Dv20.12.0-blue.svg" />
   <a href="https://github.com/basheermulla/Cinema-management-system/blob/main/LICENSE.txt" target="_blank">
-    <img alt="License: MIT" src="https://img.shields.io/github/license/2/Cinema Management" />
+    <img alt="License: MIT" src="https://img.shields.io/github/license/basheermulla/Cinema-management-system" />
   </a>
 
 </p>
@@ -14,7 +14,7 @@
 > Management of members' cinema subscription
 
 ## ✨ System architecture
-<img alt="Version" src="https://github.com/basheermulla/Cinema-management-system/blob/main/client/src/assets/images/SystemArchitecture.drawio.svg" />
+<img alt="Version" src="https://github.com/basheermulla/Cinema-management-system/blob/main/client/src/assets/images/SystemArchitecture.drawio.png" />
 
 ## ✨ Project Description
 ### About my application
@@ -72,7 +72,8 @@ cd client
 ```
 ```sh
 npm install
-````
+```
+
 ## ✨ Configuration
 > Configuration, before running the project, make sure to set up the environment variables configurations:
 1.	Configure a MONGO_URL on the .env file into both SubscriptionsWS and CinemaWS server:
