@@ -15,7 +15,7 @@
 
 ## ✨ System architecture
 <img alt="Version" src="https://github.com/basheermulla/Cinema-management-system/blob/main/client/src/assets/images/SystemArchitecture.drawio.png" />
-<video src="https://www.youtube.com/watch?v=zWh3CShX_do" />
+<video alt="Version" src="https://www.youtube.com/watch?v=zWh3CShX_do" />
 ## ✨ Project Description
 ### About my application
 1.	The cinema management system is a full-stack project designed to manage members’ subscriptions in my cinema.
