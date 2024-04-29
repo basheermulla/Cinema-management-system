@@ -17,8 +17,7 @@
 <img alt="Version" src="https://github.com/basheermulla/Cinema-management-system/blob/main/client/src/assets/images/SystemArchitecture.drawio.png" />
 
 ## ✨ Demo
-[video](https://www.google.com/search?sca_esv=9c0a2ce53a51d660&sxsrf=ACQVn0-IQs8PIvUyijwoX3TCR4UVQp9MmQ:1714412328708&q=gif+video&tbm=vid&source=lnms&prmd=ivsnbmtz&sa=X&ved=2ahUKEwj0lefO--eFAxUlS_EDHQmBBtkQ0pQJegQIDRAB&biw=2195&bih=1100&dpr=1.75#fpstate=ive&vld=cid:7f116181,vid:up7HZuLa_zI,st:0)
-
+<img alt="Version" src="https://github.com/basheermulla/Cinema-management-system/blob/main/client/src/assets/images/SystemArchitecture.drawio.png" />
 
 ## ✨ Project Description
 ### About my application
