@@ -15,7 +15,6 @@
 
 ## ✨ System architecture
 <img alt="Version" src="https://github.com/basheermulla/Cinema-management-system/blob/main/client/src/assets/images/SystemArchitecture.drawio.png" />
-<video src='https://www.youtube.com/embed/dQw4w9WgXcQ" width=180 />
 
 ## ✨ Project Description
 ### About my application
