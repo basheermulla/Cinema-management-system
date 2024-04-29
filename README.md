@@ -17,7 +17,7 @@
 <img alt="Version" src="https://github.com/basheermulla/Cinema-management-system/blob/main/client/src/assets/images/SystemArchitecture.drawio.png" />
 
 ## ✨ Project Description
-#### About my application
+### About my application
 1.	The cinema management system is a full-stack project designed to manage members’ subscriptions in my cinema.
 2.	The architecture of the system is based on MERN Stack development. The backend side consists of two Node JS servers as a REST API (CinemaWS, SubscriptionsWS) that use two external web services to provide main data, 240 movies, and 10 members, the database is based on Mongo DB and includes several collections such as movies, members, subscriptions, messages, conversations and users, and two JSON files inside one of the servers (CinemaWS) that store the users' information and permissions. The frontend side was implemented using JavaScript using advanced features and capabilities of the popular React JS library such as redux toolkit, context, custom hooks, and multiple third-party modules such as formik, yup, framer-motion, moment, date-fns, apexcharts, etc.
 3.	This system provides an easy interface and good control for users to manage the members’ subscriptions on my cinema. After logging in, the system navigates to the default page as a dashboard that displays important and statistical data about the system's activity such as the number of movies, the number of online users, the number of subscriptions, a bar graph of the number of subscribers in the current year per month, popular movies, etc.
