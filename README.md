@@ -17,9 +17,8 @@
 <img alt="Version" src="https://github.com/basheermulla/Cinema-management-system/blob/main/client/src/assets/images/SystemArchitecture.drawio.png" />
 
 ## ✨ Demo
-<iframe src="https://www.youtube.com/watch?v=zWh3CShX_do" width=180>
-Link
-</iframe>
+![](https://www.youtube.com/watch?v=zWh3CShX_do)
+
 
 ## ✨ Project Description
 ### About my application
