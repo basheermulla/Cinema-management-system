@@ -6,6 +6,8 @@
   <a href="https://github.com/basheermulla/Cinema-management-system/issues" target="_blank">
     <img alt="Issues" src="https://img.shields.io/github/issues/basheermulla/Cinema-management-system" />
   </a>
+  </p>
+    <p>
   <a href="https://github.com/basheermulla/Cinema-management-system/stargazers" target="_blank">
     <img alt="Stargazers" src="https://img.shields.io/github/stars/basheermulla/Cinema-management-system" />
   </a>
