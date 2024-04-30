@@ -7,7 +7,7 @@
     <img alt="License: MIT" src="https://img.shields.io/github/license/basheermulla/Cinema-management-system" />
   </a>
 <a href="https://www.linkedin.com/in/basheer-mulla-678069ba" target="_blank">
-    <img alt="in: LinkedIn" src="https://img.shields.io/badge/node-%3E%3Dv20.12.0-blue.svg" />
+    <img alt="in: LinkedIn" src="https://img.shields.io/badge/in-LinkedIn-blue.svg" />
 </a>
 </p>
 
