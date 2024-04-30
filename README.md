@@ -4,16 +4,16 @@
   <img src="https://img.shields.io/badge/npm-%3E%3D10.5.0-blue.svg" />
   <img src="https://img.shields.io/badge/node-%3E%3Dv20.12.0-blue.svg" />
   <a href="https://github.com/basheermulla/Cinema-management-system/issues">
-    <img alt="Issues" src="https://img.shields.io/github/issues/basheermulla/Cinema-management-system" />
+    <img alt="Issues" src="https://img.shields.io/github/issues/basheermulla/Cinema-management-system.svg?style=for-the-badge" style="max-width: 100%;" />
   </a>
   <a href="https://github.com/basheermulla/Cinema-management-system/stargazers">
     <img alt="Stargazers" src="https://img.shields.io/github/stars/basheermulla/Cinema-management-system.svg?style=for-the-badge" style="max-width: 100%;" />
   </a>
   <a href="https://www.linkedin.com/in/basheer-mulla-678069ba"">
-    <img alt="in: LinkedIn" src="https://img.shields.io/badge/in-LinkedIn-blue.svg" />
+    <img alt="in: LinkedIn" src="https://img.shields.io/badge/in-LinkedIn-blue.svg?style=for-the-badge" style="max-width: 100%;" />
   </a>
     <a href="https://github.com/basheermulla/Cinema-management-system/blob/main/LICENSE.txt" target="_blank">
-    <img alt="License: MIT" src="https://img.shields.io/github/license/basheermulla/Cinema-management-system" />
+    <img alt="License: MIT" src="https://img.shields.io/github/license/basheermulla/Cinema-management-system.svg?style=for-the-badge" style="max-width: 100%;" />
   </a>
 </p>
 
