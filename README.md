@@ -7,7 +7,7 @@
     <img alt="Issues" src="https://img.shields.io/github/issues/basheermulla/Cinema-management-system" />
   </a>
   <a href="https://github.com/basheermulla/Cinema-management-system/stargazers">
-    <img alt="Stargazers" src="https://img.shields.io/github/stars/basheermulla/Cinema-management-system" />
+    <img alt="Stargazers" src="https://img.shields.io/github/stars/basheermulla/Cinema-management-system?style=for-the-badge" style="max-width: 100%;" />
   </a>
   <a href="https://www.linkedin.com/in/basheer-mulla-678069ba"">
     <img alt="in: LinkedIn" src="https://img.shields.io/badge/in-LinkedIn-blue.svg" />
