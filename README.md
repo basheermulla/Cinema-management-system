@@ -3,10 +3,18 @@
   <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
   <img src="https://img.shields.io/badge/npm-%3E%3D10.5.0-blue.svg" />
   <img src="https://img.shields.io/badge/node-%3E%3Dv20.12.0-blue.svg" />
-  <a href="https://github.com/basheermulla/Cinema-management-system/blob/main/LICENSE.txt" target="_blank">
+  <a href="https://github.com/basheermulla/Cinema-management-system/issues" target="_blank">
+    <img alt="Issues" src="https://img.shields.io/github/issues/basheermulla/Cinema-management-system" />
+  </a>
+  <a href="https://github.com/basheermulla/Cinema-management-system/stargazers" target="_blank">
+    <img alt="Stargazers" src="https://img.shields.io/github/stars/basheermulla/Cinema-management-system" />
+  </a>
+  <a href="https://www.linkedin.com/in/basheer-mulla-678069ba" target="_blank">
+    <img alt="in: LinkedIn" src="https://img.shields.io/badge/in-LinkedIn-blue.svg" />
+  </a>
+    <a href="https://github.com/basheermulla/Cinema-management-system/blob/main/LICENSE.txt" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/github/license/basheermulla/Cinema-management-system" />
   </a>
-
 </p>
 
 ## ✨ Project's Title
@@ -20,7 +28,7 @@
 <img alt="Version" src="https://github.com/basheermulla/Cinema-management-system/blob/main/client/src/assets/images/SystemArchitecture.drawio.png" />
 
 > Displays a demo of system capabilities
-[Play the video](https://www.youtube.com/watch?v=WwQjgb_4TwI)
+[Play the video](https://www.youtube.com/watch?v=WwQjgb_4TwI) <br />
 > Introducing the architecture of the system
 [Play the video](https://www.youtube.com/watch?v=H3tkQY5pgxI)
 
