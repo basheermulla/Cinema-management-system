@@ -17,8 +17,6 @@
 <img alt="Version" src="https://github.com/basheermulla/Cinema-management-system/blob/main/client/src/assets/images/SystemArchitecture.drawio.png" />
 
 ## ✨ Demo
-<img alt="Version" src="https://github.com/basheermulla/Cinema-management-system/blob/main/client/src/assets/images/SystemArchitecture.drawio.png" />
-
 > Displays a demo of system capabilities
 [Play the video](https://www.youtube.com/watch?v=WwQjgb_4TwI)
 > Introducing the architecture of the system
