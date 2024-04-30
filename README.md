@@ -1,24 +1,20 @@
 <h1 align="center">Welcome to Cinema Management 👋❤️</h1>
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?style=for-the-badge" style="max-width: 100%;" />
-  <img src="https://img.shields.io/badge/npm-%3E%3D10.5.0-blue.svg?style=for-the-badge" style="max-width: 100%;" />
-  <img src="https://img.shields.io/badge/node-%3E%3Dv20.12.0-blue.svg?style=for-the-badge" style="max-width: 100%;" />
+  <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?style=for-the-badge" style="max-width: 100%; text-decoration: none;" />
+  <img src="https://img.shields.io/badge/npm-%3E%3D10.5.0-blue.svg?style=for-the-badge" style="max-width: 100%; text-decoration: none;" />
+  <img src="https://img.shields.io/badge/node-%3E%3Dv20.12.0-blue.svg?style=for-the-badge" style="max-width: 100%; text-decoration: none;" />
   <a href="https://github.com/basheermulla/Cinema-management-system/issues">
-    <img alt="Issues" src="https://img.shields.io/github/issues/basheermulla/Cinema-management-system.svg?style=for-the-badge" style="max-width: 100%;" />
+    <img alt="Issues" src="https://img.shields.io/github/issues/basheermulla/Cinema-management-system.svg?style=for-the-badge" style="max-width: 100%; text-decoration: none;" />
   </a>
   <a href="https://github.com/basheermulla/Cinema-management-system/stargazers">
-    <img alt="Stargazers" src="https://img.shields.io/github/stars/basheermulla/Cinema-management-system.svg?style=for-the-badge" style="max-width: 100%;" />
+    <img alt="Stargazers" src="https://img.shields.io/github/stars/basheermulla/Cinema-management-system.svg?style=for-the-badge" style="max-width: 100%; text-decoration: none;" />
   </a>
   <a href="https://www.linkedin.com/in/basheer-mulla-678069ba"">
-    <img alt="in: LinkedIn" src="https://img.shields.io/badge/in-LinkedIn-blue.svg?style=for-the-badge" style="max-width: 100%;" />
+    <img alt="in: LinkedIn" src="https://img.shields.io/badge/in-LinkedIn-blue.svg?style=for-the-badge" style="max-width: 100%; text-decoration: none;" />
   </a>
     <a href="https://github.com/basheermulla/Cinema-management-system/blob/main/LICENSE.txt" target="_blank">
-    <img alt="License: MIT" src="https://img.shields.io/github/license/basheermulla/Cinema-management-system.svg?style=for-the-badge" style="max-width: 100%;" />
+    <img alt="License: MIT" src="https://img.shields.io/github/license/basheermulla/Cinema-management-system.svg?style=for-the-badge" style="max-width: 100%; text-decoration: none;" />
   </a>
-  <a href="link_to_badge_1">
-    <img src="https://img.shields.io/badge/Badge1-Value1-brightgreen" alt="Badge 1">
-  </a>
-  <img src="https://img.shields.io/badge/Badge2-Value2-blue" alt="Badge 2">
 </p>
 
 ## ✨ Project's Title
