@@ -1,8 +1,8 @@
 <h1 align="center">Welcome to Cinema Management 👋❤️</h1>
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
-  <img src="https://img.shields.io/badge/npm-%3E%3D10.5.0-blue.svg" />
-  <img src="https://img.shields.io/badge/node-%3E%3Dv20.12.0-blue.svg" />
+  <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" style="max-width: 100%;" />
+  <img src="https://img.shields.io/badge/npm-%3E%3D10.5.0-blue.svg" style="max-width: 100%;" />
+  <img src="https://img.shields.io/badge/node-%3E%3Dv20.12.0-blue.svg" style="max-width: 100%;" />
   <a href="https://github.com/basheermulla/Cinema-management-system/issues">
     <img alt="Issues" src="https://img.shields.io/github/issues/basheermulla/Cinema-management-system.svg?style=for-the-badge" style="max-width: 100%;" />
   </a>
