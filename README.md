@@ -6,7 +6,10 @@
   <a href="https://github.com/basheermulla/Cinema-management-system/blob/main/LICENSE.txt" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/github/license/basheermulla/Cinema-management-system" />
   </a>
+<a href="https://www.linkedin.com/in/basheer-mulla-678069ba/" rel="nofollow">
+<img src="https://camo.githubusercontent.com/d7e79aa0e1a75aebce039c453d8735c725ccfa0b44f77a961b898076f215cb2a/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2d4c696e6b6564496e2d626c61636b2e7376673f7374796c653d666f722d7468652d6261646765266c6f676f3d6c696e6b6564696e26636f6c6f72423d353535" alt="LinkedIn" data-canonical-src="https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&amp;logo=linkedin&amp;colorB=555" style="max-width: 100%;">
 
+</a>
 </p>
 
 ## ✨ Project's Title
