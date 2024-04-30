@@ -17,7 +17,10 @@
 <img alt="Version" src="https://github.com/basheermulla/Cinema-management-system/blob/main/client/src/assets/images/SystemArchitecture.drawio.png" />
 
 ## ✨ Demo
-<img alt="Version" src="https://github.com/basheermulla/Cinema-management-system/blob/main/client/src/assets/images/SystemArchitecture.drawio.png" />
+> Displays a demo of system capabilities
+[Play the video](https://www.youtube.com/watch?v=WwQjgb_4TwI)
+> Introducing the architecture of the system
+[Play the video](https://www.youtube.com/watch?v=H3tkQY5pgxI)
 
 ## ✨ Project Description
 ### About my application
@@ -38,25 +41,25 @@
 
 ## ✨ Prerequisites
 > Before you begin, ensure you have met the following requirements:
-a.	Node.js: The project requires Node.js to be installed on your system (node >=v20.12.0).
-b.	MongoDB: The project relies on MongoDB for storing data.
-c.	npm (Node Package Manager): npm typically comes with Node.js installation. You can verify if npm is installed by running the following command in your terminal: npm -v (npm >=10.5.0).
-d.	Git: Make sure you have Git installed on your system so you can clone this repository. 
+1.	Node.js: The project requires Node.js to be installed on your system (node >=v20.12.0).
+2.	MongoDB: The project relies on MongoDB for storing data.
+3.	npm (Node Package Manager): npm typically comes with Node.js installation. You can verify if npm is installed by running the following command in your terminal: npm -v (npm >=10.5.0).
+4.	Git: Make sure you have Git installed on your system so you can clone this repository. 
 
 ## ✨ How to Install the Project
 > Follow these steps to install and run the project:
-1.	Clone the repository:
+#### 1.	Clone the repository:
 ```sh
 git clone https://github.com/basheermulla/Cinema-management-system.git
 ```
-2.	Installing a Concurrently module, and some scripts which run both the backend and frontend:
+#### 2.	Installing a Concurrently module, and some scripts which run both the backend and frontend:
 ```sh
 cd Cinema-management-system
 ```
 ```sh
 npm install
 ```
-3.	Installing the backend:
+#### 3.	Installing the backend:
 ```sh
 cd Cinema-management-system/server/SubscriptionsWS
 ```
@@ -69,7 +72,7 @@ cd Cinema-management-system/server/CinemaWS
 ```sh
 npm install
 ```
-4.	Installing the frontend:
+#### 4.	Installing the frontend:
 ```sh
 cd client
 ```
@@ -79,28 +82,28 @@ npm install
 
 ## ✨ Configuration
 > Configuration, before running the project, make sure to set up the environment variables configurations:
-1.	Configure a MONGO_URL on the .env file into both SubscriptionsWS and CinemaWS server:
+#### 1.	Configure a MONGO_URL on the .env file into both SubscriptionsWS and CinemaWS server:
 ```sh
 MONGODB_URL=<your_mongodb_url>
 ```
-2.	Configure the environment mode (development / production) on the .env file into a CinemaWS server:
+#### 2.	Configure the environment mode (development / production) on the .env file into a CinemaWS server:
 ```sh
 NODE_ENV=development
 ```
-3. Configure the environment mode (development / production) on the .env file into a client:
+#### 3. Configure the environment mode (development / production) on the .env file into a client:
 ```sh
 VITE_APP_MODE=development
 ```
 
 ### ✨ Usage
-1. Running the project on the development environment:
+#### 1. Running the project on the development environment:
 ```sh
 cd Cinema-management-system
 ```
 ```sh
 npm run dev
 ```
-2.	Running the project on the production environment:
+#### 2.	Running the project on the production environment:
 ```sh
 cd Cinema-management-system
 ```
