@@ -15,6 +15,10 @@
     <a href="https://github.com/basheermulla/Cinema-management-system/blob/main/LICENSE.txt" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/github/license/basheermulla/Cinema-management-system.svg?style=for-the-badge" style="max-width: 100%;" />
   </a>
+  <a href="link_to_badge_1">
+    <img src="https://img.shields.io/badge/Badge1-Value1-brightgreen" alt="Badge 1">
+  </a>
+  <img src="https://img.shields.io/badge/Badge2-Value2-blue" alt="Badge 2">
 </p>
 
 ## ✨ Project's Title
