@@ -238,7 +238,7 @@ function MemberRowCollapsible({ ID, member, handleClickOpenMemberDialog, addSubs
                                                                 })}
                                                         </TableCell>
                                                         <TableCell align="right" sx={{ pr: 3 }}>
-                                                            {new Date(relatedMovieRow.date).getTime() < (new Date().getDate() + 1) ?
+                                                            {new Date(relatedMovieRow.date).getTime() < (new Date().setHours(0, 0, 0, 0)) ?
                                                                 <IconButton color="primary" size="large" aria-label="view">
                                                                     <DoneIcon sx={{ fontSize: '1.3rem' }} />
                                                                 </IconButton>

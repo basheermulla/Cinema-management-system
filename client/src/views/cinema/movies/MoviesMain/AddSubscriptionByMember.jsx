@@ -47,7 +47,6 @@ const AddSubscriptionByMember = ({ open, movieId, handleCloseSubscribeDialog, ad
         },
         validationSchema,
         onSubmit: (values, { resetForm }) => {
-            console.log(values);
             // Add a subscription for the selected member with a given movie
             addSubscriptionByMember('put', { id: values.memberId }, { movieId: values.movieId, date: values.date });
             const memberName = members?.find((member) => member._id === values.memberId).name;
