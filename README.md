@@ -6,9 +6,7 @@
   <a href="https://github.com/basheermulla/Cinema-management-system/blob/main/LICENSE.txt" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/github/license/basheermulla/Cinema-management-system" />
   </a>
-  <a href="https://github.com/basheermulla/Cinema-management-system/issues">
-    <img alt="Issues" src="https://img.shields.io/github/issues/basheermulla/Cinema-management-system" />
-  </a>
+  
 </p>
 
 ## ✨ Project's Title
