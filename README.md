@@ -18,7 +18,7 @@
 
 ## ✨ Demo
 > Displays a demo of system capabilities
-[Play the video](https://www.youtube.com/watch?v=WwQjgb_4TwI)
+[Play the video](https://www.youtube.com/watch?v=WwQjgb_4TwI) <br/>
 > Introducing the architecture of the system
 [Play the video](https://www.youtube.com/watch?v=H3tkQY5pgxI)
 
